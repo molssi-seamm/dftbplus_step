@@ -1,0 +1,29 @@
+name: test
+channels:
+  - default
+  - conda-forge
+dependencies:
+  # Base depends
+  - python
+  - pip
+
+  # molsystem needs this, so assuming it is needed here.
+  - openbabel
+
+  # Testing
+  - coverage
+  - flake8
+  - pytest
+  - pytest-cov
+  - pytest-runner
+
+    # Pip-only installs
+  - pip:
+    - seamm
+    - seamm-util
+    - seamm-widgets
+
+      # Testing
+    - codecov
+    - yapf
+
