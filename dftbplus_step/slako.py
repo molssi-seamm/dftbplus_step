@@ -80,6 +80,11 @@ def analyze_directory(root='data/slako'):
         # Assume the parent directory is the parameterization + version
         # and grandparent is the parameterization.
         parent = path.parent
+        # Handle the ob2 files...
+        if parent.name == 'split' or parent.name == 'shift':
+            continue
+        if parent.name == 'base':
+            parent = parent.parent
         grandparent = parent.parent
         parameterization = grandparent.name
         version = '.'.join(parent.name.split('-')[1:])
@@ -102,7 +107,7 @@ def analyze_directory(root='data/slako'):
                     "but there is no filename !?!"
                 )
             else:
-                same[str(path)] = all_potentials[md5sum]['filename']
+                same[str(path)] = md5sum
         else:
             all_potentials[md5sum] = data
 
@@ -110,11 +115,11 @@ def analyze_directory(root='data/slako'):
             md5 = general['Md5sum']
 
             data['md5 mismatch'] = True
-            bad[md5sum] = md5
-            # comments.append(f'{path} md5 checksums differ!')
+            bad[md5] = md5sum
+            comments.append(f'{path} md5 checksums differ! {md5} {md5sum}')
         else:
             data['md5 mismatch'] = False
-            
+
         if parameterization not in metadata:
             pdata = metadata[parameterization] = {}
         else:
@@ -140,7 +145,7 @@ def analyze_directory(root='data/slako'):
                     comments.append(
                         f'Element error in {path}: should be {el1}-{el2}'
                     )
-                    data['elements'] = [tmp1, tmp2]
+                data['elements'] = [tmp1, tmp2]
             except Exception:
                 print(f'Odd filename: {path} -- elements {el1}-{el2}')
                 comments.append(
@@ -162,15 +167,17 @@ def analyze_directory(root='data/slako'):
     if len(same) > 0:
         comments.append('')
         comments.append('The following files have the same data:')
-        for f1, f2 in same.items():
+        for f1, md5sum in same.items():
+            f2 = all_potentials[md5sum]['filename']
             if Path(f1).parent == Path(f2).parent:
-                comments.append(f'    {f1} {Path(f2).name}')
+                # comments.append(f'    {f1} {Path(f2).name}')
+                pass
             else:
-                comments.append(f'    {f1} {f2}')
+                comments.append(f'    {md5sum} {f1} {f2}')
 
     # Check on the bad md5 sums from in the file
     comments.append('')
-    for good, other in bad.items():
+    for other, good in bad.items():
         good_file = Path(all_potentials[good]['filename']).relative_to(root)
         if other in metadata:
             other_file = Path(
@@ -188,28 +195,38 @@ def analyze_directory(root='data/slako'):
     return metadata, comments
 
 
-def find_sets(metadata, parameterization):
-    """Find the sets of atoms with complete parameterizations"""
-    pdata = metadata[parameterization]
-    version = [*pdata.keys()][0]
-    vdata = pdata[version]
-    potentials = vdata['potentials']
+def find_sets(metadata, parameterizations):
+    """Find the sets of atoms with complete parameterizations
+    from one or more parameterizations
+    """
+    # Find the pairs in all the parameterizations
     elements = []
-    for stem in potentials.keys():
-        el1, el2 = stem.split('-')
-        if el1 not in elements:
-            elements.append(el1)
-        if el2 not in elements:
-            elements.append(el2)
-    elements.sort()
+    for parameterization in parameterizations:
+        pdata = metadata[parameterization]
+        version = [*pdata.keys()][0]
+        vdata = pdata[version]
+        potentials = vdata['potentials']
+        for stem in potentials.keys():
+            el1, el2 = stem.split('-')
+            if el1 not in elements:
+                elements.append(el1)
+            if el2 not in elements:
+                elements.append(el2)
 
+    elements.sort()
     pairs = {el: [] for el in elements}
-    for stem in potentials.keys():
-        el1, el2 = stem.split('-')
-        if el2 not in pairs[el1]:
-            pairs[el1].append(el2)
-        if el1 not in pairs[el2]:
-            pairs[el2].append(el1)
+
+    for parameterization in parameterizations:
+        pdata = metadata[parameterization]
+        version = [*pdata.keys()][0]
+        vdata = pdata[version]
+        potentials = vdata['potentials']
+        for stem in potentials.keys():
+            el1, el2 = stem.split('-')
+            if el2 not in pairs[el1]:
+                pairs[el1].append(el2)
+            if el1 not in pairs[el2]:
+                pairs[el2].append(el1)
 
     # Build up sets element by element, starting with pairs
     sets = {}
@@ -257,14 +274,18 @@ def find_sets(metadata, parameterization):
                 tmp = [*nm1_set]
                 tmp.sort()
                 result.append(tmp)
+
     # Add any sets with all the atoms ... they are not a subset!
     if len(elements) == 1:
         result.append(elements)
     else:
         for n_set in sets[len(elements)]:
-            result.append([*n_set])
+            result.append(sorted([*n_set]))
 
-    vdata['sets'] = result
+    if 'sets' not in metadata:
+        metadata['sets'] = {}
+    key = ' -- '.join(sorted(parameterizations))
+    metadata['sets'][key] = result
     return result
 
 
@@ -279,6 +300,7 @@ def partners2(metadata, parameterization):
     for key, md5sum in potentials.items():
         print(f'\n{key}')
         data = all_potentials[md5sum]
+        data['partners'] = []
         general = data['General']
         if 'Compatibility' not in general:
             print(f"{data['filename']} has no compatibility data")
@@ -287,6 +309,7 @@ def partners2(metadata, parameterization):
         for partner in compatibility['Partner']:
             md5 = partner['Md5sum']
             if md5 in all_potentials:
+                data['partners'].append(md5)
                 tmp = all_potentials[md5]
                 print(
                     f"     {tmp['parameterization']} {tmp['version']} "
@@ -294,14 +317,35 @@ def partners2(metadata, parameterization):
                 )
             elif md5 in metadata['bad_md5s']:
                 good_md5 = metadata['bad_md5s'][md5]
+                data['partners'].append(good_md5)
                 tmp = all_potentials[good_md5]
                 print(
                     f"     {tmp['parameterization']} {tmp['version']} "
                     f"{partner['@Identifier']}"
                 )
             else:
-                print(f"    {partner['@Identifier']} {partner['Md5sum']}")
-                pprint.pprint(partner)
+                el1 = partner['Element1']
+                if 'Element2' in partner:
+                    el2 = partner['Element2']
+                else:
+                    el2 = el1
+                if f'{el1}-{el2}' in potentials:
+                    correct_md5 = potentials[f'{el1}-{el2}']
+                    data['partners'].append(correct_md5)
+                    print(
+                        f"    {el1}-{el2} {data['filename']} "
+                        f"{partner['@Identifier']} "
+                        f"{partner['Md5sum']} {correct_md5} "
+                        f"{all_potentials[correct_md5]['elements']}"
+                    )
+                else:
+                    correct_md5 = 'unknown'
+                    print(
+                        f"    {el1}-{el2} {data['filename']} "
+                        f"{partner['@Identifier']} "
+                        f"{partner['Md5sum']} {correct_md5} "
+                    )
+                # pprint.pprint(partner)
 
 
 def partners(metadata):
@@ -324,26 +368,274 @@ def partners(metadata):
                 good_md5 = metadata['bad_md5s'][md5]
                 partners.append(good_md5)
             else:
-                print(f"    {partner['@Identifier']} {partner['Md5sum']}")
-                pprint.pprint(partner)
+                parameterization = data['parameterization']
+                version = data['version']
+                el1 = partner['Element1']
+                el2 = partner['Element1']
+                potentials = metadata[parameterization][version]['potentials']
+                if f'{el1}-{el2}' in potentials:
+                    correct_md5 = potentials[f'{el1}-{el2}']
+                else:
+                    correct_md5 = 'unknown'
+                print(
+                    f"    {data['filename']} {partner['@Identifier']} "
+                    f"{partner['Md5sum']} {correct_md5} bad partner md5sum"
+                )
+                # pprint.pprint(partner)
         data['partners'] = partners
+
+
+def list_partners(metadata, parameterization):
+    """Find the listed partners"""
+    pdata = metadata[parameterization]
+    all_potentials = metadata['potentials']
+    version = [*pdata.keys()][0]
+    vdata = pdata[version]
+    potentials = vdata['potentials']
+
+    outside = {}
+    inside = []
+    for key, md5sum in potentials.items():
+        data = all_potentials[md5sum]
+        for partner in data['partners']:
+            p_param = all_potentials[partner]['parameterization']
+            if p_param != parameterization:
+                if p_param not in outside:
+                    outside[p_param] = []
+                o_param = outside[p_param]
+                if partner not in o_param:
+                    o_param.append(partner)
+            else:
+                if partner not in inside:
+                    inside.append(partner)
+    return inside, outside
+
+
+def create_datafile():
+    """Parse the files and get the data needed for the metadata-file"""
+    datasets = {
+        '3ob': ['3ob-freq', '3ob-hhmod', '3ob-nhmod', '3ob-ophyd'],
+        'matsci': ['magsil'],
+        'mio': [
+            'chalc', 'hyb', 'miomod-hh', 'miomod-nh', 'tiorg', 'trans3d',
+            'znorg'
+        ],
+        'auorg': [],
+        'borg': [],
+        'halorg': [],
+        'ob2': [],
+        'pbc': [],
+        'siband': [],
+        'rare': []
+    }
+
+    # The result dictionary
+    result = {}
+
+    # Read in all the potentials
+    metadata, comments = analyze_directory('data/slako')
+    print('\n'.join(comments))
+    print('')
+    all_potentials = metadata['potentials']
+
+    # Make a list of the sets or elements covered by each combination
+    result['datasets'] = {}
+    for dataset, subsets in datasets.items():
+        result['datasets'][dataset] = {
+            'subsets': subsets,
+            'parent': None,
+        }
+        for subset in subsets:
+            result['datasets'][subset] = {
+                'subsets': [],
+                'parent': dataset,
+            }
+
+        # Create the element sets
+        sets = find_sets(metadata, [dataset])
+        result['datasets'][dataset]['element sets'] = sets
+        for subset in subsets:
+            sets = find_sets(metadata, [dataset, subset])
+            result['datasets'][subset]['element sets'] = sets
+
+    # Transfer desired information about each of the potentials
+    result['potentials'] = {}
+    result['pairs'] = {}
+    for md5sum, data in all_potentials.items():
+        result['potentials'][md5sum] = {
+            'filename': data['filename'],
+            'elements': data['elements'],
+            'datasets': [f"{data['parameterization']}@{data['version']}"]
+        }
+        el1, el2 = data['elements']
+        key = f'{el1}-{el2}'
+        if key not in result['pairs']:
+            result['pairs'][key] = [md5sum]
+        else:
+            result['pairs'][key].append(md5sum)
+
+    # Get the maximum angular moment
+    for dataset in result['datasets']:
+        pdata = metadata[dataset]
+        version = [*pdata.keys()][0]
+        vdata = pdata[version]
+        potentials = vdata['potentials']
+        elements = {}
+
+        pairs = result['datasets'][dataset]['potential pairs'] = {}
+        for potential, md5sum in potentials.items():
+            data = all_potentials[md5sum]
+            el1, el2 = data['elements']
+            pairs[f'{el1}-{el2}'] = {
+                'md5sum': md5sum
+            }
+
+            # Check that this dataset/version is in the list
+            dv = f"{data['parameterization']}@{data['version']}"
+            if dv not in result['potentials'][md5sum]['datasets']:
+                result['potentials'][md5sum]['datasets'].append(dv)
+
+            if el1 == el2:
+                sk_table = data['SK_table']
+                basis = sk_table['Basis']
+                shells = basis['Shells']
+                highest = shells.split()[-1][1]
+                if 'HubbDerivative' in basis:
+                    hder = basis['HubbDerivative']
+                    elements[el1] = {
+                        'maximum angular momentum': highest,
+                        'Hubbard derivative': hder
+                    }
+                else:
+                    elements[el1] = {
+                        'maximum angular momentum': highest
+                    }
+        result['datasets'][dataset]['element data'] = elements
+
+    # Print and save the results
+    data = json.dumps(result, indent=4, sort_keys=True)
+    # print(data)
+    with open('data/slako/metadata.json', 'w') as fd:
+        fd.write(data)
 
 
 if __name__ == "__main__":
     # test_one('data/slako/3ob/3ob-3-1/Br-Br.skf')
 
+    create_datafile()
+    exit()
+
     metadata, comments = analyze_directory('data/slako')
     print('\n'.join(comments))
     print('')
 
-    if True:
+    if False:
         for parameterization in metadata['parameterizations']:
             print('')
             print(parameterization)
-            sets = find_sets(metadata, parameterization)
+            sets = find_sets(metadata, [parameterization])
+            for group in sets:
+                print(f'    {group}')
+
+    if False:
+        partners(metadata)
+
+    if False:
+        for parameterization in metadata['parameterizations']:
+            print('')
+            print(parameterization)
+            partners2(metadata, parameterization)
+
+    if False:
+        # Print the md5 sums for all potentials
+        print('')
+        print('Potentials')
+        print('----------')
+        for md5sum, data in metadata['potentials'].items():
+            if 'elements' in data:
+                el1, el2 = data['elements']
+            else:
+                el1 = 'xx'
+                el2 = 'xx'
+            print(f"{md5sum}  {el1}-{el2}  {data['filename']}")
+
+    if False:
+        # List partners outside the current parameterization
+        all_potentials = metadata['potentials']
+        for parameterization in metadata['parameterizations']:
+            pdata = metadata[parameterization]
+            version = [*pdata.keys()][0]
+            vdata = pdata[version]
+            potentials = vdata['potentials']
+            print('')
+            print(parameterization)
+            for group in vdata['sets']:
+                print(f'    {group}')
+            inside, outside = list_partners(metadata, parameterization)
+            print('    inside:')
+            for partner in inside:
+                data = all_potentials[partner]
+                print(f"        {data['filename']}")
+            for param, partners in outside.items():
+                print(f"    {param}:")
+                for partner in partners:
+                    data = all_potentials[partner]
+                    print(f"        {data['filename']}")
+
+    if False:
+        # Check if partners think we are a partner
+        potentials = metadata['potentials']
+        missing_partners = {}
+        for md5sum, data in potentials.items():
+            first = True
+            for partner in data['partners']:
+                pdata = potentials[partner]
+                if md5sum not in pdata['partners']:
+                    if partner not in missing_partners:
+                        missing_partners[partner] = []
+                    if md5sum not in missing_partners[partner]:
+                        missing_partners[partner].append(md5sum)
+
+        for md5sum, missing in missing_partners.items():
+            print(potentials[md5sum]['filename'])
+            for missed in missing:
+                print(f"    {potentials[missed]['filename']}")
+
+    if False:
+        # Find the sets of elements given multiple parameterizations
+        for parameterizations in [
+                ['mio'],
+                ['mio', 'chalc'],
+                ['mio', 'hyb'],
+                ['mio', 'tiorg'],
+                ['mio', 'znorg'],
+                ['mio', 'tiorg', 'znorg']
+        ]:
+            print('')
+            print(parameterizations)
+            sets = find_sets(metadata, parameterizations)
             for group in sets:
                 print(f'    {group}')
 
     if True:
-        partners(metadata)
-
+        # Get the maximum angular momentum from potentials
+        all_potentials = metadata['potentials']
+        for parameterization in metadata['parameterizations']:
+            pdata = metadata[parameterization]
+            version = [*pdata.keys()][0]
+            vdata = pdata[version]
+            potentials = vdata['potentials']
+            print(parameterization)
+            for potential, md5sum in potentials.items():
+                data = all_potentials[md5sum]
+                el1, el2 = data['elements']
+                if el1 == el2:
+                    sk_table = data['SK_table']
+                    basis = sk_table['Basis']
+                    shells = basis['Shells']
+                    highest = shells.split()[-1][1]
+                    if 'HubbDerivative' in basis:
+                        hder = basis['HubbDerivative']
+                        print(f"    {el1:2} {highest} {hder}")
+                    else:
+                        print(f"    {el1:2} {highest}")

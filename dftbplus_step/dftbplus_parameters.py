@@ -78,14 +78,21 @@ class DftbplusParameters(seamm.Parameters):
     """
 
     parameters = {
-        "time": {
-            "default": 100.0,
-            "kind": "float",
-            "default_units": "ps",
-            "enumeration": tuple(),
-            "format_string": ".1f",
-            "description": "Simulation time:",
-            "help_text": ("The time to simulate in the dynamics run.")
+        "calculation": {
+            "default": "geometry optimization",
+            "kind": "string",
+            "default_units": None,
+            "enumeration": (
+                "current structure",
+                "geometry optimization",
+                "molecular dynamics",
+            ),
+            "format_string": "",
+            "description": "Calculation type:",
+            "help_text": (
+                "Whether to do a calculation on the current structure, "
+                "optimize the geometry, or run molecular dynamics."
+            )
         },
     }
 

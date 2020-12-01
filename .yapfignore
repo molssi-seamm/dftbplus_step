@@ -1,2 +1,3 @@
 dftbplus_step/_version.py
 dftbplus_step/*_parameters.py
+dftbplus_step/slako.py

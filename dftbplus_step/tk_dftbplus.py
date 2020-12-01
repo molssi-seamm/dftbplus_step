@@ -3,12 +3,10 @@
 """The graphical part of a DFTB+ step"""
 
 import pprint  # noqa: F401
-import tkinter as tk
 
 import dftbplus_step  # noqa: F401
 import seamm
 from seamm_util import ureg, Q_, units_class  # noqa: F401
-import seamm_widgets as sw
 
 
 class TkDftbplus(seamm.TkNode):
@@ -21,10 +19,6 @@ class TkDftbplus(seamm.TkNode):
         The flowchart that we belong to.
     node : Node = None
         The corresponding node of the non-graphical flowchart
-    namespace : str
-        The namespace of the current step.
-    sub_tk_flowchart : TkFlowchart
-        A graphical Flowchart representing a subflowchart
     canvas: tkCanvas = None
         The Tk Canvas to draw on
     dialog : Dialog
@@ -51,6 +45,7 @@ class TkDftbplus(seamm.TkNode):
         self,
         tk_flowchart=None,
         node=None,
+        namespace='org.molssi.seamm.dftbplus.tk',
         canvas=None,
         x=None,
         y=None,
@@ -83,6 +78,7 @@ class TkDftbplus(seamm.TkNode):
         -------
         None
         """
+        self.namespace = namespace
         self.dialog = None
 
         super().__init__(
@@ -94,6 +90,7 @@ class TkDftbplus(seamm.TkNode):
             w=w,
             h=h
         )
+        self.create_dialog()
 
     def create_dialog(self):
         """
@@ -115,59 +112,22 @@ class TkDftbplus(seamm.TkNode):
         """
 
         frame = super().create_dialog(title='DFTB+')
-        # Shortcut for parameters
-        P = self.node.parameters
+        # make it large!
+        screen_w = self.dialog.winfo_screenwidth()
+        screen_h = self.dialog.winfo_screenheight()
+        w = int(0.9 * screen_w)
+        h = int(0.8 * screen_h)
+        x = int(0.05 * screen_w / 2)
+        y = int(0.1 * screen_h / 2)
 
-        # Then create the widgets
-        for key in P:
-            self[key] = P[key].widget(frame)
+        self.dialog.geometry('{}x{}+{}+{}'.format(w, h, x, y))
 
-        # and lay them out
-        self.reset_dialog()
-
-    def reset_dialog(self, widget=None):
-        """Layout the widgets in the dialog.
-
-        The widgets are chosen by default from the information in
-        DFTB+_parameter.
-
-        This function simply lays them out row by row with
-        aligned labels. You may wish a more complicated layout that
-        is controlled by values of some of the control parameters.
-        If so, edit or override this method
-
-        Parameters
-        ----------
-        widget : Tk Widget = None
-
-        Returns
-        -------
-        None
-
-        See Also
-        --------
-        TkDftbplus.create_dialog
-        """
-
-        # Remove any widgets previously packed
-        frame = self['frame']
-        for slave in frame.grid_slaves():
-            slave.grid_forget()
-
-        # Shortcut for parameters
-        P = self.node.parameters
-
-        # keep track of the row in a variable, so that the layout is flexible
-        # if e.g. rows are skipped to control such as 'method' here
-        row = 0
-        widgets = []
-        for key in P:
-            self[key].grid(row=row, column=0, sticky=tk.EW)
-            widgets.append(self[key])
-            row += 1
-
-        # Align the labels
-        sw.align_labels(widgets)
+        self.tk_subflowchart = seamm.TkFlowchart(
+            master=frame,
+            flowchart=self.node.subflowchart,
+            namespace=self.namespace
+        )
+        self.tk_subflowchart.draw()
 
     def right_click(self, event):
         """
@@ -245,14 +205,54 @@ class TkDftbplus(seamm.TkNode):
             )
 
         self.dialog.deactivate(result)
-        # Shortcut for parameters
-        P = self.node.parameters
 
-        # Get the values for all the widgets. This may be overkill, but
-        # it is easy! You can sort out what it all means later, or
-        # be a bit more selective.
-        for key in P:
-            P[key].set_from_widget()
+    def update_flowchart(self, tk_flowchart=None, flowchart=None):
+        """Update the nongraphical flowchart.
+
+        This is only used in nodes that contain sub-flowcharts
+        What to do depends on the button used to close the dialog. If
+        the user closes it by clicking the 'x' of the dialog window,
+        None is returned, which we take as equivalent to cancel.
+
+        Parameters
+        ----------
+        tk_flowchart : seamm.tk_Flowchart
+            A graphical representation of the SEAMM Flowchart
+
+        flowchart : seamm.Flowchart
+            A non-graphical representation of the SEAMM Flowchart
+
+        Returns
+        -------
+        None
+        """
+
+        super().update_flowchart(
+            flowchart=self.node.subflowchart,
+            tk_flowchart=self.tk_subflowchart
+        )
+
+    def from_flowchart(self, tk_flowchart=None, flowchart=None):
+        """Recreate the graphics from the non-graphical flowchart.
+
+        This is only used in nodes that contain sub-flowcharts.
+
+        Parameters
+        ----------
+        tk_flowchart : seamm.tk_Flowchart
+            A graphical representation of the SEAMM Flowchart
+        flowchart : seamm.Flowchart
+            A non-graphical representation of the SEAMM Flowchart
+
+        Returns
+        -------
+        None
+        """
+
+        super().from_flowchart(
+            flowchart=self.node.subflowchart,
+            tk_flowchart=self.tk_subflowchart
+        )
 
     def handle_help(self):
         """Shows the help to the user when click on help button.

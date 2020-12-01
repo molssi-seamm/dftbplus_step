@@ -83,5 +83,15 @@ setup(
         'org.molssi.seamm.tk': [
             'DFTB+ = dftbplus_step:DftbplusStep',
         ],
+        'org.molssi.seamm.dftbplus': [
+            'Energy = dftbplus_step:EnergyStep',
+            'ChooseParameters = dftbplus_step:ChooseParametersStep',
+            'Optimization = dftbplus_step:OptimizationStep',
+        ],
+        'org.molssi.seamm.dftbplus.tk': [
+            'Energy = dftbplus_step:EnergyStep',
+            'ChooseParameters = dftbplus_step:ChooseParametersStep',
+            'Optimization = dftbplus_step:OptimizationStep',
+        ],
     }
 )
