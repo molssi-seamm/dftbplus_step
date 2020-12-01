@@ -1,7 +1,7 @@
 name: test
 channels:
   - conda-forge
-  - default
+  - defaults
 dependencies:
   # Base depends
   - python
