@@ -1,7 +1,7 @@
 name: test
 channels:
-  - default
   - conda-forge
+  - default
 dependencies:
   # Base depends
   - python
@@ -11,11 +11,12 @@ dependencies:
   - openbabel
 
   # Testing
-  - coverage
-  - flake8
+  # - coverage
+  # - flake8
   - pytest
   - pytest-cov
-  - pytest-runner
+  # - pytest-runner
+  - codecov
 
     # Pip-only installs
   - pip:
@@ -24,6 +25,6 @@ dependencies:
     - seamm-widgets
 
       # Testing
-    - codecov
+    # - codecov
     - yapf
 
