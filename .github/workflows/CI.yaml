@@ -20,7 +20,7 @@ on:
 
 jobs:
   lint:
-    name: Lint ${{ matrix.os }} P${{ matrix.python-version }}
+    name: Lint: ${{ matrix.os }} Py${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -69,7 +69,7 @@ jobs:
         yapf --diff --recursive dftblus_step tests
       
   test:
-    name: Test ${{ matrix.os }} P${{ matrix.python-version }}
+    name: Test: ${{ matrix.os }} Py${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
     needs: lint
     strategy:
@@ -93,9 +93,6 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
         environment-file: devtools/conda-envs/test_env.yaml
-
-        # channels: conda-forge,defaults
-
         activate-environment: test
         auto-update-conda: false
         auto-activate-base: false
@@ -124,3 +121,41 @@ jobs:
         file: ./coverage.xml
         flags: unittests
         name: codecov-${{ matrix.os }}-py${{ matrix.python-version }}
+  deploy:
+    name: PyPi: ${{ matrix.os }} Py${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: [3.8]
+
+    steps:
+    - uses: actions/checkout@master
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+
+
+    - name: Additional info about the build
+      shell: bash
+      run: |
+        uname -a
+        df -h
+        ulimit -a
+
+    - name: Build a binary wheel and a source tarball
+      run: |
+        python setup.py sdist bdist_wheel
+
+    - name: Publish distribution 📦 to Test PyPI
+      uses: pypa/gh-action-pypi-publish@master
+      with:
+        password: ${{ secrets.test_pypi_password }}
+        repository_url: https://test.pypi.org/legacy/
+
+    - name: Publish distribution 📦 to PyPI
+      if: startsWith(github.ref, 'refs/tags')
+      uses: pypa/gh-action-pypi-publish@master
+      with:
+        password: ${{ secrets.pypi_password }}
