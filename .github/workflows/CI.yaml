@@ -20,7 +20,7 @@ on:
 
 jobs:
   lint:
-    name: Lint: ${{ matrix.os }} Py${{ matrix.python-version }}
+    name: Lint ${{ matrix.os }} Py${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -69,7 +69,7 @@ jobs:
         yapf --diff --recursive dftblus_step tests
       
   test:
-    name: Test: ${{ matrix.os }} Py${{ matrix.python-version }}
+    name: Test ${{ matrix.os }} Py${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
     needs: lint
     strategy:
@@ -121,8 +121,9 @@ jobs:
         file: ./coverage.xml
         flags: unittests
         name: codecov-${{ matrix.os }}-py${{ matrix.python-version }}
+
   deploy:
-    name: PyPi: ${{ matrix.os }} Py${{ matrix.python-version }}
+    name: PyPi ${{ matrix.os }} Py${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
