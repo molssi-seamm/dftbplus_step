@@ -148,9 +148,9 @@ jobs:
 
     - name: Build a binary wheel and a source tarball
       run: |
-        python -m pip install . --no-deps
-        python -m setup.py sdist
-        python -m setup.py bdist_wheel
+        # python -m pip install . --no-deps
+        python setup.py sdist
+        python setup.py bdist_wheel
         ls -l dist
 
     - name: Publish distribution 📦 to Test PyPI
