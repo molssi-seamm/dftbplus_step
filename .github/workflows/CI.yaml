@@ -125,6 +125,7 @@ jobs:
   deploy:
     name: PyPi ${{ matrix.os }} Py${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
+    needs: [lint, test]
     strategy:
       matrix:
         os: [ubuntu-latest]
@@ -147,7 +148,10 @@ jobs:
 
     - name: Build a binary wheel and a source tarball
       run: |
-        python setup.py sdist bdist_wheel
+        python -m pip install . --no-deps
+        python -m setup.py sdist
+        python -m setup.py bdist_wheel
+        ls -l dist
 
     - name: Publish distribution 📦 to Test PyPI
       uses: pypa/gh-action-pypi-publish@master
