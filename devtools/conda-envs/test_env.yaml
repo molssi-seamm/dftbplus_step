@@ -11,7 +11,7 @@ dependencies:
 
   # Testing
   # - coverage
-  # - flake8
+  - flake8
   - pytest
   - pytest-cov
   # - pytest-runner
