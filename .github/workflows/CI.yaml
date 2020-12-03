@@ -13,10 +13,10 @@ on:
       - "master"
       - "main"
   schedule:
-    # Nightly tests run on master by default:
+    # Run on master by default Sunday morning at 3:30:
     #   Scheduled workflows run on the latest commit on the default or base branch.
     #   (from https://help.github.com/en/actions/reference/events-that-trigger-workflows#scheduled-events-schedule)
-    - cron: "0 0 * * *"
+    - cron: "30 3 * * 0"
 
 jobs:
   lint:
@@ -156,14 +156,15 @@ jobs:
         ls -l dist/
         
     - name: Publish distribution 📦 to Test PyPI
-      # if: startsWith(github.ref, 'refs/tags')
+      if: startsWith(github.ref, 'refs/tags')
       uses: pypa/gh-action-pypi-publish@master
       with:
         password: ${{ secrets.test_pypi_password }}
         repository_url: https://test.pypi.org/legacy/
+        skip_existing: true
 
     - name: Publish distribution 📦 to PyPI
-      # if: startsWith(github.ref, 'refs/tags')
+      if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
       uses: pypa/gh-action-pypi-publish@master
       with:
         password: ${{ secrets.pypi_password }}
