@@ -10,16 +10,14 @@ dependencies:
   - openbabel
 
   # Testing
+  - codecov
   - flake8
   - pytest
   - pytest-cov
-  - codecov
 
     # Pip-only installs
   - pip:
     - seamm
-    - seamm-util
-    - seamm-widgets
 
     # Testing
     - yapf
