@@ -61,7 +61,7 @@ This plug-in currently supports
 * Single-point energy calculations
 * Structural (geometry) optimization
 
-At the moment the plug-in only handle molecular (non-periodic)
+At the moment the plug-in only handles molecular (non-periodic)
 systems. Periodic systems will be added in an upcoming release.
 
 .. _SEAMM environment: https://github.com/molssi-seamm
@@ -71,8 +71,13 @@ systems. Periodic systems will be added in an upcoming release.
 Credits
 ---------
 
-This package was created with Cookiecutter_ and the `molssi-seamm/cookiecutter-seamm-plugin`_ project template.
+This package was created with Cookiecutter_ and the
+`molssi-seamm/cookiecutter-seamm-plugin`_ project template.
+
+Developed by the Molecular Sciences Software Institute (MolSSI_),
+which receives funding from the National Science Foundation under
+award ACI-1547580
 
 .. _Cookiecutter: https://github.com/audreyr/cookiecutter
 .. _`molssi-seamm/cookiecutter-seamm-plugin`: https://github.com/molssi-seamm/cookiecutter-seamm-plugin
-
+.. _MolSSI: https://molssi.org
