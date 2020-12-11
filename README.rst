@@ -2,15 +2,6 @@
 DFTB+ Step
 ==========
 
-A plug-in for DFTB+ in a SEAMM flowchart
-
-* Free software: BSD-3-Clause
-* Developer Documentation: https://dftbplus-step.readthedocs.io
-* User Documentation: https://molssi-seamm.github.io
-
-Development Status
-------------------
-
 .. image:: https://img.shields.io/github/issues-pr-raw/molssi-seamm/dftbplus_step
    :target: https://github.com/molssi-seamm/dftbplus_step/pulls
    :alt: GitHub pull requests
@@ -35,7 +26,6 @@ Development Status
    :target: https://pyup.io/repos/github/molssi-seamm/dftbplus_step/
    :alt: Updates for requirements
 
-Release Status
 --------------
 
 .. image:: https://github.com/molssi-seamm/dftbplus_step/workflows/Release/badge.svg
@@ -45,6 +35,12 @@ Release Status
 .. image:: https://img.shields.io/pypi/v/dftbplus_step.svg
    :target: https://pypi.python.org/pypi/dftbplus_step
    :alt: Release version
+
+A plug-in for DFTB+ in a SEAMM flowchart
+
+* Free software: BSD-3-Clause
+* Developer Documentation: https://dftbplus-step.readthedocs.io
+* User Documentation: https://molssi-seamm.github.io
 
 
 Features
