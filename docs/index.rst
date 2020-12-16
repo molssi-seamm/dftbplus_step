@@ -21,12 +21,12 @@ Contents:
    Main SEAMM documentation <https://molssi-seamm.github.io>
 
 Indices and tables
-==================
+------------------
 
 * :ref:`search`
 
 Documentation Versions
-======================
+----------------------
 
 .. raw:: html
 
