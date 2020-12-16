@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Utility program to scan the Slater-Koster potential files and extract
-the metadata from them.
+"""Utility program to scan the Slater-Koster potential files and
+extract the metadata from them.
 """
 
 import hashlib
