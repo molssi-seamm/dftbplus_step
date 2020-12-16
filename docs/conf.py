@@ -220,7 +220,7 @@ latex_elements = {
 # [howto/manual]).
 latex_documents = [
     ('index', 'dftbplus_step.tex',
-     u'System Step Documentation',
+     u'DFTB+ Step Documentation',
      u'Paul Saxe', 'manual'),
 ]
 
@@ -251,7 +251,7 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
     ('index', 'dftbplus_step',
-     u'System Step Documentation',
+     u'DFTB+ Step Documentation',
      [u'Paul Saxe'], 1)
 ]
 
@@ -266,7 +266,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
     ('index', 'dftbplus_step',
-     u'System Step Documentation',
+     u'DFTB+ Step Documentation',
      u'Paul Saxe',
      'dftbplus_step',
      'One line description of project.',
