@@ -100,9 +100,10 @@ class ChooseParameters(seamm.Node):
         )
 
         # The Slater-Koster files
-        system = self.get_variable('_system')
+        system_db = self.get_variable('_system_db')
+        configuration = system_db.system.configuration
         parameters = {}
-        elements = set(system.atoms.symbols())
+        elements = set(configuration.atoms.symbols)
         elements = sorted([*elements])
         datasets = slako['datasets']
         potentials = slako['potentials']

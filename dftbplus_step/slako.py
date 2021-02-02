@@ -7,7 +7,6 @@ extract the metadata from them.
 import hashlib
 import json  # noqa: F401
 from pathlib import Path
-import pprint  # noqa: F401
 
 import xmltodict
 
@@ -524,117 +523,117 @@ if __name__ == "__main__":
     create_datafile()
     exit()
 
-    metadata, comments = analyze_directory('data/slako')
-    print('\n'.join(comments))
-    print('')
+    # metadata, comments = analyze_directory('data/slako')
+    # print('\n'.join(comments))
+    # print('')
 
-    if False:
-        for parameterization in metadata['parameterizations']:
-            print('')
-            print(parameterization)
-            sets = find_sets(metadata, [parameterization])
-            for group in sets:
-                print(f'    {group}')
+    # if False:
+    #     for parameterization in metadata['parameterizations']:
+    #         print('')
+    #         print(parameterization)
+    #         sets = find_sets(metadata, [parameterization])
+    #         for group in sets:
+    #             print(f'    {group}')
 
-    if False:
-        partners(metadata)
+    # if False:
+    #     partners(metadata)
 
-    if False:
-        for parameterization in metadata['parameterizations']:
-            print('')
-            print(parameterization)
-            partners2(metadata, parameterization)
+    # if False:
+    #     for parameterization in metadata['parameterizations']:
+    #         print('')
+    #         print(parameterization)
+    #         partners2(metadata, parameterization)
 
-    if False:
-        # Print the md5 sums for all potentials
-        print('')
-        print('Potentials')
-        print('----------')
-        for md5sum, data in metadata['potentials'].items():
-            if 'elements' in data:
-                el1, el2 = data['elements']
-            else:
-                el1 = 'xx'
-                el2 = 'xx'
-            print(f"{md5sum}  {el1}-{el2}  {data['filename']}")
+    # if False:
+    #     # Print the md5 sums for all potentials
+    #     print('')
+    #     print('Potentials')
+    #     print('----------')
+    #     for md5sum, data in metadata['potentials'].items():
+    #         if 'elements' in data:
+    #             el1, el2 = data['elements']
+    #         else:
+    #             el1 = 'xx'
+    #             el2 = 'xx'
+    #         print(f"{md5sum}  {el1}-{el2}  {data['filename']}")
 
-    if False:
-        # List partners outside the current parameterization
-        all_potentials = metadata['potentials']
-        for parameterization in metadata['parameterizations']:
-            pdata = metadata[parameterization]
-            version = [*pdata.keys()][0]
-            vdata = pdata[version]
-            potentials = vdata['potentials']
-            print('')
-            print(parameterization)
-            for group in vdata['sets']:
-                print(f'    {group}')
-            inside, outside = list_partners(metadata, parameterization)
-            print('    inside:')
-            for partner in inside:
-                data = all_potentials[partner]
-                print(f"        {data['filename']}")
-            for param, partners in outside.items():
-                print(f"    {param}:")
-                for partner in partners:
-                    data = all_potentials[partner]
-                    print(f"        {data['filename']}")
+    # if False:
+    #     # List partners outside the current parameterization
+    #     all_potentials = metadata['potentials']
+    #     for parameterization in metadata['parameterizations']:
+    #         pdata = metadata[parameterization]
+    #         version = [*pdata.keys()][0]
+    #         vdata = pdata[version]
+    #         potentials = vdata['potentials']
+    #         print('')
+    #         print(parameterization)
+    #         for group in vdata['sets']:
+    #             print(f'    {group}')
+    #         inside, outside = list_partners(metadata, parameterization)
+    #         print('    inside:')
+    #         for partner in inside:
+    #             data = all_potentials[partner]
+    #             print(f"        {data['filename']}")
+    #         for param, partners in outside.items():
+    #             print(f"    {param}:")
+    #             for partner in partners:
+    #                 data = all_potentials[partner]
+    #                 print(f"        {data['filename']}")
 
-    if False:
-        # Check if partners think we are a partner
-        potentials = metadata['potentials']
-        missing_partners = {}
-        for md5sum, data in potentials.items():
-            first = True
-            for partner in data['partners']:
-                pdata = potentials[partner]
-                if md5sum not in pdata['partners']:
-                    if partner not in missing_partners:
-                        missing_partners[partner] = []
-                    if md5sum not in missing_partners[partner]:
-                        missing_partners[partner].append(md5sum)
+    # if False:
+    #     # Check if partners think we are a partner
+    #     potentials = metadata['potentials']
+    #     missing_partners = {}
+    #     for md5sum, data in potentials.items():
+    #         first = True
+    #         for partner in data['partners']:
+    #             pdata = potentials[partner]
+    #             if md5sum not in pdata['partners']:
+    #                 if partner not in missing_partners:
+    #                     missing_partners[partner] = []
+    #                 if md5sum not in missing_partners[partner]:
+    #                     missing_partners[partner].append(md5sum)
 
-        for md5sum, missing in missing_partners.items():
-            print(potentials[md5sum]['filename'])
-            for missed in missing:
-                print(f"    {potentials[missed]['filename']}")
+    #     for md5sum, missing in missing_partners.items():
+    #         print(potentials[md5sum]['filename'])
+    #         for missed in missing:
+    #             print(f"    {potentials[missed]['filename']}")
 
-    if False:
-        # Find the sets of elements given multiple parameterizations
-        for parameterizations in [
-                ['mio'],
-                ['mio', 'chalc'],
-                ['mio', 'hyb'],
-                ['mio', 'tiorg'],
-                ['mio', 'znorg'],
-                ['mio', 'tiorg', 'znorg']
-        ]:
-            print('')
-            print(parameterizations)
-            sets = find_sets(metadata, parameterizations)
-            for group in sets:
-                print(f'    {group}')
+    # if False:
+    #     # Find the sets of elements given multiple parameterizations
+    #     for parameterizations in [
+    #             ['mio'],
+    #             ['mio', 'chalc'],
+    #             ['mio', 'hyb'],
+    #             ['mio', 'tiorg'],
+    #             ['mio', 'znorg'],
+    #             ['mio', 'tiorg', 'znorg']
+    #     ]:
+    #         print('')
+    #         print(parameterizations)
+    #         sets = find_sets(metadata, parameterizations)
+    #         for group in sets:
+    #             print(f'    {group}')
 
-    if True:
-        # Get the maximum angular momentum from potentials
-        all_potentials = metadata['potentials']
-        for parameterization in metadata['parameterizations']:
-            pdata = metadata[parameterization]
-            version = [*pdata.keys()][0]
-            vdata = pdata[version]
-            potentials = vdata['potentials']
-            print(parameterization)
-            for potential, md5sum in potentials.items():
-                data = all_potentials[md5sum]
-                el1, el2 = data['elements']
-                if el1 == el2:
-                    sk_table = data['SK_table']
-                    basis = sk_table['Basis']
-                    shells = basis['Shells']
-                    highest = shells.split()[-1][1]
-                    if 'HubbDerivative' in basis:
-                        hder = basis['HubbDerivative']
-                        print(f"    {el1:2} {highest} {hder}")
-                    else:
-                        print(f"    {el1:2} {highest}")
+    # if True:
+    #     # Get the maximum angular momentum from potentials
+    #     all_potentials = metadata['potentials']
+    #     for parameterization in metadata['parameterizations']:
+    #         pdata = metadata[parameterization]
+    #         version = [*pdata.keys()][0]
+    #         vdata = pdata[version]
+    #         potentials = vdata['potentials']
+    #         print(parameterization)
+    #         for potential, md5sum in potentials.items():
+    #             data = all_potentials[md5sum]
+    #             el1, el2 = data['elements']
+    #             if el1 == el2:
+    #                 sk_table = data['SK_table']
+    #                 basis = sk_table['Basis']
+    #                 shells = basis['Shells']
+    #                 highest = shells.split()[-1][1]
+    #                 if 'HubbDerivative' in basis:
+    #                     hder = basis['HubbDerivative']
+    #                     print(f"    {el1:2} {highest} {hder}")
+    #                 else:
+    #                     print(f"    {el1:2} {highest}")

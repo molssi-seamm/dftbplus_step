@@ -17,7 +17,6 @@ import traceback
 
 import dftbplus_step
 import seamm
-from seamm_util import ureg, Q_  # noqa: F401
 import seamm_util.printing as printing
 from seamm_util.printing import FormattedText as __
 
@@ -366,15 +365,15 @@ class Dftbplus(seamm.Node):
         seamm.Node
             The next node object in the flowchart.
         """
-        system = self.get_variable('_system')
-        n_atoms = system.n_atoms()
+        system_db = self.get_variable('_system_db')
+        configuration = system_db.system.configuration
+        n_atoms = configuration.n_atoms
         if n_atoms == 0:
             self.logger.error('DFTB+ run(): there is no structure!')
             raise RuntimeError('DFTB+ run(): there is no structure!')
 
         # Access the options
         options = self.options
-        seamm_options = self.global_options  # noqa: F841
 
         # Add the main citation for DFTB+
         self.references.cite(
@@ -529,30 +528,32 @@ class Dftbplus(seamm.Node):
             }
         }
         """
-        system = self.get_variable('_system')
+        system_db = self.get_variable('_system_db')
+        configuration = system_db.system.configuration
 
         result = 'Geometry = {\n'
 
-        elements = set(system.atoms.symbols())
+        elements = set(configuration.atoms.symbols)
         elements = sorted([*elements])
         names = '{"' + '" "'.join(elements) + '"}'
         result += f"    TypeNames = {names}\n"
 
         result += "    TypesAndCoordinates [Angstrom] = {\n"
         for element, xyz in zip(
-            system.atoms.symbols(), system.atoms.coordinates(fractionals=True)
+            configuration.atoms.symbols,
+            configuration.atoms.get_coordinates(fractionals=True)
         ):
             index = elements.index(element)
             x, y, z = xyz
             result += f"        {index+1:>2} {x:10.6f} {y:10.6f} {z:10.6f}\n"
         result += '    }\n'
 
-        if system.periodicity == 3:
+        if configuration.periodicity == 3:
             result += "   Periodic = Yes\n"
             result += "   LatticeVectors [Angstrom] = {\n"
 
             uvw = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
-            XYZ = system.cell.cell().to_cartesians(uvw)
+            XYZ = configuration.cell.to_cartesians(uvw)
             for xyz in XYZ:
                 x, y, z = xyz
                 result += f"        {x:10.6f} {y:10.6f} {z:10.6f}\n"
@@ -630,9 +631,10 @@ class Dftbplus(seamm.Node):
         """
         data = parse_gen_file(gen_data)
 
-        system = self.get_variable('_system')
+        system_db = self.get_variable('_system_db')
+        configuration = system_db.system.configuration
 
-        system.atoms.set_coordinates(
+        configuration.atoms.set_coordinates(
             data['coordinates'],
             fractionals=data['coordinate system'] == 'fractional'
         )
@@ -690,7 +692,7 @@ def parse_gen_file(data):
             for i in range(3):
                 data = next(line).split()
                 lattice.append([float(x) for x in data])
-    except StopIteration():
+    except StopIteration:
         raise EOFError('The gen file ended prematurely.')
 
     return result
