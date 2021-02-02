@@ -17,7 +17,6 @@ import traceback
 
 import dftbplus_step
 import seamm
-from seamm_util import ureg, Q_  # noqa: F401
 import seamm_util.printing as printing
 from seamm_util.printing import FormattedText as __
 
@@ -375,7 +374,6 @@ class Dftbplus(seamm.Node):
 
         # Access the options
         options = self.options
-        seamm_options = self.global_options  # noqa: F841
 
         # Add the main citation for DFTB+
         self.references.cite(
@@ -694,7 +692,7 @@ def parse_gen_file(data):
             for i in range(3):
                 data = next(line).split()
                 lattice.append([float(x) for x in data])
-    except StopIteration():
+    except StopIteration:
         raise EOFError('The gen file ended prematurely.')
 
     return result

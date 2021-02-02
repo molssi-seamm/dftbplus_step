@@ -5,7 +5,6 @@ Control parameters for the DFTB+ step in a SEAMM flowchart
 
 import logging
 import seamm
-import pprint  # noqa: F401
 
 logger = logging.getLogger(__name__)
 
