@@ -1,15 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""
-dftbplus_step
-A step for DFTB+ in a SEAMM flowchart
+"""dftbplus_step
+A SEAMM plug-in for DFTB+, a fast quantum mechanical simulation code.
 """
 import sys
 from setuptools import setup, find_packages
 import versioneer
 
-short_description = __doc__.split("\n")
+short_description = __doc__.splitlines()[1]
 
 # from https://github.com/pytest-dev/pytest-runner#conditional-requirement
 needs_pytest = {'pytest', 'test', 'ptr'}.intersection(sys.argv)
@@ -28,7 +27,7 @@ setup(
     name='dftbplus_step',
     author="Paul Saxe",
     author_email='psaxe@molssi.org',
-    description=short_description[1],
+    description=short_description,
     long_description=readme + '\n\n' + history,
     long_description_content_type='text/x-rst',
     version=versioneer.get_version(),
@@ -65,9 +64,10 @@ setup(
     # prevent the .egg from being made
     zip_safe=True,
 
-    keywords='dftbplus_step',
+    keywords=['SEAMM', 'plug-in', 'flowchart', 'quantum', 'simulation',
+              'atomistic', 'DFTB+', 'DFTBplus', 'tight-binding', 'DFT'],
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Science/Research',
         'Topic :: Scientific/Engineering :: Chemistry',
         'Topic :: Scientific/Engineering :: Physics',
