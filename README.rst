@@ -30,23 +30,26 @@ DFTB+ Step
    :target: https://pypi.python.org/pypi/dftbplus_step
    :alt: PyPi VERSION
 
-A plug-in for DFTB+ in a SEAMM flowchart
+Description
+-----------
+
+A SEAMM_ plug-in for DFTB+, a fast quantum mechanical simulation code.
+
+This plug-in provides a graphical user interface (GUI) for setting up
+simulations using `DFTB+`_ quantum mechanical simulation software
+package. DFTB+ does quantum mechanical simulations similar to standard
+density functional theory (DFT) for molecules, crystals and
+materials. The simulations are carried out in an approximate way using
+the **D**\ ensity **F**\ unctional based **T**\ ight **B**\ inding
+method (DFTB), which is typically about two orders of magnitude faster
+than traditonal DFT.
+
 
 * Free software: BSD-3-Clause
 * Documentation: https://molssi-seamm.github.io/dftbplus_step/index.html
 
 Features
 --------
-
-This plug-in to the `SEAMM environment`_ provides an interface to the
-`DFTB+`_ quantum mechanical simulation software package. DFTB+ lets
-you do quantum mechanical simulations similar to density functional
-theory (DFT)  for molecules, crystals and materials. The simulations
-are carried out in an approximate way using the **D**\ ensity
-**F**\ unctional based **T**\ ight **B**\ inding method (DFTB), which
-is typically about two orders of magnitude faster than traditonal DFT.
-
-This plug-in currently supports
 
 * The selection and use of any of the parameter sets found at the
   `DFTB website`_.
@@ -56,7 +59,7 @@ This plug-in currently supports
 At the moment the plug-in only handles molecular (non-periodic)
 systems. Periodic systems will be added in an upcoming release.
 
-.. _SEAMM environment: https://github.com/molssi-seamm
+.. _SEAMM: https://github.com/molssi-seamm
 .. _DFTB+: https://dftbplus.org
 .. _DFTB website: https://dftb.org
 
