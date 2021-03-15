@@ -1,0 +1,1513 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>dftbplus_step package &mdash; DFTB+ Step 2021.2.10+1.g675667e documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Contributing" href="contributing.html" />
+    <link rel="prev" title="dftbplus_step" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> DFTB+ Step
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2021.2.10+1.g675667e
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../user/index.html">User Documentation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Developer Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="readme.html">DFTB+ Step</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="modules.html">dftbplus_step</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">dftbplus_step package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html">Contributing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../history.html">History</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://molssi-seamm.github.io">Main SEAMM documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">DFTB+ Step</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Developer Documentation</a> &raquo;</li>
+        
+          <li><a href="modules.html">dftbplus_step</a> &raquo;</li>
+        
+      <li>dftbplus_step package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/developer/dftbplus_step.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="dftbplus-step-package">
+<h1>dftbplus_step package<a class="headerlink" href="#dftbplus-step-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-dftbplus_step.choose_parameters">
+<span id="dftbplus-step-choose-parameters-module"></span><h2>dftbplus_step.choose_parameters module<a class="headerlink" href="#module-dftbplus_step.choose_parameters" title="Permalink to this headline">¶</a></h2>
+<p>Setup DFTB+</p>
+<dl class="py class">
+<dt id="dftbplus_step.choose_parameters.ChooseParameters">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">dftbplus_step.choose_parameters.</span></code><code class="sig-name descname"><span class="pre">ChooseParameters</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">flowchart=None</span></em>, <em class="sig-param"><span class="pre">title='Choose</span> <span class="pre">Parameters'</span></em>, <em class="sig-param"><span class="pre">extension=None</span></em>, <em class="sig-param"><span class="pre">logger=&lt;Logger</span> <span class="pre">dftbplus_step.choose_parameters</span> <span class="pre">(WARNING)&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/choose_parameters.html#ChooseParameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.choose_parameters.ChooseParameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">seamm.node.Node</span></code></p>
+<dl class="py method">
+<dt id="dftbplus_step.choose_parameters.ChooseParameters.analyze">
+<code class="sig-name descname"><span class="pre">analyze</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/choose_parameters.html#ChooseParameters.analyze"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.choose_parameters.ChooseParameters.analyze" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse the output and generating the text output and store the
+data in variables for other stages to access</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.choose_parameters.ChooseParameters.description_text">
+<code class="sig-name descname"><span class="pre">description_text</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">P</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/choose_parameters.html#ChooseParameters.description_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.choose_parameters.ChooseParameters.description_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepare information about what this node will do</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.choose_parameters.ChooseParameters.get_input">
+<code class="sig-name descname"><span class="pre">get_input</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/choose_parameters.html#ChooseParameters.get_input"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.choose_parameters.ChooseParameters.get_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the input for the Slater-Koster parameters for DFTB+</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.choose_parameters.ChooseParameters.git_revision">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">git_revision</span></code><a class="headerlink" href="#dftbplus_step.choose_parameters.ChooseParameters.git_revision" title="Permalink to this definition">¶</a></dt>
+<dd><p>The git version of this module.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.choose_parameters.ChooseParameters.header">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">header</span></code><a class="headerlink" href="#dftbplus_step.choose_parameters.ChooseParameters.header" title="Permalink to this definition">¶</a></dt>
+<dd><p>A printable header for this section of output</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.choose_parameters.ChooseParameters.version">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">version</span></code><a class="headerlink" href="#dftbplus_step.choose_parameters.ChooseParameters.version" title="Permalink to this definition">¶</a></dt>
+<dd><p>The semantic version of this module.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-dftbplus_step.choose_parameters_parameters">
+<span id="dftbplus-step-choose-parameters-parameters-module"></span><h2>dftbplus_step.choose_parameters_parameters module<a class="headerlink" href="#module-dftbplus_step.choose_parameters_parameters" title="Permalink to this headline">¶</a></h2>
+<p>Global control parameters for DFTB+</p>
+<dl class="py class">
+<dt id="dftbplus_step.choose_parameters_parameters.ChooseParametersParameters">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">dftbplus_step.choose_parameters_parameters.</span></code><code class="sig-name descname"><span class="pre">ChooseParametersParameters</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">defaults</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/choose_parameters_parameters.html#ChooseParametersParameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.choose_parameters_parameters.ChooseParametersParameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">seamm.parameters.Parameters</span></code></p>
+<p>The control parameters for initializing DFTB+</p>
+<dl class="py attribute">
+<dt id="dftbplus_step.choose_parameters_parameters.ChooseParametersParameters.parameters">
+<code class="sig-name descname"><span class="pre">parameters</span></code><em class="property"> <span class="pre">=</span> <span class="pre">{'dataset':</span> <span class="pre">{'default':</span> <span class="pre">'3ob',</span> <span class="pre">'default_units':</span> <span class="pre">None,</span> <span class="pre">'description':</span> <span class="pre">'Slater-Koster</span> <span class="pre">dataset:',</span> <span class="pre">'enumeration':</span> <span class="pre">('3ob',</span> <span class="pre">'matsci',</span> <span class="pre">'mio',</span> <span class="pre">'auorg',</span> <span class="pre">'borg',</span> <span class="pre">'halorg',</span> <span class="pre">'ob2',</span> <span class="pre">'pbc',</span> <span class="pre">'siband',</span> <span class="pre">'rare'),</span> <span class="pre">'format_string':</span> <span class="pre">'',</span> <span class="pre">'help_text':</span> <span class="pre">'The</span> <span class="pre">main</span> <span class="pre">set</span> <span class="pre">of</span> <span class="pre">Slater-Koster</span> <span class="pre">potentials</span> <span class="pre">to</span> <span class="pre">use.',</span> <span class="pre">'kind':</span> <span class="pre">'string'},</span> <span class="pre">'elements':</span> <span class="pre">{'default':</span> <span class="pre">'',</span> <span class="pre">'default_units':</span> <span class="pre">None,</span> <span class="pre">'description':</span> <span class="pre">'Elements:',</span> <span class="pre">'enumeration':</span> <span class="pre">None,</span> <span class="pre">'format_string':</span> <span class="pre">'',</span> <span class="pre">'help_text':</span> <span class="pre">'The</span> <span class="pre">elements</span> <span class="pre">to</span> <span class="pre">include.',</span> <span class="pre">'kind':</span> <span class="pre">'periodic</span> <span class="pre">table'},</span> <span class="pre">'subset':</span> <span class="pre">{'default':</span> <span class="pre">'none',</span> <span class="pre">'default_units':</span> <span class="pre">None,</span> <span class="pre">'description':</span> <span class="pre">'Specialized</span> <span class="pre">Slater-Koster</span> <span class="pre">potentials</span> <span class="pre">to</span> <span class="pre">add:',</span> <span class="pre">'enumeration':</span> <span class="pre">('none',</span> <span class="pre">'3ob-freq',</span> <span class="pre">'3ob-hhmod',</span> <span class="pre">'3ob-nhmod',</span> <span class="pre">'3ob-ophyd'),</span> <span class="pre">'format_string':</span> <span class="pre">'',</span> <span class="pre">'help_text':</span> <span class="pre">'The</span> <span class="pre">specialized</span> <span class="pre">set</span> <span class="pre">of</span> <span class="pre">Slater-Koster</span> <span class="pre">potentials</span> <span class="pre">to</span> <span class="pre">add</span> <span class="pre">to</span> <span class="pre">the</span> <span class="pre">main</span> <span class="pre">set.',</span> <span class="pre">'kind':</span> <span class="pre">'string'}}</span></em><a class="headerlink" href="#dftbplus_step.choose_parameters_parameters.ChooseParametersParameters.parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-dftbplus_step.choose_parameters_step">
+<span id="dftbplus-step-choose-parameters-step-module"></span><h2>dftbplus_step.choose_parameters_step module<a class="headerlink" href="#module-dftbplus_step.choose_parameters_step" title="Permalink to this headline">¶</a></h2>
+<p>Main module.</p>
+<dl class="py class">
+<dt id="dftbplus_step.choose_parameters_step.ChooseParametersStep">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">dftbplus_step.choose_parameters_step.</span></code><code class="sig-name descname"><span class="pre">ChooseParametersStep</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flowchart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gui</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/choose_parameters_step.html#ChooseParametersStep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.choose_parameters_step.ChooseParametersStep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="dftbplus_step.choose_parameters_step.ChooseParametersStep.create_node">
+<code class="sig-name descname"><span class="pre">create_node</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flowchart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/choose_parameters_step.html#ChooseParametersStep.create_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.choose_parameters_step.ChooseParametersStep.create_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the new node object</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.choose_parameters_step.ChooseParametersStep.create_tk_node">
+<code class="sig-name descname"><span class="pre">create_tk_node</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">canvas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/choose_parameters_step.html#ChooseParametersStep.create_tk_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.choose_parameters_step.ChooseParametersStep.create_tk_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the graphical Tk node object</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.choose_parameters_step.ChooseParametersStep.description">
+<code class="sig-name descname"><span class="pre">description</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/choose_parameters_step.html#ChooseParametersStep.description"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.choose_parameters_step.ChooseParametersStep.description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a description of what this extension does</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="dftbplus_step.choose_parameters_step.ChooseParametersStep.my_description">
+<code class="sig-name descname"><span class="pre">my_description</span></code><em class="property"> <span class="pre">=</span> <span class="pre">{'description':</span> <span class="pre">'Choose</span> <span class="pre">Slater-Koster</span> <span class="pre">parameters',</span> <span class="pre">'group':</span> <span class="pre">'Setup',</span> <span class="pre">'name':</span> <span class="pre">'Choose</span> <span class="pre">parameters'}</span></em><a class="headerlink" href="#dftbplus_step.choose_parameters_step.ChooseParametersStep.my_description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-dftbplus_step.dftbplus">
+<span id="dftbplus-step-dftbplus-module"></span><h2>dftbplus_step.dftbplus module<a class="headerlink" href="#module-dftbplus_step.dftbplus" title="Permalink to this headline">¶</a></h2>
+<p>Non-graphical part of the DFTB+ step in a SEAMM flowchart</p>
+<dl class="py class">
+<dt id="dftbplus_step.dftbplus.Dftbplus">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">dftbplus_step.dftbplus.</span></code><code class="sig-name descname"><span class="pre">Dftbplus</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">flowchart=None</span></em>, <em class="sig-param"><span class="pre">title='DFTB+'</span></em>, <em class="sig-param"><span class="pre">namespace='org.molssi.seamm.dftbplus'</span></em>, <em class="sig-param"><span class="pre">extension=None</span></em>, <em class="sig-param"><span class="pre">logger=&lt;Logger</span> <span class="pre">dftbplus_step.dftbplus</span> <span class="pre">(WARNING)&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/dftbplus.html#Dftbplus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.dftbplus.Dftbplus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">seamm.node.Node</span></code></p>
+<p>The non-graphical part of a DFTB+ step in a flowchart.</p>
+<dl class="py attribute">
+<dt id="dftbplus_step.dftbplus.Dftbplus.parser">
+<code class="sig-name descname"><span class="pre">parser</span></code><a class="headerlink" href="#dftbplus_step.dftbplus.Dftbplus.parser" title="Permalink to this definition">¶</a></dt>
+<dd><p>The parser object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>configargparse.ArgParser</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="dftbplus_step.dftbplus.Dftbplus.options">
+<code class="sig-name descname"><span class="pre">options</span></code><a class="headerlink" href="#dftbplus_step.dftbplus.Dftbplus.options" title="Permalink to this definition">¶</a></dt>
+<dd><p>It contains a two item tuple containing the populated namespace and the
+list of remaining argument strings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="dftbplus_step.dftbplus.Dftbplus.subflowchart">
+<code class="sig-name descname"><span class="pre">subflowchart</span></code><a class="headerlink" href="#dftbplus_step.dftbplus.Dftbplus.subflowchart" title="Permalink to this definition">¶</a></dt>
+<dd><p>A SEAMM Flowchart object that represents a subflowchart, if needed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>seamm.Flowchart</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="dftbplus_step.dftbplus.Dftbplus.parameters">
+<code class="sig-name descname"><span class="pre">parameters</span></code><a class="headerlink" href="#dftbplus_step.dftbplus.Dftbplus.parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>The control parameters for DFTB+.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#dftbplus_step.dftbplus_parameters.DftbplusParameters" title="dftbplus_step.dftbplus_parameters.DftbplusParameters">DftbplusParameters</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TkDftbplus</span></code>, <a class="reference internal" href="#dftbplus_step.dftbplus.Dftbplus" title="dftbplus_step.dftbplus.Dftbplus"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Dftbplus</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">DftbplusParameters</span></code></p>
+</div>
+<dl class="py method">
+<dt id="dftbplus_step.dftbplus.Dftbplus.analyze">
+<code class="sig-name descname"><span class="pre">analyze</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/dftbplus.html#Dftbplus.analyze"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.dftbplus.Dftbplus.analyze" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do any analysis of the output from this step.</p>
+<p>Also print important results to the local step.out file using
+‘printer’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>indent</strong> (<em>str</em>) – An extra indentation for the output</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.dftbplus.Dftbplus.create_parser">
+<code class="sig-name descname"><span class="pre">create_parser</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/dftbplus.html#Dftbplus.create_parser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.dftbplus.Dftbplus.create_parser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setup the command-line / config file parser</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.dftbplus.Dftbplus.description_text">
+<code class="sig-name descname"><span class="pre">description_text</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">P</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/dftbplus.html#Dftbplus.description_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.dftbplus.Dftbplus.description_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the text description of what this step will do.
+The dictionary of control values is passed in as P so that
+the code can test values, etc.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>P</strong> (<em>dict</em>) – An optional dictionary of the current values of the control
+parameters.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A description of the current step.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.dftbplus.Dftbplus.geometry">
+<code class="sig-name descname"><span class="pre">geometry</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/dftbplus.html#Dftbplus.geometry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.dftbplus.Dftbplus.geometry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the input for DFTB+ for the geometry.</p>
+<p>Example:</p>
+<dl>
+<dt>Geometry = {</dt><dd><p>TypeNames = { “Ga” “As” }
+TypesAndCoordinates [Angstrom] = {</p>
+<blockquote>
+<div><p>1 0.000000 0.000000 0.000000
+2 1.356773 1.356773 1.356773</p>
+</div></blockquote>
+<p>}
+Periodic = Yes
+LatticeVectors [Angstrom] = {</p>
+<blockquote>
+<div><p>2.713546 2.713546 0.
+0. 2.713546 2.713546
+2.713546 0. 2.713546</p>
+</div></blockquote>
+<p>}</p>
+</dd>
+</dl>
+<p>}</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.dftbplus.Dftbplus.git_revision">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">git_revision</span></code><a class="headerlink" href="#dftbplus_step.dftbplus.Dftbplus.git_revision" title="Permalink to this definition">¶</a></dt>
+<dd><p>The git version of this module.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.dftbplus.Dftbplus.parse_results">
+<code class="sig-name descname"><span class="pre">parse_results</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lines</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/dftbplus.html#Dftbplus.parse_results"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.dftbplus.Dftbplus.parse_results" title="Permalink to this definition">¶</a></dt>
+<dd><p>Digest the data in the results.tag file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.dftbplus.Dftbplus.run">
+<code class="sig-name descname"><span class="pre">run</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/dftbplus.html#Dftbplus.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.dftbplus.Dftbplus.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run a DFTB+ step.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>None</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The next node object in the flowchart.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>seamm.Node</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.dftbplus.Dftbplus.set_id">
+<code class="sig-name descname"><span class="pre">set_id</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/dftbplus.html#Dftbplus.set_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.dftbplus.Dftbplus.set_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the id for node to a given tuple</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.dftbplus.Dftbplus.update_system">
+<code class="sig-name descname"><span class="pre">update_system</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gen_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/dftbplus.html#Dftbplus.update_system"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.dftbplus.Dftbplus.update_system" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the system with the changed coordinates and cell.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>gen_data</strong> (<em>str</em>) – The contents of a gen file, as a single string.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.dftbplus.Dftbplus.version">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">version</span></code><a class="headerlink" href="#dftbplus_step.dftbplus.Dftbplus.version" title="Permalink to this definition">¶</a></dt>
+<dd><p>The semantic version of this module.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="dftbplus_step.dftbplus.deep_merge">
+<code class="sig-prename descclassname"><span class="pre">dftbplus_step.dftbplus.</span></code><code class="sig-name descname"><span class="pre">deep_merge</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/dftbplus.html#deep_merge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.dftbplus.deep_merge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do a deep merge of one dict into another.</p>
+<p>This will update d with values in u, but will not delete keys in d
+not found in u at some arbitrary depth of d. That is, u is deeply
+merged into d.</p>
+<dl class="simple">
+<dt>Args -</dt><dd><p>d, u: dicts</p>
+</dd>
+</dl>
+<p>Note: this is destructive to d, but not u.</p>
+<p>Returns: None</p>
+<p>Written by djpinne &#64;
+<a class="reference external" href="https://stackoverflow.com/questions/3232943/update-value-of-a-nested-dictionary-of-varying-depth">https://stackoverflow.com/questions/3232943/update-value-of-a-nested-dictionary-of-varying-depth</a></p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="dftbplus_step.dftbplus.dict_to_hsd">
+<code class="sig-prename descclassname"><span class="pre">dftbplus_step.dftbplus.</span></code><code class="sig-name descname"><span class="pre">dict_to_hsd</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/dftbplus.html#dict_to_hsd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.dftbplus.dict_to_hsd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a dictionary into human-friendly structured data (HSD).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>d</strong> (<em>dict</em>) – The input dictionary to transform</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>hsd</strong> – The HSD text.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="dftbplus_step.dftbplus.parse_gen_file">
+<code class="sig-prename descclassname"><span class="pre">dftbplus_step.dftbplus.</span></code><code class="sig-name descname"><span class="pre">parse_gen_file</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/dftbplus.html#parse_gen_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.dftbplus.parse_gen_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse a DFTB+ gen datafile into coordinates, etc.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>str</em>) – The contents of the file as a string</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionary with labeled coordinates, periodicity, etc.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="dftbplus_step.dftbplus.redimension">
+<code class="sig-prename descclassname"><span class="pre">dftbplus_step.dftbplus.</span></code><code class="sig-name descname"><span class="pre">redimension</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimensions</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/dftbplus.html#redimension"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.dftbplus.redimension" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the dimensions on values to the new dimensions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>values</strong> (<em>[</em><em>]</em>) – The incoming values</p></li>
+<li><p><strong>dimensions</strong> (<em>[</em><em>int</em><em>]</em>) – The desired dimensions</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>values</strong> – The redimensioned values.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[[]..]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-dftbplus_step.dftbplus_parameters">
+<span id="dftbplus-step-dftbplus-parameters-module"></span><h2>dftbplus_step.dftbplus_parameters module<a class="headerlink" href="#module-dftbplus_step.dftbplus_parameters" title="Permalink to this headline">¶</a></h2>
+<p>Control parameters for the DFTB+ step in a SEAMM flowchart</p>
+<dl class="py class">
+<dt id="dftbplus_step.dftbplus_parameters.DftbplusParameters">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">dftbplus_step.dftbplus_parameters.</span></code><code class="sig-name descname"><span class="pre">DftbplusParameters</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">defaults</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/dftbplus_parameters.html#DftbplusParameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.dftbplus_parameters.DftbplusParameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">seamm.parameters.Parameters</span></code></p>
+<p>The control parameters for DFTB+.</p>
+<p>The developer will add a dictionary of Parameters to this class.
+The keys are parameters for the current plugin, which themselves
+might be dictionaries.</p>
+<p>You need to replace the ‘time’ example below with one or more
+definitions of the control parameters for your plugin and application.</p>
+<dl class="py attribute">
+<dt id="dftbplus_step.dftbplus_parameters.DftbplusParameters.parameters">
+<code class="sig-name descname"><span class="pre">parameters</span></code><a class="headerlink" href="#dftbplus_step.dftbplus_parameters.DftbplusParameters.parameters" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>‘format_string’, description’, help_text’}</p>
+</div></blockquote>
+<p>A dictionary containing the parameters for the current step.
+Each key of the dictionary is a dictionary that contains the
+the following keys: kind, default, default_units, enumeration,
+format_string, description and help text.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>{‘kind’, ‘default’, ‘default_units’, ‘enumeration’,</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt>
+<code class="sig-name descname"><span class="pre">parameters['kind']</span></code></dt>
+<dd><p>Specifies the kind of a variable. While the ‘kind’ of a variable might
+be a numeric value, it may still have enumerated custom values
+meaningful to the user. For instance, if the parameter is
+a convergence criterion for an optimizer, custom values like ‘normal’,
+‘precise’, etc, might be adequate. In addition, any
+parameter can be set to a variable of expression, indicated by having
+‘$’ as the first character in the field. For example, $OPTIMIZER_CONV.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>custom</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt>
+<code class="sig-name descname"><span class="pre">parameters['default']</span></code></dt>
+<dd><p>‘enum’ The default value of the parameter, used to reset it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>‘integer’ or ‘float’ or ‘string’ or ‘boolean’ or</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt>
+<code class="sig-name descname"><span class="pre">parameters['default_units']</span></code></dt>
+<dd><p>The default units, used for resetting the value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt>
+<code class="sig-name descname"><span class="pre">parameters['enumeration']</span></code></dt>
+<dd><p>A tuple of enumerated values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt>
+<code class="sig-name descname"><span class="pre">parameters['format_string']</span></code></dt>
+<dd><p>A format string for ‘pretty’ output.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt>
+<code class="sig-name descname"><span class="pre">parameters['description']</span></code></dt>
+<dd><p>A short string used as a prompt in the GUI.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt>
+<code class="sig-name descname"><span class="pre">parameters['help_text']</span></code></dt>
+<dd><p>A longer string to display as help for the user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Dftbplus</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">TkDftbplus</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">Dftbplus</span></code>, <a class="reference internal" href="#dftbplus_step.dftbplus_parameters.DftbplusParameters" title="dftbplus_step.dftbplus_parameters.DftbplusParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DftbplusParameters</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">DFTB</span></code></p>
+</div>
+<p class="rubric">Examples</p>
+<dl>
+<dt>parameters = {</dt><dd><dl class="simple">
+<dt>“time”: {</dt><dd><p>“default”: 100.0,
+“kind”: “float”,
+“default_units”: “ps”,
+“enumeration”: tuple(),
+“format_string”: “.1f”,
+“description”: “Simulation time:”,
+“help_text”: (“The time to simulate in the dynamics run.”)</p>
+</dd>
+</dl>
+<p>},</p>
+</dd>
+</dl>
+<p>}</p>
+<dl class="py attribute">
+<dt id="id0">
+<code class="sig-name descname"><span class="pre">parameters</span></code><em class="property"> <span class="pre">=</span> <span class="pre">{'calculation':</span> <span class="pre">{'default':</span> <span class="pre">'geometry</span> <span class="pre">optimization',</span> <span class="pre">'default_units':</span> <span class="pre">None,</span> <span class="pre">'description':</span> <span class="pre">'Calculation</span> <span class="pre">type:',</span> <span class="pre">'enumeration':</span> <span class="pre">('current</span> <span class="pre">structure',</span> <span class="pre">'geometry</span> <span class="pre">optimization',</span> <span class="pre">'molecular</span> <span class="pre">dynamics'),</span> <span class="pre">'format_string':</span> <span class="pre">'',</span> <span class="pre">'help_text':</span> <span class="pre">'Whether</span> <span class="pre">to</span> <span class="pre">do</span> <span class="pre">a</span> <span class="pre">calculation</span> <span class="pre">on</span> <span class="pre">the</span> <span class="pre">current</span> <span class="pre">structure,</span> <span class="pre">optimize</span> <span class="pre">the</span> <span class="pre">geometry,</span> <span class="pre">or</span> <span class="pre">run</span> <span class="pre">molecular</span> <span class="pre">dynamics.',</span> <span class="pre">'kind':</span> <span class="pre">'string'}}</span></em><a class="headerlink" href="#id0" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-dftbplus_step.dftbplus_step">
+<span id="dftbplus-step-dftbplus-step-module"></span><h2>dftbplus_step.dftbplus_step module<a class="headerlink" href="#module-dftbplus_step.dftbplus_step" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="dftbplus_step.dftbplus_step.DftbplusStep">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">dftbplus_step.dftbplus_step.</span></code><code class="sig-name descname"><span class="pre">DftbplusStep</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flowchart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gui</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/dftbplus_step.html#DftbplusStep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.dftbplus_step.DftbplusStep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Helper class needed for the stevedore integration.</p>
+<p>This must provide a description() method that returns a dict containing a
+description of this node, and create_node() and create_tk_node() methods
+for creating the graphical and non-graphical nodes.</p>
+<dl class="py attribute">
+<dt id="dftbplus_step.dftbplus_step.DftbplusStep.my_description">
+<code class="sig-name descname"><span class="pre">my_description</span></code><a class="headerlink" href="#dftbplus_step.dftbplus_step.DftbplusStep.my_description" title="Permalink to this definition">¶</a></dt>
+<dd><p>A human-readable description of this step. It can be
+several lines long, and needs to be clear to non-expert users.
+It contains the following keys: description, group, name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>{description, group, name}</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt>
+<code class="sig-name descname"><span class="pre">my_description['description']</span></code></dt>
+<dd><p>A description of the DFTB+ step. It must be
+clear to non-experts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt>
+<code class="sig-name descname"><span class="pre">my_description['group']</span></code></dt>
+<dd><p>Which group in the menus to put this step. If the group does
+not exist it will be created. Common groups are ‘Building’,
+‘Calculations’, ‘Control’ and ‘Data’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt>
+<code class="sig-name descname"><span class="pre">my_description['name']</span></code></dt>
+<dd><p>The name of this step, to be displayed in the menus.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.dftbplus_step.DftbplusStep.create_node">
+<code class="sig-name descname"><span class="pre">create_node</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flowchart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/dftbplus_step.html#DftbplusStep.create_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.dftbplus_step.DftbplusStep.create_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create and return the new node object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>flowchart</strong> (<em>seamm.Node</em>) – A non-graphical SEAMM node</p></li>
+<li><p><strong>**kwargs</strong> (<em>keyworded arguments</em>) – Various keyworded arguments such as title, namespace or
+extension representing the title displayed in the flowchart,
+the namespace for the plugins of a subflowchart and
+the extension, respectively.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#dftbplus_step.dftbplus.Dftbplus" title="dftbplus_step.dftbplus.Dftbplus">Dftbplus</a></p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Dftbplus</span></code></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.dftbplus_step.DftbplusStep.create_tk_node">
+<code class="sig-name descname"><span class="pre">create_tk_node</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">canvas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/dftbplus_step.html#DftbplusStep.create_tk_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.dftbplus_step.DftbplusStep.create_tk_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create and return the graphical Tk node object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>canvas</strong> (<em>tk.Canvas</em>) – The Tk Canvas widget</p></li>
+<li><p><strong>**kwargs</strong> (<em>keyworded arguments</em>) – Various keyworded arguments such as tk_flowchart, node, x, y, w, h
+representing a graphical flowchart object, a non-graphical node for
+a step, and dimensions of the graphical node.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#dftbplus_step.tk_dftbplus.TkDftbplus" title="dftbplus_step.tk_dftbplus.TkDftbplus">TkDftbplus</a></p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TkDftbplus</span></code></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.dftbplus_step.DftbplusStep.description">
+<code class="sig-name descname"><span class="pre">description</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/dftbplus_step.html#DftbplusStep.description"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.dftbplus_step.DftbplusStep.description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a description of what this extension does</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="id1">
+<code class="sig-name descname"><span class="pre">my_description</span></code><em class="property"> <span class="pre">=</span> <span class="pre">{'description':</span> <span class="pre">'An</span> <span class="pre">interface</span> <span class="pre">for</span> <span class="pre">DFTB+',</span> <span class="pre">'group':</span> <span class="pre">'Simulations',</span> <span class="pre">'name':</span> <span class="pre">'DFTB+'}</span></em><a class="headerlink" href="#id1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-dftbplus_step.energy">
+<span id="dftbplus-step-energy-module"></span><h2>dftbplus_step.energy module<a class="headerlink" href="#module-dftbplus_step.energy" title="Permalink to this headline">¶</a></h2>
+<p>Setup DFTB+</p>
+<dl class="py class">
+<dt id="dftbplus_step.energy.Energy">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">dftbplus_step.energy.</span></code><code class="sig-name descname"><span class="pre">Energy</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">flowchart=None</span></em>, <em class="sig-param"><span class="pre">title='Single-Point</span> <span class="pre">Energy'</span></em>, <em class="sig-param"><span class="pre">extension=None</span></em>, <em class="sig-param"><span class="pre">logger=&lt;Logger</span> <span class="pre">dftbplus_step.energy</span> <span class="pre">(WARNING)&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/energy.html#Energy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.energy.Energy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">seamm.node.Node</span></code></p>
+<dl class="py method">
+<dt id="dftbplus_step.energy.Energy.analyze">
+<code class="sig-name descname"><span class="pre">analyze</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/energy.html#Energy.analyze"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.energy.Energy.analyze" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse the output and generating the text output and store the
+data in variables for other stages to access</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.energy.Energy.description_text">
+<code class="sig-name descname"><span class="pre">description_text</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">P</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/energy.html#Energy.description_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.energy.Energy.description_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepare information about what this node will do</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.energy.Energy.get_input">
+<code class="sig-name descname"><span class="pre">get_input</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/energy.html#Energy.get_input"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.energy.Energy.get_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the input for an initialization calculation for DFTB+</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.energy.Energy.git_revision">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">git_revision</span></code><a class="headerlink" href="#dftbplus_step.energy.Energy.git_revision" title="Permalink to this definition">¶</a></dt>
+<dd><p>The git version of this module.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.energy.Energy.header">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">header</span></code><a class="headerlink" href="#dftbplus_step.energy.Energy.header" title="Permalink to this definition">¶</a></dt>
+<dd><p>A printable header for this section of output</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.energy.Energy.version">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">version</span></code><a class="headerlink" href="#dftbplus_step.energy.Energy.version" title="Permalink to this definition">¶</a></dt>
+<dd><p>The semantic version of this module.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-dftbplus_step.energy_parameters">
+<span id="dftbplus-step-energy-parameters-module"></span><h2>dftbplus_step.energy_parameters module<a class="headerlink" href="#module-dftbplus_step.energy_parameters" title="Permalink to this headline">¶</a></h2>
+<p>Global control parameters for DFTB+</p>
+<dl class="py class">
+<dt id="dftbplus_step.energy_parameters.EnergyParameters">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">dftbplus_step.energy_parameters.</span></code><code class="sig-name descname"><span class="pre">EnergyParameters</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">defaults</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/energy_parameters.html#EnergyParameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.energy_parameters.EnergyParameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">seamm.parameters.Parameters</span></code></p>
+<p>The control parameters for the DFTB+ Hamiltonian</p>
+<p class="rubric">Example</p>
+<dl>
+<dt>Hamiltonian = DFTB {</dt><dd><p>Scc = Yes
+SlaterKosterFiles = {</p>
+<blockquote>
+<div><p>O-O = “../../slakos/mio-ext/O-O.skf”
+O-H = “../../slakos/mio-ext/O-H.skf”
+H-O = “../../slakos/mio-ext/H-O.skf”
+H-H = “../../slakos/mio-ext/H-H.skf”</p>
+</div></blockquote>
+<p>}
+MaxAngularMomentum = {</p>
+<blockquote>
+<div><p>O = “p”
+H = “s”</p>
+</div></blockquote>
+<p>}
+PolynomialRepulsive = {}
+ShellResolvedSCC = No
+OldSKInterpolation = No
+RangeSeparated = None {}
+ReadInitialCharges = No
+InitialCharges = {}
+SCCTolerance = 1.0000000000000001E-005
+HCorrection = None {}
+SpinPolarisation = {}
+ElectricField = {}
+Solver = RelativelyRobust {}
+Charge = 0.0000000000000000
+MaxSCCIterations = 100
+OnSiteCorrection = {}
+Dispersion = {}
+Solvation = {}
+Electrostatics = GammaFunctional {}
+ThirdOrder = No
+ThirdOrderFull = No
+Differentiation = FiniteDiff {</p>
+<blockquote>
+<div><p>Delta = 1.2207031250000000E-004</p>
+</div></blockquote>
+<p>}
+ForceEvaluation = “Traditional”
+Mixer = Broyden {</p>
+<blockquote>
+<div><p>MixingParameter = 0.20000000000000001
+InverseJacobiWeight = 1.0000000000000000E-002
+MinimalWeight = 1.0000000000000000
+MaximalWeight = 100000.00000000000
+WeightFactor = 1.0000000000000000E-002</p>
+</div></blockquote>
+<p>}
+Filling = Fermi {</p>
+<blockquote>
+<div><p>Temperature = 0.0000000000000000</p>
+</div></blockquote>
+<p>}</p>
+</dd>
+</dl>
+<p>}</p>
+<dl class="py attribute">
+<dt id="dftbplus_step.energy_parameters.EnergyParameters.parameters">
+<code class="sig-name descname"><span class="pre">parameters</span></code><em class="property"> <span class="pre">=</span> <span class="pre">{'Damping</span> <span class="pre">Exponent':</span> <span class="pre">{'default':</span> <span class="pre">4.0,</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'Damping</span> <span class="pre">exponent:',</span> <span class="pre">'enumeration':</span> <span class="pre">None,</span> <span class="pre">'format_string':</span> <span class="pre">'',</span> <span class="pre">'help_text':</span> <span class="pre">'The</span> <span class="pre">exponent</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">short</span> <span class="pre">range</span> <span class="pre">damping</span> <span class="pre">of</span> <span class="pre">interactions</span> <span class="pre">where</span> <span class="pre">at</span> <span class="pre">least</span> <span class="pre">one</span> <span class="pre">atom</span> <span class="pre">is</span> <span class="pre">a</span> <span class="pre">hydrogen.',</span> <span class="pre">'kind':</span> <span class="pre">'float'},</span> <span class="pre">'HCorrection':</span> <span class="pre">{'default':</span> <span class="pre">'Default</span> <span class="pre">for</span> <span class="pre">parameters',</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'Hydrogen</span> <span class="pre">interaction</span> <span class="pre">correction:',</span> <span class="pre">'enumeration':</span> <span class="pre">('None',</span> <span class="pre">'Default</span> <span class="pre">for</span> <span class="pre">parameters',</span> <span class="pre">'Damping',</span> <span class="pre">'DFTB3-D3H5'),</span> <span class="pre">'format_string':</span> <span class="pre">'',</span> <span class="pre">'help_text':</span> <span class="pre">'Whether</span> <span class="pre">and</span> <span class="pre">how</span> <span class="pre">to</span> <span class="pre">correct</span> <span class="pre">the</span> <span class="pre">interactions</span> <span class="pre">of</span> <span class="pre">hydrogens,</span> <span class="pre">mainly</span> <span class="pre">hydrogen</span> <span class="pre">bonds.',</span> <span class="pre">'kind':</span> <span class="pre">'string'},</span> <span class="pre">'MaxSCCIterations':</span> <span class="pre">{'default':</span> <span class="pre">100,</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'Maximum</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">iterations:',</span> <span class="pre">'enumeration':</span> <span class="pre">None,</span> <span class="pre">'format_string':</span> <span class="pre">'',</span> <span class="pre">'help_text':</span> <span class="pre">'Maximal</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">SCC</span> <span class="pre">cycles</span> <span class="pre">to</span> <span class="pre">reach</span> <span class="pre">convergence.</span> <span class="pre">If</span> <span class="pre">convergence</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">reached</span> <span class="pre">after</span> <span class="pre">the</span> <span class="pre">specified</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">steps,</span> <span class="pre">the</span> <span class="pre">program</span> <span class="pre">stops</span> <span class="pre">unless</span> <span class="pre">requested</span> <span class="pre">elsewhere.',</span> <span class="pre">'kind':</span> <span class="pre">'integer'},</span> <span class="pre">'SCC':</span> <span class="pre">{'default':</span> <span class="pre">'Yes',</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'Self-consistent</span> <span class="pre">charges:',</span> <span class="pre">'enumeration':</span> <span class="pre">('Yes',</span> <span class="pre">'No'),</span> <span class="pre">'format_string':</span> <span class="pre">'',</span> <span class="pre">'help_text':</span> <span class="pre">'Whether</span> <span class="pre">to</span> <span class="pre">do</span> <span class="pre">a</span> <span class="pre">self-consistent</span> <span class="pre">charge</span> <span class="pre">calculation.',</span> <span class="pre">'kind':</span> <span class="pre">'string'},</span> <span class="pre">'SCCTolerance':</span> <span class="pre">{'default':</span> <span class="pre">1e-05,</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'Convergence</span> <span class="pre">criterion:',</span> <span class="pre">'enumeration':</span> <span class="pre">None,</span> <span class="pre">'format_string':</span> <span class="pre">'',</span> <span class="pre">'help_text':</span> <span class="pre">'Stopping</span> <span class="pre">criteria</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">SCC.</span> <span class="pre">Specifies</span> <span class="pre">the</span> <span class="pre">tolerance</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">maximum</span> <span class="pre">difference</span> <span class="pre">in</span> <span class="pre">any</span> <span class="pre">charge</span> <span class="pre">between</span> <span class="pre">two</span> <span class="pre">SCC</span> <span class="pre">cycles.',</span> <span class="pre">'kind':</span> <span class="pre">'float'},</span> <span class="pre">'ThirdOrder':</span> <span class="pre">{'default':</span> <span class="pre">'Default</span> <span class="pre">for</span> <span class="pre">parameters',</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'Use</span> <span class="pre">3rd</span> <span class="pre">order</span> <span class="pre">corrections:',</span> <span class="pre">'enumeration':</span> <span class="pre">('No',</span> <span class="pre">'Default</span> <span class="pre">for</span> <span class="pre">parameters',</span> <span class="pre">'Partial',</span> <span class="pre">'Full'),</span> <span class="pre">'format_string':</span> <span class="pre">'',</span> <span class="pre">'help_text':</span> <span class="pre">'Whether</span> <span class="pre">to</span> <span class="pre">use</span> <span class="pre">3rd</span> <span class="pre">order</span> <span class="pre">corrections.',</span> <span class="pre">'kind':</span> <span class="pre">'string'},</span> <span class="pre">'create</span> <span class="pre">tables':</span> <span class="pre">{'default':</span> <span class="pre">'yes',</span> <span class="pre">'default_units':</span> <span class="pre">None,</span> <span class="pre">'description':</span> <span class="pre">'Create</span> <span class="pre">tables</span> <span class="pre">as</span> <span class="pre">needed:',</span> <span class="pre">'enumeration':</span> <span class="pre">('yes',</span> <span class="pre">'no'),</span> <span class="pre">'format_string':</span> <span class="pre">'',</span> <span class="pre">'help_text':</span> <span class="pre">'Whether</span> <span class="pre">to</span> <span class="pre">create</span> <span class="pre">tables</span> <span class="pre">as</span> <span class="pre">needed</span> <span class="pre">for</span> <span class="pre">results</span> <span class="pre">being</span> <span class="pre">saved</span> <span class="pre">into</span> <span class="pre">tables.',</span> <span class="pre">'kind':</span> <span class="pre">'boolean'},</span> <span class="pre">'results':</span> <span class="pre">{'default':</span> <span class="pre">{},</span> <span class="pre">'default_units':</span> <span class="pre">None,</span> <span class="pre">'description':</span> <span class="pre">'results',</span> <span class="pre">'enumeration':</span> <span class="pre">(),</span> <span class="pre">'format_string':</span> <span class="pre">'',</span> <span class="pre">'help_text':</span> <span class="pre">'The</span> <span class="pre">results</span> <span class="pre">to</span> <span class="pre">save</span> <span class="pre">to</span> <span class="pre">variables</span> <span class="pre">or</span> <span class="pre">in</span> <span class="pre">tables.</span> <span class="pre">',</span> <span class="pre">'kind':</span> <span class="pre">'dictionary'}}</span></em><a class="headerlink" href="#dftbplus_step.energy_parameters.EnergyParameters.parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-dftbplus_step.energy_step">
+<span id="dftbplus-step-energy-step-module"></span><h2>dftbplus_step.energy_step module<a class="headerlink" href="#module-dftbplus_step.energy_step" title="Permalink to this headline">¶</a></h2>
+<p>Main module.</p>
+<dl class="py class">
+<dt id="dftbplus_step.energy_step.EnergyStep">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">dftbplus_step.energy_step.</span></code><code class="sig-name descname"><span class="pre">EnergyStep</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flowchart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gui</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/energy_step.html#EnergyStep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.energy_step.EnergyStep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="dftbplus_step.energy_step.EnergyStep.create_node">
+<code class="sig-name descname"><span class="pre">create_node</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flowchart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/energy_step.html#EnergyStep.create_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.energy_step.EnergyStep.create_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the new node object</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.energy_step.EnergyStep.create_tk_node">
+<code class="sig-name descname"><span class="pre">create_tk_node</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">canvas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/energy_step.html#EnergyStep.create_tk_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.energy_step.EnergyStep.create_tk_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the graphical Tk node object</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.energy_step.EnergyStep.description">
+<code class="sig-name descname"><span class="pre">description</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/energy_step.html#EnergyStep.description"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.energy_step.EnergyStep.description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a description of what this extension does</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="dftbplus_step.energy_step.EnergyStep.my_description">
+<code class="sig-name descname"><span class="pre">my_description</span></code><em class="property"> <span class="pre">=</span> <span class="pre">{'description':</span> <span class="pre">'Single-point</span> <span class="pre">energy</span> <span class="pre">with</span> <span class="pre">DFTB+',</span> <span class="pre">'group':</span> <span class="pre">'Simulations',</span> <span class="pre">'name':</span> <span class="pre">'Single-point</span> <span class="pre">Energy'}</span></em><a class="headerlink" href="#dftbplus_step.energy_step.EnergyStep.my_description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-dftbplus_step.metadata">
+<span id="dftbplus-step-metadata-module"></span><h2>dftbplus_step.metadata module<a class="headerlink" href="#module-dftbplus_step.metadata" title="Permalink to this headline">¶</a></h2>
+<p>This file contains metadata to help describe the results of DFTB+
+calculations, etc.</p>
+</div>
+<div class="section" id="module-dftbplus_step.optimization">
+<span id="dftbplus-step-optimization-module"></span><h2>dftbplus_step.optimization module<a class="headerlink" href="#module-dftbplus_step.optimization" title="Permalink to this headline">¶</a></h2>
+<p>Setup DFTB+</p>
+<dl class="py class">
+<dt id="dftbplus_step.optimization.Optimization">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">dftbplus_step.optimization.</span></code><code class="sig-name descname"><span class="pre">Optimization</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flowchart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Optimization'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extension</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/optimization.html#Optimization"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.optimization.Optimization" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dftbplus_step.energy.Energy" title="dftbplus_step.energy.Energy"><code class="xref py py-class docutils literal notranslate"><span class="pre">dftbplus_step.energy.Energy</span></code></a></p>
+<dl class="py method">
+<dt id="dftbplus_step.optimization.Optimization.analyze">
+<code class="sig-name descname"><span class="pre">analyze</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/optimization.html#Optimization.analyze"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.optimization.Optimization.analyze" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse the output and generating the text output and store the
+data in variables for other stages to access</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.optimization.Optimization.description_text">
+<code class="sig-name descname"><span class="pre">description_text</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">P</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/optimization.html#Optimization.description_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.optimization.Optimization.description_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepare information about what this node will do</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.optimization.Optimization.get_input">
+<code class="sig-name descname"><span class="pre">get_input</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/optimization.html#Optimization.get_input"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.optimization.Optimization.get_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the input for an optimization calculation for DFTB+</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.optimization.Optimization.git_revision">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">git_revision</span></code><a class="headerlink" href="#dftbplus_step.optimization.Optimization.git_revision" title="Permalink to this definition">¶</a></dt>
+<dd><p>The git version of this module.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.optimization.Optimization.header">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">header</span></code><a class="headerlink" href="#dftbplus_step.optimization.Optimization.header" title="Permalink to this definition">¶</a></dt>
+<dd><p>A printable header for this section of output</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.optimization.Optimization.version">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">version</span></code><a class="headerlink" href="#dftbplus_step.optimization.Optimization.version" title="Permalink to this definition">¶</a></dt>
+<dd><p>The semantic version of this module.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-dftbplus_step.optimization_parameters">
+<span id="dftbplus-step-optimization-parameters-module"></span><h2>dftbplus_step.optimization_parameters module<a class="headerlink" href="#module-dftbplus_step.optimization_parameters" title="Permalink to this headline">¶</a></h2>
+<p>Global control parameters for DFTB+</p>
+<dl class="py class">
+<dt id="dftbplus_step.optimization_parameters.OptimizationParameters">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">dftbplus_step.optimization_parameters.</span></code><code class="sig-name descname"><span class="pre">OptimizationParameters</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">defaults</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/optimization_parameters.html#OptimizationParameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.optimization_parameters.OptimizationParameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dftbplus_step.energy_parameters.EnergyParameters" title="dftbplus_step.energy_parameters.EnergyParameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">dftbplus_step.energy_parameters.EnergyParameters</span></code></a></p>
+<p>The control parameters for optimization using DFTB+</p>
+<dl class="py attribute">
+<dt id="dftbplus_step.optimization_parameters.OptimizationParameters.parameters">
+<code class="sig-name descname"><span class="pre">parameters</span></code><em class="property"> <span class="pre">=</span> <span class="pre">{'Alpha':</span> <span class="pre">{'default':</span> <span class="pre">0.1,</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'Initial</span> <span class="pre">scaling</span> <span class="pre">parameter:',</span> <span class="pre">'enumeration':</span> <span class="pre">(),</span> <span class="pre">'format_string':</span> <span class="pre">'',</span> <span class="pre">'help_text':</span> <span class="pre">'Initial</span> <span class="pre">scaling</span> <span class="pre">parameter</span> <span class="pre">to</span> <span class="pre">prevent</span> <span class="pre">the</span> <span class="pre">iterative</span> <span class="pre">space</span> <span class="pre">becoming</span> <span class="pre">exhausted</span> <span class="pre">(this</span> <span class="pre">is</span> <span class="pre">dynamically</span> <span class="pre">adjusted</span> <span class="pre">during</span> <span class="pre">the</span> <span class="pre">run).',</span> <span class="pre">'kind':</span> <span class="pre">'float'},</span> <span class="pre">'Generations':</span> <span class="pre">{'default':</span> <span class="pre">8,</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'Generations:',</span> <span class="pre">'enumeration':</span> <span class="pre">(),</span> <span class="pre">'format_string':</span> <span class="pre">'',</span> <span class="pre">'help_text':</span> <span class="pre">'Number</span> <span class="pre">of</span> <span class="pre">generations</span> <span class="pre">to</span> <span class="pre">consider</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">mixing.',</span> <span class="pre">'kind':</span> <span class="pre">'integer'},</span> <span class="pre">'LatticeOpt':</span> <span class="pre">{'default':</span> <span class="pre">'Yes',</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'Optimize</span> <span class="pre">the</span> <span class="pre">cell:',</span> <span class="pre">'enumeration':</span> <span class="pre">('Yes',</span> <span class="pre">'No'),</span> <span class="pre">'format_string':</span> <span class="pre">'',</span> <span class="pre">'help_text':</span> <span class="pre">'Allow</span> <span class="pre">the</span> <span class="pre">lattice</span> <span class="pre">vectors</span> <span class="pre">to</span> <span class="pre">change</span> <span class="pre">during</span> <span class="pre">optimisation.</span> <span class="pre">MovedAtoms</span> <span class="pre">can</span> <span class="pre">be</span> <span class="pre">optionally</span> <span class="pre">used</span> <span class="pre">with</span> <span class="pre">lattice</span> <span class="pre">optimisation</span> <span class="pre">if</span> <span class="pre">the</span> <span class="pre">atomic</span> <span class="pre">coordinates</span> <span class="pre">are</span> <span class="pre">to</span> <span class="pre">be</span> <span class="pre">co-optimised</span> <span class="pre">with</span> <span class="pre">the</span> <span class="pre">lattice.',</span> <span class="pre">'kind':</span> <span class="pre">'string'},</span> <span class="pre">'LineSearch':</span> <span class="pre">{'default':</span> <span class="pre">'No',</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'Use</span> <span class="pre">a</span> <span class="pre">linesearch</span> <span class="pre">rather</span> <span class="pre">than</span> <span class="pre">Newton</span> <span class="pre">step:',</span> <span class="pre">'enumeration':</span> <span class="pre">('Yes',</span> <span class="pre">'No'),</span> <span class="pre">'format_string':</span> <span class="pre">'',</span> <span class="pre">'help_text':</span> <span class="pre">'Should</span> <span class="pre">a</span> <span class="pre">line</span> <span class="pre">search</span> <span class="pre">be</span> <span class="pre">performed,</span> <span class="pre">instead</span> <span class="pre">of</span> <span class="pre">a</span> <span class="pre">quasi-Newton</span> <span class="pre">step</span> <span class="pre">along</span> <span class="pre">the</span> <span class="pre">LBFGS</span> <span class="pre">direction.',</span> <span class="pre">'kind':</span> <span class="pre">'string'},</span> <span class="pre">'MaxAtomStep':</span> <span class="pre">{'default':</span> <span class="pre">0.2,</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'Maximum</span> <span class="pre">atom</span> <span class="pre">step:',</span> <span class="pre">'enumeration':</span> <span class="pre">(),</span> <span class="pre">'format_string':</span> <span class="pre">'.1f',</span> <span class="pre">'help_text':</span> <span class="pre">'The</span> <span class="pre">maximum</span> <span class="pre">possible</span> <span class="pre">line</span> <span class="pre">search</span> <span class="pre">step</span> <span class="pre">size</span> <span class="pre">for</span> <span class="pre">atomic</span> <span class="pre">relaxation.',</span> <span class="pre">'kind':</span> <span class="pre">'float'},</span> <span class="pre">'MaxForceComponent':</span> <span class="pre">{'default':</span> <span class="pre">0.0001,</span> <span class="pre">'default_units':</span> <span class="pre">'hartree/bohr',</span> <span class="pre">'description':</span> <span class="pre">'Convergence</span> <span class="pre">criterion:',</span> <span class="pre">'enumeration':</span> <span class="pre">(),</span> <span class="pre">'format_string':</span> <span class="pre">'.1f',</span> <span class="pre">'help_text':</span> <span class="pre">'Optimisation</span> <span class="pre">is</span> <span class="pre">stopped</span> <span class="pre">if</span> <span class="pre">the</span> <span class="pre">force</span> <span class="pre">component</span> <span class="pre">with</span> <span class="pre">the</span> <span class="pre">maximal</span> <span class="pre">absolute</span> <span class="pre">value</span> <span class="pre">goes</span> <span class="pre">below</span> <span class="pre">this</span> <span class="pre">threshold.',</span> <span class="pre">'kind':</span> <span class="pre">'float'},</span> <span class="pre">'MaxLatticeStep':</span> <span class="pre">{'default':</span> <span class="pre">0.2,</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'Maximum</span> <span class="pre">step</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">lattice:',</span> <span class="pre">'enumeration':</span> <span class="pre">(),</span> <span class="pre">'format_string':</span> <span class="pre">'.1f',</span> <span class="pre">'help_text':</span> <span class="pre">'The</span> <span class="pre">maximum</span> <span class="pre">possible</span> <span class="pre">line</span> <span class="pre">search</span> <span class="pre">step</span> <span class="pre">size</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">cell</span> <span class="pre">relaxation.</span> <span class="pre">For</span> <span class="pre">fixed</span> <span class="pre">angles</span> <span class="pre">it</span> <span class="pre">is</span> <span class="pre">a</span> <span class="pre">percentage</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">lattice</span> <span class="pre">parameter;</span> <span class="pre">for</span> <span class="pre">isotropic</span> <span class="pre">constraint,</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">volume.',</span> <span class="pre">'kind':</span> <span class="pre">'float'},</span> <span class="pre">'MaxSteps':</span> <span class="pre">{'default':</span> <span class="pre">200,</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'Maximum</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">steps:',</span> <span class="pre">'enumeration':</span> <span class="pre">(),</span> <span class="pre">'format_string':</span> <span class="pre">'',</span> <span class="pre">'help_text':</span> <span class="pre">'Maximum</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">steps</span> <span class="pre">after</span> <span class="pre">which</span> <span class="pre">the</span> <span class="pre">optimisation</span> <span class="pre">should</span> <span class="pre">stop</span> <span class="pre">(unless</span> <span class="pre">already</span> <span class="pre">stopped</span> <span class="pre">by</span> <span class="pre">achieving</span> <span class="pre">convergence).</span> <span class="pre">Setting</span> <span class="pre">this</span> <span class="pre">value</span> <span class="pre">as</span> <span class="pre">-1</span> <span class="pre">runs</span> <span class="pre">a</span> <span class="pre">huge()</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">iterations.',</span> <span class="pre">'kind':</span> <span class="pre">'integer'},</span> <span class="pre">'Memory':</span> <span class="pre">{'default':</span> <span class="pre">20,</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'Number</span> <span class="pre">of</span> <span class="pre">steps</span> <span class="pre">to</span> <span class="pre">remember:',</span> <span class="pre">'enumeration':</span> <span class="pre">(),</span> <span class="pre">'format_string':</span> <span class="pre">'',</span> <span class="pre">'help_text':</span> <span class="pre">'Number</span> <span class="pre">of</span> <span class="pre">last</span> <span class="pre">steps</span> <span class="pre">which</span> <span class="pre">are</span> <span class="pre">saved</span> <span class="pre">and</span> <span class="pre">used</span> <span class="pre">to</span> <span class="pre">calculate</span> <span class="pre">the</span> <span class="pre">next</span> <span class="pre">step</span> <span class="pre">via</span> <span class="pre">the</span> <span class="pre">LBFGS</span> <span class="pre">algorithm.</span> <span class="pre">The</span> <span class="pre">literature</span> <span class="pre">recommends</span> <span class="pre">that</span> <span class="pre">Memory</span> <span class="pre">should</span> <span class="pre">between</span> <span class="pre">3</span> <span class="pre">and</span> <span class="pre">20.',</span> <span class="pre">'kind':</span> <span class="pre">'integer'},</span> <span class="pre">'StepSize':</span> <span class="pre">{'default':</span> <span class="pre">100.0,</span> <span class="pre">'default_units':</span> <span class="pre">'a_u_time',</span> <span class="pre">'description':</span> <span class="pre">'Step</span> <span class="pre">size:',</span> <span class="pre">'enumeration':</span> <span class="pre">(),</span> <span class="pre">'format_string':</span> <span class="pre">'',</span> <span class="pre">'help_text':</span> <span class="pre">'Step</span> <span class="pre">size</span> <span class="pre">(dt)</span> <span class="pre">along</span> <span class="pre">the</span> <span class="pre">forces.</span> <span class="pre">The</span> <span class="pre">displacement</span> <span class="pre">dxi</span> <span class="pre">along</span> <span class="pre">the</span> <span class="pre">ith</span> <span class="pre">coordinate</span> <span class="pre">is</span> <span class="pre">given</span> <span class="pre">for</span> <span class="pre">each</span> <span class="pre">atom</span> <span class="pre">as</span> <span class="pre">dxi</span> <span class="pre">=</span> <span class="pre">fi2mdt2,</span> <span class="pre">where</span> <span class="pre">fi</span> <span class="pre">is</span> <span class="pre">the</span> <span class="pre">appropriate</span> <span class="pre">force</span> <span class="pre">component</span> <span class="pre">and</span> <span class="pre">m</span> <span class="pre">is</span> <span class="pre">the</span> <span class="pre">mass</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">atom.',</span> <span class="pre">'kind':</span> <span class="pre">'float'},</span> <span class="pre">'constrain_cell':</span> <span class="pre">{'default':</span> <span class="pre">'No',</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'Constrain</span> <span class="pre">the</span> <span class="pre">cell:',</span> <span class="pre">'enumeration':</span> <span class="pre">('No',</span> <span class="pre">'Angles',</span> <span class="pre">'Isotropically'),</span> <span class="pre">'format_string':</span> <span class="pre">'',</span> <span class="pre">'help_text':</span> <span class="pre">'Constrain</span> <span class="pre">the</span> <span class="pre">cell</span> <span class="pre">during</span> <span class="pre">optimisation.',</span> <span class="pre">'kind':</span> <span class="pre">'string'},</span> <span class="pre">'fix_a':</span> <span class="pre">{'default':</span> <span class="pre">'No',</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">&quot;Fix</span> <span class="pre">length</span> <span class="pre">'a':&quot;,</span> <span class="pre">'enumeration':</span> <span class="pre">('Yes',</span> <span class="pre">'No'),</span> <span class="pre">'format_string':</span> <span class="pre">'',</span> <span class="pre">'help_text':</span> <span class="pre">&quot;Keep</span> <span class="pre">the</span> <span class="pre">length</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">first</span> <span class="pre">lattice</span> <span class="pre">vector</span> <span class="pre">('a')</span> <span class="pre">fixed</span> <span class="pre">during</span> <span class="pre">the</span> <span class="pre">optimisation.&quot;,</span> <span class="pre">'kind':</span> <span class="pre">'string'},</span> <span class="pre">'fix_b':</span> <span class="pre">{'default':</span> <span class="pre">'No',</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">&quot;Fix</span> <span class="pre">length</span> <span class="pre">'b':&quot;,</span> <span class="pre">'enumeration':</span> <span class="pre">('Yes',</span> <span class="pre">'No'),</span> <span class="pre">'format_string':</span> <span class="pre">'',</span> <span class="pre">'help_text':</span> <span class="pre">&quot;Keep</span> <span class="pre">the</span> <span class="pre">length</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">second</span> <span class="pre">lattice</span> <span class="pre">vector</span> <span class="pre">('b')</span> <span class="pre">fixed</span> <span class="pre">during</span> <span class="pre">the</span> <span class="pre">optimisation.&quot;,</span> <span class="pre">'kind':</span> <span class="pre">'string'},</span> <span class="pre">'fix_c':</span> <span class="pre">{'default':</span> <span class="pre">'No',</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">&quot;Fix</span> <span class="pre">length</span> <span class="pre">'c':&quot;,</span> <span class="pre">'enumeration':</span> <span class="pre">('Yes',</span> <span class="pre">'No'),</span> <span class="pre">'format_string':</span> <span class="pre">'',</span> <span class="pre">'help_text':</span> <span class="pre">&quot;Keep</span> <span class="pre">the</span> <span class="pre">length</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">third</span> <span class="pre">lattice</span> <span class="pre">vector</span> <span class="pre">('c')</span> <span class="pre">fixed</span> <span class="pre">during</span> <span class="pre">the</span> <span class="pre">optimisation.&quot;,</span> <span class="pre">'kind':</span> <span class="pre">'string'},</span> <span class="pre">'optimization</span> <span class="pre">method':</span> <span class="pre">{'default':</span> <span class="pre">'Direct</span> <span class="pre">inversion</span> <span class="pre">of</span> <span class="pre">iterative</span> <span class="pre">subspace</span> <span class="pre">(gDIIS)',</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'Method:',</span> <span class="pre">'enumeration':</span> <span class="pre">('Steepest</span> <span class="pre">descents',</span> <span class="pre">'Conjugate</span> <span class="pre">gradients',</span> <span class="pre">'Direct</span> <span class="pre">inversion</span> <span class="pre">of</span> <span class="pre">iterative</span> <span class="pre">subspace</span> <span class="pre">(gDIIS)',</span> <span class="pre">'Limited-memory</span> <span class="pre">Broyden-Fletcher-Goldfarb-Shanno</span> <span class="pre">(LBFGS)',</span> <span class="pre">'Fast</span> <span class="pre">inertial</span> <span class="pre">relaxation</span> <span class="pre">engine</span> <span class="pre">(FIRE)'),</span> <span class="pre">'format_string':</span> <span class="pre">'s',</span> <span class="pre">'help_text':</span> <span class="pre">'The</span> <span class="pre">optimization</span> <span class="pre">method</span> <span class="pre">to</span> <span class="pre">use.',</span> <span class="pre">'kind':</span> <span class="pre">'enumeration'},</span> <span class="pre">'pressure':</span> <span class="pre">{'default':</span> <span class="pre">0.0,</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'Pressure:',</span> <span class="pre">'enumeration':</span> <span class="pre">(),</span> <span class="pre">'format_string':</span> <span class="pre">'.1f',</span> <span class="pre">'help_text':</span> <span class="pre">'The</span> <span class="pre">applied</span> <span class="pre">pressure.',</span> <span class="pre">'kind':</span> <span class="pre">'float'},</span> <span class="pre">'stop_if_scc_fails':</span> <span class="pre">{'default':</span> <span class="pre">'Yes',</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'Stop</span> <span class="pre">if</span> <span class="pre">SCC</span> <span class="pre">fails:',</span> <span class="pre">'enumeration':</span> <span class="pre">('Yes',</span> <span class="pre">'No'),</span> <span class="pre">'format_string':</span> <span class="pre">'',</span> <span class="pre">'help_text':</span> <span class="pre">'Stop</span> <span class="pre">if</span> <span class="pre">the</span> <span class="pre">self</span> <span class="pre">consistent</span> <span class="pre">charge</span> <span class="pre">calculation</span> <span class="pre">fails</span> <span class="pre">to</span> <span class="pre">converge.',</span> <span class="pre">'kind':</span> <span class="pre">'string'}}</span></em><a class="headerlink" href="#dftbplus_step.optimization_parameters.OptimizationParameters.parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-dftbplus_step.optimization_step">
+<span id="dftbplus-step-optimization-step-module"></span><h2>dftbplus_step.optimization_step module<a class="headerlink" href="#module-dftbplus_step.optimization_step" title="Permalink to this headline">¶</a></h2>
+<p>Main module.</p>
+<dl class="py class">
+<dt id="dftbplus_step.optimization_step.OptimizationStep">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">dftbplus_step.optimization_step.</span></code><code class="sig-name descname"><span class="pre">OptimizationStep</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flowchart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gui</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/optimization_step.html#OptimizationStep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.optimization_step.OptimizationStep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="dftbplus_step.optimization_step.OptimizationStep.create_node">
+<code class="sig-name descname"><span class="pre">create_node</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flowchart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/optimization_step.html#OptimizationStep.create_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.optimization_step.OptimizationStep.create_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the new node object</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.optimization_step.OptimizationStep.create_tk_node">
+<code class="sig-name descname"><span class="pre">create_tk_node</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">canvas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/optimization_step.html#OptimizationStep.create_tk_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.optimization_step.OptimizationStep.create_tk_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the graphical Tk node object</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.optimization_step.OptimizationStep.description">
+<code class="sig-name descname"><span class="pre">description</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/optimization_step.html#OptimizationStep.description"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.optimization_step.OptimizationStep.description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a description of what this extension does</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="dftbplus_step.optimization_step.OptimizationStep.my_description">
+<code class="sig-name descname"><span class="pre">my_description</span></code><em class="property"> <span class="pre">=</span> <span class="pre">{'description':</span> <span class="pre">'Structure</span> <span class="pre">optimization</span> <span class="pre">DFTB+',</span> <span class="pre">'group':</span> <span class="pre">'Simulations',</span> <span class="pre">'name':</span> <span class="pre">'Optimization'}</span></em><a class="headerlink" href="#dftbplus_step.optimization_step.OptimizationStep.my_description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="dftbplus-step-slako-module">
+<h2>dftbplus_step.slako module<a class="headerlink" href="#dftbplus-step-slako-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-dftbplus_step.tk_choose_parameters">
+<span id="dftbplus-step-tk-choose-parameters-module"></span><h2>dftbplus_step.tk_choose_parameters module<a class="headerlink" href="#module-dftbplus_step.tk_choose_parameters" title="Permalink to this headline">¶</a></h2>
+<p>The graphical part of a DFTB+ ChooseParameters node</p>
+<dl class="py class">
+<dt id="dftbplus_step.tk_choose_parameters.TkChooseParameters">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">dftbplus_step.tk_choose_parameters.</span></code><code class="sig-name descname"><span class="pre">TkChooseParameters</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">tk_flowchart=None</span></em>, <em class="sig-param"><span class="pre">node=None</span></em>, <em class="sig-param"><span class="pre">canvas=None</span></em>, <em class="sig-param"><span class="pre">x=120</span></em>, <em class="sig-param"><span class="pre">y=20</span></em>, <em class="sig-param"><span class="pre">w=200</span></em>, <em class="sig-param"><span class="pre">h=50</span></em>, <em class="sig-param"><span class="pre">my_logger=&lt;Logger</span> <span class="pre">dftbplus_step.tk_choose_parameters</span> <span class="pre">(WARNING)&gt;</span></em>, <em class="sig-param"><span class="pre">keyword_metadata=None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/tk_choose_parameters.html#TkChooseParameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.tk_choose_parameters.TkChooseParameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">seamm.tk_node.TkNode</span></code></p>
+<dl class="py method">
+<dt id="dftbplus_step.tk_choose_parameters.TkChooseParameters.create_dialog">
+<code class="sig-name descname"><span class="pre">create_dialog</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Edit</span> <span class="pre">DFTB+</span> <span class="pre">ChooseParameters</span> <span class="pre">Step'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/tk_choose_parameters.html#TkChooseParameters.create_dialog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.tk_choose_parameters.TkChooseParameters.create_dialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the dialog!</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.tk_choose_parameters.TkChooseParameters.reset_dialog">
+<code class="sig-name descname"><span class="pre">reset_dialog</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">widget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/tk_choose_parameters.html#TkChooseParameters.reset_dialog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.tk_choose_parameters.TkChooseParameters.reset_dialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the layout of the dialog as needed for the parameters.</p>
+<p>In this base class this does nothing. Override as needed in the
+subclasses derived from this class.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.tk_choose_parameters.TkChooseParameters.right_click">
+<code class="sig-name descname"><span class="pre">right_click</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/tk_choose_parameters.html#TkChooseParameters.right_click"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.tk_choose_parameters.TkChooseParameters.right_click" title="Permalink to this definition">¶</a></dt>
+<dd><p>Probably need to add our dialog…</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-dftbplus_step.tk_dftbplus">
+<span id="dftbplus-step-tk-dftbplus-module"></span><h2>dftbplus_step.tk_dftbplus module<a class="headerlink" href="#module-dftbplus_step.tk_dftbplus" title="Permalink to this headline">¶</a></h2>
+<p>The graphical part of a DFTB+ step</p>
+<dl class="py class">
+<dt id="dftbplus_step.tk_dftbplus.TkDftbplus">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">dftbplus_step.tk_dftbplus.</span></code><code class="sig-name descname"><span class="pre">TkDftbplus</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tk_flowchart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">namespace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'org.molssi.seamm.dftbplus.tk'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">canvas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/tk_dftbplus.html#TkDftbplus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.tk_dftbplus.TkDftbplus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">seamm.tk_node.TkNode</span></code></p>
+<p>The graphical part of a DFTB+ step in a flowchart.</p>
+<dl class="py attribute">
+<dt id="dftbplus_step.tk_dftbplus.TkDftbplus.tk_flowchart">
+<code class="sig-name descname"><span class="pre">tk_flowchart</span></code><a class="headerlink" href="#dftbplus_step.tk_dftbplus.TkDftbplus.tk_flowchart" title="Permalink to this definition">¶</a></dt>
+<dd><p>The flowchart that we belong to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>TkFlowchart = None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="dftbplus_step.tk_dftbplus.TkDftbplus.node">
+<code class="sig-name descname"><span class="pre">node</span></code><a class="headerlink" href="#dftbplus_step.tk_dftbplus.TkDftbplus.node" title="Permalink to this definition">¶</a></dt>
+<dd><p>The corresponding node of the non-graphical flowchart</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Node = None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="dftbplus_step.tk_dftbplus.TkDftbplus.canvas">
+<code class="sig-name descname"><span class="pre">canvas</span></code><a class="headerlink" href="#dftbplus_step.tk_dftbplus.TkDftbplus.canvas" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Tk Canvas to draw on</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>tkCanvas = None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="dftbplus_step.tk_dftbplus.TkDftbplus.dialog">
+<code class="sig-name descname"><span class="pre">dialog</span></code><a class="headerlink" href="#dftbplus_step.tk_dftbplus.TkDftbplus.dialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Pmw dialog object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Dialog</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="dftbplus_step.tk_dftbplus.TkDftbplus.x">
+<code class="sig-name descname"><span class="pre">x</span></code><a class="headerlink" href="#dftbplus_step.tk_dftbplus.TkDftbplus.x" title="Permalink to this definition">¶</a></dt>
+<dd><p>The x-coordinate of the center of the picture of the node</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int = None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="dftbplus_step.tk_dftbplus.TkDftbplus.y">
+<code class="sig-name descname"><span class="pre">y</span></code><a class="headerlink" href="#dftbplus_step.tk_dftbplus.TkDftbplus.y" title="Permalink to this definition">¶</a></dt>
+<dd><p>The y-coordinate of the center of the picture of the node</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int = None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="dftbplus_step.tk_dftbplus.TkDftbplus.w">
+<code class="sig-name descname"><span class="pre">w</span></code><a class="headerlink" href="#dftbplus_step.tk_dftbplus.TkDftbplus.w" title="Permalink to this definition">¶</a></dt>
+<dd><p>The width in pixels of the picture of the node</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int = 200</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="dftbplus_step.tk_dftbplus.TkDftbplus.h">
+<code class="sig-name descname"><span class="pre">h</span></code><a class="headerlink" href="#dftbplus_step.tk_dftbplus.TkDftbplus.h" title="Permalink to this definition">¶</a></dt>
+<dd><p>The height in pixels of the picture of the node</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int = 50</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt>
+<code class="sig-name descname"><span class="pre">self[widget]</span></code></dt>
+<dd><p>A dictionary of tk widgets built using the information
+contained in DFTB+_parameters.py</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Dftbplus</span></code>, <a class="reference internal" href="#dftbplus_step.tk_dftbplus.TkDftbplus" title="dftbplus_step.tk_dftbplus.TkDftbplus"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TkDftbplus</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">DftbplusParameters</span></code></p>
+</div>
+<dl class="py method">
+<dt id="dftbplus_step.tk_dftbplus.TkDftbplus.create_dialog">
+<code class="sig-name descname"><span class="pre">create_dialog</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/tk_dftbplus.html#TkDftbplus.create_dialog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.tk_dftbplus.TkDftbplus.create_dialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the dialog. A set of widgets will be chosen by default
+based on what is specified in the DFTB+_parameters
+module.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>None</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TkDftbplus.reset_dialog</span></code></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.tk_dftbplus.TkDftbplus.edit">
+<code class="sig-name descname"><span class="pre">edit</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/tk_dftbplus.html#TkDftbplus.edit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.tk_dftbplus.TkDftbplus.edit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Present a dialog for editing the DFTB+ input</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>None</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#dftbplus_step.tk_dftbplus.TkDftbplus.right_click" title="dftbplus_step.tk_dftbplus.TkDftbplus.right_click"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TkDftbplus.right_click</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.tk_dftbplus.TkDftbplus.from_flowchart">
+<code class="sig-name descname"><span class="pre">from_flowchart</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tk_flowchart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flowchart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/tk_dftbplus.html#TkDftbplus.from_flowchart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.tk_dftbplus.TkDftbplus.from_flowchart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Recreate the graphics from the non-graphical flowchart.</p>
+<p>This is only used in nodes that contain sub-flowcharts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tk_flowchart</strong> (<em>seamm.tk_Flowchart</em>) – A graphical representation of the SEAMM Flowchart</p></li>
+<li><p><strong>flowchart</strong> (<em>seamm.Flowchart</em>) – A non-graphical representation of the SEAMM Flowchart</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.tk_dftbplus.TkDftbplus.handle_dialog">
+<code class="sig-name descname"><span class="pre">handle_dialog</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/tk_dftbplus.html#TkDftbplus.handle_dialog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.tk_dftbplus.TkDftbplus.handle_dialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle the closing of the edit dialog</p>
+<p>What to do depends on the button used to close the dialog. If
+the user closes it by clicking the ‘x’ of the dialog window,
+None is returned, which we take as equivalent to cancel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>result</strong> (<em>None</em><em> or </em><em>str</em>) – The value of this variable depends on what the button
+the user clicked.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.tk_dftbplus.TkDftbplus.handle_help">
+<code class="sig-name descname"><span class="pre">handle_help</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/tk_dftbplus.html#TkDftbplus.handle_help"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.tk_dftbplus.TkDftbplus.handle_help" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shows the help to the user when click on help button.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>None</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.tk_dftbplus.TkDftbplus.right_click">
+<code class="sig-name descname"><span class="pre">right_click</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/tk_dftbplus.html#TkDftbplus.right_click"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.tk_dftbplus.TkDftbplus.right_click" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles the right click event on the node.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>event</strong> (<em>Tk Event</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#dftbplus_step.tk_dftbplus.TkDftbplus.edit" title="dftbplus_step.tk_dftbplus.TkDftbplus.edit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TkDftbplus.edit</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.tk_dftbplus.TkDftbplus.update_flowchart">
+<code class="sig-name descname"><span class="pre">update_flowchart</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tk_flowchart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flowchart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/tk_dftbplus.html#TkDftbplus.update_flowchart"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.tk_dftbplus.TkDftbplus.update_flowchart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the nongraphical flowchart.</p>
+<p>This is only used in nodes that contain sub-flowcharts
+What to do depends on the button used to close the dialog. If
+the user closes it by clicking the ‘x’ of the dialog window,
+None is returned, which we take as equivalent to cancel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tk_flowchart</strong> (<em>seamm.tk_Flowchart</em>) – A graphical representation of the SEAMM Flowchart</p></li>
+<li><p><strong>flowchart</strong> (<em>seamm.Flowchart</em>) – A non-graphical representation of the SEAMM Flowchart</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-dftbplus_step.tk_energy">
+<span id="dftbplus-step-tk-energy-module"></span><h2>dftbplus_step.tk_energy module<a class="headerlink" href="#module-dftbplus_step.tk_energy" title="Permalink to this headline">¶</a></h2>
+<p>The graphical part of a DFTB+ Energy node</p>
+<dl class="py class">
+<dt id="dftbplus_step.tk_energy.TkEnergy">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">dftbplus_step.tk_energy.</span></code><code class="sig-name descname"><span class="pre">TkEnergy</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">tk_flowchart=None</span></em>, <em class="sig-param"><span class="pre">node=None</span></em>, <em class="sig-param"><span class="pre">canvas=None</span></em>, <em class="sig-param"><span class="pre">x=120</span></em>, <em class="sig-param"><span class="pre">y=20</span></em>, <em class="sig-param"><span class="pre">w=200</span></em>, <em class="sig-param"><span class="pre">h=50</span></em>, <em class="sig-param"><span class="pre">my_logger=&lt;Logger</span> <span class="pre">dftbplus_step.tk_energy</span> <span class="pre">(WARNING)&gt;</span></em>, <em class="sig-param"><span class="pre">keyword_metadata=None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/tk_energy.html#TkEnergy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.tk_energy.TkEnergy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">seamm.tk_node.TkNode</span></code></p>
+<dl class="py method">
+<dt id="dftbplus_step.tk_energy.TkEnergy.create_dialog">
+<code class="sig-name descname"><span class="pre">create_dialog</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Edit</span> <span class="pre">DFTB+</span> <span class="pre">Energy</span> <span class="pre">Step'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calculation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'energy'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/tk_energy.html#TkEnergy.create_dialog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.tk_energy.TkEnergy.create_dialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the dialog!</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.tk_energy.TkEnergy.reset_dialog">
+<code class="sig-name descname"><span class="pre">reset_dialog</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">widget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/tk_energy.html#TkEnergy.reset_dialog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.tk_energy.TkEnergy.reset_dialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the layout of the dialog as needed for the parameters.</p>
+<p>In this base class this does nothing. Override as needed in the
+subclasses derived from this class.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.tk_energy.TkEnergy.reset_energy_frame">
+<code class="sig-name descname"><span class="pre">reset_energy_frame</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">widget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/tk_energy.html#TkEnergy.reset_energy_frame"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.tk_energy.TkEnergy.reset_energy_frame" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.tk_energy.TkEnergy.right_click">
+<code class="sig-name descname"><span class="pre">right_click</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/tk_energy.html#TkEnergy.right_click"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.tk_energy.TkEnergy.right_click" title="Permalink to this definition">¶</a></dt>
+<dd><p>Probably need to add our dialog…</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-dftbplus_step.tk_optimization">
+<span id="dftbplus-step-tk-optimization-module"></span><h2>dftbplus_step.tk_optimization module<a class="headerlink" href="#module-dftbplus_step.tk_optimization" title="Permalink to this headline">¶</a></h2>
+<p>The graphical part of a DFTB+ Optimization node</p>
+<dl class="py class">
+<dt id="dftbplus_step.tk_optimization.TkOptimization">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">dftbplus_step.tk_optimization.</span></code><code class="sig-name descname"><span class="pre">TkOptimization</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">tk_flowchart=None</span></em>, <em class="sig-param"><span class="pre">node=None</span></em>, <em class="sig-param"><span class="pre">canvas=None</span></em>, <em class="sig-param"><span class="pre">x=120</span></em>, <em class="sig-param"><span class="pre">y=20</span></em>, <em class="sig-param"><span class="pre">w=200</span></em>, <em class="sig-param"><span class="pre">h=50</span></em>, <em class="sig-param"><span class="pre">my_logger=&lt;Logger</span> <span class="pre">dftbplus_step.tk_optimization</span> <span class="pre">(WARNING)&gt;</span></em>, <em class="sig-param"><span class="pre">keyword_metadata=None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/tk_optimization.html#TkOptimization"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.tk_optimization.TkOptimization" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dftbplus_step.tk_energy.TkEnergy" title="dftbplus_step.tk_energy.TkEnergy"><code class="xref py py-class docutils literal notranslate"><span class="pre">dftbplus_step.tk_energy.TkEnergy</span></code></a></p>
+<dl class="py method">
+<dt id="dftbplus_step.tk_optimization.TkOptimization.create_dialog">
+<code class="sig-name descname"><span class="pre">create_dialog</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Edit</span> <span class="pre">DFTB+</span> <span class="pre">Optimization</span> <span class="pre">Step'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calculation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'optimization'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/tk_optimization.html#TkOptimization.create_dialog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.tk_optimization.TkOptimization.create_dialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the dialog!</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.tk_optimization.TkOptimization.reset_dialog">
+<code class="sig-name descname"><span class="pre">reset_dialog</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">widget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/tk_optimization.html#TkOptimization.reset_dialog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.tk_optimization.TkOptimization.reset_dialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the layout of the dialog as needed for the parameters.</p>
+<p>In this base class this does nothing. Override as needed in the
+subclasses derived from this class.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.tk_optimization.TkOptimization.reset_optimization_frame">
+<code class="sig-name descname"><span class="pre">reset_optimization_frame</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/tk_optimization.html#TkOptimization.reset_optimization_frame"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.tk_optimization.TkOptimization.reset_optimization_frame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Layout the optimization frame according to the current values.</p>
+<blockquote>
+<div><p>SD                   CG                  gDIIS                LBFGS              FIRE</p>
+</div></blockquote>
+<p>——————   ——————-  ——————-  ——————-  ——–
+MovedAtoms           MovedAtoms           MovedAtoms           MovedAtoms           TimeStep
+MaxForceComponent    MaxForceComponent    MaxForceComponent    MaxForceComponent
+MaxSteps             MaxSteps             MaxSteps             MaxSteps
+OutputPrefix         OutputPrefix         OutputPrefix         OutputPrefix
+AppendGeometries     AppendGeometries     AppendGeometries     AppendGeometries
+Constraints          Constraints          Constraints          Constraints
+LatticeOpt           LatticeOpt           LatticeOpt           LatticeOpt
+FixAngles            FixAngles            FixAngles            FixAngles
+FixLengths
+Isotropic            Isotropic            Isotropic            Isotropic
+Pressure             Pressure             Pressure             Pressure
+MaxAtomStep          MaxAtomStep                               MaxAtomStep
+MaxLatticeStep       MaxLatticeStep       MaxLatticeStep       MaxLatticeStep
+ConvergentForcesOnly ConvergentForcesOnly ConvergentForcesOnly ConvergentForcesOnly
+StepSize                                  Alpha                Memory</p>
+<blockquote>
+<div><p>Generations          LineSearch</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt id="dftbplus_step.tk_optimization.TkOptimization.right_click">
+<code class="sig-name descname"><span class="pre">right_click</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/tk_optimization.html#TkOptimization.right_click"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.tk_optimization.TkOptimization.right_click" title="Permalink to this definition">¶</a></dt>
+<dd><p>Probably need to add our dialog…</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-dftbplus_step">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-dftbplus_step" title="Permalink to this headline">¶</a></h2>
+<p>dftbplus_step
+A step for DFTB+ in a SEAMM flowchart</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="contributing.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="modules.html" class="btn btn-neutral float-left" title="dftbplus_step" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div>
+
+<p>
+<div class="row">
+  <div class="column_left">
+    <a href="https://molssi.org/" target="_blank" title="Go to MolSSI in a new tab">
+      <img src="/_images/MolSSI.jpg" alt="The MolSSI" style="border:0;">
+    </a>
+  </div>
+  <div class="column">
+    &copy; Copyright 2020, the Molecular Sciences Software Institute,
+    which receives funding from the National Science Foundation under award ACI-1547580
+  </div>
+  <div class="column_right">
+    <a href="https://nsf.gov/" target="_blank" title="Go to the NSF in a new tab">
+      <img src="/_images/NSF_4-Color_bitmap_Logo.png" alt="The NSF" style="border:0;">
+    </a>
+  </div>
+</div>
+
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
