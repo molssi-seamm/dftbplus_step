@@ -78,6 +78,9 @@ setup(
         'Programming Language :: Python :: 3.8',
     ],
     entry_points={
+        'console_scripts': [
+            'dftbplus-step-installer=dftbplus_step.__main__:run',
+        ],
         'org.molssi.seamm': [
             'DFTB+ = dftbplus_step:DftbplusStep',
         ],
