@@ -7,9 +7,9 @@ import dftbplus_step
 
 class ChooseParametersStep(object):
     my_description = {
-        'description': 'Choose Slater-Koster parameters',
-        'group': 'Setup',
-        'name': 'Choose parameters'
+        "description": "Choose Slater-Koster parameters",
+        "group": "Setup",
+        "name": "Choose parameters",
     }
 
     def __init__(self, flowchart=None, gui=None):
@@ -20,8 +20,7 @@ class ChooseParametersStep(object):
         pass
 
     def description(self):
-        """Return a description of what this extension does
-        """
+        """Return a description of what this extension does"""
         return ChooseParametersStep.my_description
 
     def create_node(self, flowchart=None, **kwargs):

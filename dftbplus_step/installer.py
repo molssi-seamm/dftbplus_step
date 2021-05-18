@@ -100,8 +100,8 @@ class Installer(seamm_installer.InstallerBase):
             for line in lines:
                 line = line.strip()
                 tmp = line.split()
-                if len(tmp) == 1:
-                    version = tmp[0]
+                if len(tmp) == 4 and tmp[2] == "release":
+                    version = tmp[3]
                     break
 
         return version

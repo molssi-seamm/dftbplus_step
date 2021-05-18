@@ -91,7 +91,7 @@ class DftbplusParameters(seamm.Parameters):
             "help_text": (
                 "Whether to do a calculation on the current structure, "
                 "optimize the geometry, or run molecular dynamics."
-            )
+            ),
         },
     }
 
@@ -113,9 +113,8 @@ class DftbplusParameters(seamm.Parameters):
         None
         """
 
-        logger.debug('DftbplusParameters.__init__')
+        logger.debug("DftbplusParameters.__init__")
 
         super().__init__(
-            defaults={**DftbplusParameters.parameters, **defaults},
-            data=data
+            defaults={**DftbplusParameters.parameters, **defaults}, data=data
         )

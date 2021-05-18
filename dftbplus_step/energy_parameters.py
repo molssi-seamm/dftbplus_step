@@ -66,18 +66,13 @@ class EnergyParameters(seamm.Parameters):
             "default": "Yes",
             "kind": "string",
             "default_units": "",
-            "enumeration": (
-                'Yes',
-                'No'
-            ),
+            "enumeration": ("Yes", "No"),
             "format_string": "",
             "description": "Self-consistent charges:",
-            "help_text": (
-                "Whether to do a self-consistent charge calculation."
-            )
+            "help_text": ("Whether to do a self-consistent charge calculation."),
         },
         "SCCTolerance": {
-            "default": 1.0E-05,
+            "default": 1.0e-05,
             "kind": "float",
             "default_units": "",
             "enumeration": None,
@@ -86,7 +81,7 @@ class EnergyParameters(seamm.Parameters):
             "help_text": (
                 "Stopping criteria for the SCC. Specifies the tolerance for "
                 "the maximum difference in any charge between two SCC cycles."
-            )
+            ),
         },
         "MaxSCCIterations": {
             "default": 100,
@@ -99,40 +94,28 @@ class EnergyParameters(seamm.Parameters):
                 "Maximal number of SCC cycles to reach convergence. If "
                 "convergence is not reached after the specified number of "
                 "steps, the program stops unless requested elsewhere."
-            )
+            ),
         },
         "ThirdOrder": {
             "default": "Default for parameters",
             "kind": "string",
             "default_units": "",
-            "enumeration": (
-                'No',
-                'Default for parameters',
-                'Partial',
-                'Full'
-            ),
+            "enumeration": ("No", "Default for parameters", "Partial", "Full"),
             "format_string": "",
             "description": "Use 3rd order corrections:",
-            "help_text": (
-                "Whether to use 3rd order corrections."
-            )
+            "help_text": ("Whether to use 3rd order corrections."),
         },
         "HCorrection": {
-            "default": 'Default for parameters',
+            "default": "Default for parameters",
             "kind": "string",
             "default_units": "",
-            "enumeration": (
-                'None',
-                'Default for parameters',
-                'Damping',
-                'DFTB3-D3H5'
-            ),
+            "enumeration": ("None", "Default for parameters", "Damping", "DFTB3-D3H5"),
             "format_string": "",
             "description": "Hydrogen interaction correction:",
             "help_text": (
                 "Whether and how to correct the interactions of hydrogens, "
                 "mainly hydrogen bonds."
-            )
+            ),
         },
         "Damping Exponent": {
             "default": 4.0,
@@ -144,7 +127,7 @@ class EnergyParameters(seamm.Parameters):
             "help_text": (
                 "The exponent for the short range damping of interactions "
                 "where at least one atom is a hydrogen."
-            )
+            ),
         },
         "results": {
             "default": {},
@@ -153,18 +136,19 @@ class EnergyParameters(seamm.Parameters):
             "enumeration": tuple(),
             "format_string": "",
             "description": "results",
-            "help_text": ("The results to save to variables or in "
-                          "tables. ")
+            "help_text": ("The results to save to variables or in " "tables. "),
         },
         "create tables": {
             "default": "yes",
             "kind": "boolean",
             "default_units": None,
-            "enumeration": ('yes', 'no'),
+            "enumeration": ("yes", "no"),
             "format_string": "",
             "description": "Create tables as needed:",
-            "help_text": ("Whether to create tables as needed for "
-                          "results being saved into tables.")
+            "help_text": (
+                "Whether to create tables as needed for "
+                "results being saved into tables."
+            ),
         },
     }
 
@@ -173,6 +157,5 @@ class EnergyParameters(seamm.Parameters):
         parameters given in the class"""
 
         super().__init__(
-            defaults={**EnergyParameters.parameters, **defaults},
-            data=data
+            defaults={**EnergyParameters.parameters, **defaults}, data=data
         )
