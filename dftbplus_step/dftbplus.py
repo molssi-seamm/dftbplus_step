@@ -4,6 +4,7 @@
 """
 
 import collections
+
 try:
     import importlib.metadata as implib
 except Exception:
@@ -30,7 +31,7 @@ from seamm_util.printing import FormattedText as __
 
 logger = logging.getLogger(__name__)
 job = printing.getPrinter()
-printer = printing.getPrinter('DFTB+')
+printer = printing.getPrinter("DFTB+")
 
 
 def deep_merge(d, u):
@@ -88,14 +89,14 @@ def dict_to_hsd(d, indent=0):
     hsd : str
         The HSD text.
     """
-    hsd = ''
+    hsd = ""
     for key, value in d.items():
         if isinstance(value, collections.Mapping):
-            hsd += indent * ' ' + key + ' {\n'
+            hsd += indent * " " + key + " {\n"
             hsd += dict_to_hsd(value, indent + 4)
-            hsd += indent * ' ' + '}\n'
+            hsd += indent * " " + "}\n"
         else:
-            hsd += indent * ' ' + f"{key} = {value}\n"
+            hsd += indent * " " + f"{key} = {value}\n"
 
     return hsd
 
@@ -121,13 +122,13 @@ def redimension(values, dimensions):
         nvalues *= dim
     if len(values) != nvalues:
         raise ValueError(
-            f'Number of values given, {len(values)}, is not equal to the '
-            f'dimensions: {dimensions} --> {nvalues} values'
+            f"Number of values given, {len(values)}, is not equal to the "
+            f"dimensions: {dimensions} --> {nvalues} values"
         )
     try:
         _, result = _redimension_helper(values, dimensions)
     except Exception as e:
-        print(f'Exception in redimension {type(e)}: {e}')
+        print(f"Exception in redimension {type(e)}: {e}")
         print(traceback.format_exc())
         raise
 
@@ -175,10 +176,10 @@ class Dftbplus(seamm.Node):
     def __init__(
         self,
         flowchart=None,
-        title='DFTB+',
-        namespace='org.molssi.seamm.dftbplus',
+        title="DFTB+",
+        namespace="org.molssi.seamm.dftbplus",
         extension=None,
-        logger=logger
+        logger=logger,
     ):
         """A step for DFTB+ in a SEAMM flowchart.
 
@@ -203,26 +204,24 @@ class Dftbplus(seamm.Node):
         -------
         None
         """
-        logger.debug('Creating DFTB+ {}'.format(self))
+        logger.debug("Creating DFTB+ {}".format(self))
         self.subflowchart = seamm.Flowchart(
-            parent=self,
-            name='DFTB+',
-            namespace=namespace
+            parent=self, name="DFTB+", namespace=namespace
         )  # yapf: disable
 
         super().__init__(
             flowchart=flowchart,
-            title='DFTB+',
+            title="DFTB+",
             extension=extension,
             module=__name__,
-            logger=logger
+            logger=logger,
         )  # yapf: disable
 
         self.parameters = dftbplus_step.DftbplusParameters()
 
         # Get the metadata for the Slater-Koster parameters
-        package = self.__module__.split('.')[0]
-        files = [p for p in implib.files(package) if p.name == 'metadata.json']
+        package = self.__module__.split(".")[0]
+        files = [p for p in implib.files(package) if p.name == "metadata.json"]
         if len(files) != 1:
             raise RuntimeError("Can't find Slater-Koster metadata.json file")
         data = files[0].read_text()
@@ -230,19 +229,16 @@ class Dftbplus(seamm.Node):
 
     @property
     def version(self):
-        """The semantic version of this module.
-        """
+        """The semantic version of this module."""
         return dftbplus_step.__version__
 
     @property
     def git_revision(self):
-        """The git version of this module.
-        """
+        """The git version of this module."""
         return dftbplus_step.__git_revision__
 
     def create_parser(self):
-        """Setup the command-line / config file parser
-        """
+        """Setup the command-line / config file parser"""
         # parser_name = 'dftbplus-step'
         parser_name = self.step_type
         parser = seamm.getParser()
@@ -260,37 +256,34 @@ class Dftbplus(seamm.Node):
         # Options for DFTB+
         parser.add_argument(
             parser_name,
-            '--exe',
-            default='dftb+',
-            help='the path to the DFTB+ executable'
+            "--dftbplus-path",
+            default="",
+            help="the path to the DFTB+ executable",
         )
 
         parser.add_argument(
             parser_name,
-            '--slako-dir',
-            default='~/slako',
-            help='the path to the Slater-Koster parameter files'
+            "--slako-dir",
+            default="~/slako",
+            help="the path to the Slater-Koster parameter files",
         )
 
         parser.add_argument(
-            parser_name,
-            '--use-mpi',
-            default=False,
-            help='Whether to use mpi'
+            parser_name, "--use-mpi", default=False, help="Whether to use mpi"
         )  # yapf: disable
 
         parser.add_argument(
             parser_name,
-            '--use-openmp',
+            "--use-openmp",
             default=True,
-            help='Whether to use openmp threads'
+            help="Whether to use openmp threads",
         )
 
         parser.add_argument(
             parser_name,
-            '--natoms-per-core',
+            "--natoms-per-core",
             default=10,
-            help='How many atoms to have per core or thread'
+            help="How many atoms to have per core or thread",
         )
 
     def set_id(self, node_id):
@@ -320,35 +313,37 @@ class Dftbplus(seamm.Node):
         self.subflowchart.root_directory = self.flowchart.root_directory
 
         # Get the first real node
-        node = self.subflowchart.get_node('1').next()
+        node = self.subflowchart.get_node("1").next()
 
-        text = self.header + '\n\n'
+        text = self.header + "\n\n"
         while node is not None:
             try:
-                text += __(node.description_text(), indent=3 * ' ').__str__()
+                text += __(node.description_text(), indent=3 * " ").__str__()
             except Exception as e:
                 print(
-                    'Error describing dftbplus flowchart: {} in {}'.format(
+                    "Error describing dftbplus flowchart: {} in {}".format(
                         str(e), str(node)
                     )
                 )
                 logger.critical(
-                    'Error describing dftbplus flowchart: {} in {}'.format(
+                    "Error describing dftbplus flowchart: {} in {}".format(
                         str(e), str(node)
                     )
                 )
                 raise
             except:  # noqa: E722
                 print(
-                    "Unexpected error describing dftbplus flowchart: {} in {}"
-                    .format(sys.exc_info()[0], str(node))
+                    "Unexpected error describing dftbplus flowchart: {} in {}".format(
+                        sys.exc_info()[0], str(node)
+                    )
                 )
                 logger.critical(
-                    "Unexpected error describing dftbplus flowchart: {} in {}"
-                    .format(sys.exc_info()[0], str(node))
+                    "Unexpected error describing dftbplus flowchart: {} in {}".format(
+                        sys.exc_info()[0], str(node)
+                    )
                 )
                 raise
-            text += '\n'
+            text += "\n"
             node = node.next()
 
         return text
@@ -365,33 +360,33 @@ class Dftbplus(seamm.Node):
         seamm.Node
             The next node object in the flowchart.
         """
-        system_db = self.get_variable('_system_db')
+        system_db = self.get_variable("_system_db")
         configuration = system_db.system.configuration
         n_atoms = configuration.n_atoms
         if n_atoms == 0:
-            self.logger.error('DFTB+ run(): there is no structure!')
-            raise RuntimeError('DFTB+ run(): there is no structure!')
+            self.logger.error("DFTB+ run(): there is no structure!")
+            raise RuntimeError("DFTB+ run(): there is no structure!")
 
         # Access the options
         options = self.options
 
         # Add the main citation for DFTB+
         self.references.cite(
-            raw=self._bibliography['dftbplus'],
-            alias='dftb+',
-            module='dftb+ step',
+            raw=self._bibliography["dftbplus"],
+            alias="dftb+",
+            module="dftb+ step",
             level=1,
-            note='The principle DFTB+ citation.'
+            note="The principle DFTB+ citation.",
         )
 
         next_node = super().run(printer)
         # Get the first real node
-        node = self.subflowchart.get_node('1').next()
+        node = self.subflowchart.get_node("1").next()
 
         input_data = {
-            'Options': {
-                'WriteResultsTag': 'Yes',
-                'WriteChargesAsText': 'Yes',
+            "Options": {
+                "WriteResultsTag": "Yes",
+                "WriteChargesAsText": "Yes",
             }
         }  # yapf: disable
         while node is not None:
@@ -404,77 +399,76 @@ class Dftbplus(seamm.Node):
         hsd = dict_to_hsd(input_data)
         hsd += self.geometry()
 
-        files = {'dftb_in.hsd': hsd}
-        logger.info('dftb_in.hsd:\n' + files['dftb_in.hsd'])
+        files = {"dftb_in.hsd": hsd}
+        logger.info("dftb_in.hsd:\n" + files["dftb_in.hsd"])
 
         # Write the input files to the current directory
         directory = Path(self.directory)
         directory.mkdir(parents=True, exist_ok=True)
         for filename in files:
             path = directory / filename
-            with path.open(mode='w') as fd:
+            with path.open(mode="w") as fd:
                 fd.write(files[filename])
 
         return_files = [
-            '*.out',
-            'charges.*',
-            'dftb_pin.hsd',
-            'geom.out.*',
-            'output',
-            'results.tag'
+            "*.out",
+            "charges.*",
+            "dftb_pin.hsd",
+            "geom.out.*",
+            "output",
+            "results.tag",
         ]  # yapf: disable
 
         # Run the calculation
         local = seamm.ExecLocal()
+        exe = Path(options["dftbplus_path"]) / "dftb+"
         result = local.run(
-            cmd=[options['exe']],
-            files=files,
-            return_files=return_files
+            cmd=[str(exe)], files=files, return_files=return_files
         )  # yapf: disable
 
         if result is None:
-            logger.error('There was an error running DFTB+')
+            logger.error("There was an error running DFTB+")
             return None
 
-        logger.debug('\n' + pprint.pformat(result))
+        logger.debug("\n" + pprint.pformat(result))
 
-        logger.info('stdout:\n' + result['stdout'])
-        if result['stderr'] != '':
-            logger.warning('stderr:\n' + result['stderr'])
+        logger.info("stdout:\n" + result["stdout"])
+        if result["stderr"] != "":
+            logger.warning("stderr:\n" + result["stderr"])
 
         # Write the output files to the current directory
-        if 'stdout' in result and result['stdout'] != '':
-            path = directory / 'stdout.txt'
-            with path.open(mode='w') as fd:
-                fd.write(result['stdout'])
+        if "stdout" in result and result["stdout"] != "":
+            path = directory / "stdout.txt"
+            with path.open(mode="w") as fd:
+                fd.write(result["stdout"])
 
-        if result['stderr'] != '':
-            self.logger.warning('stderr:\n' + result['stderr'])
-            path = directory / 'stderr.txt'
-            with path.open(mode='w') as fd:
-                fd.write(result['stderr'])
+        if result["stderr"] != "":
+            self.logger.warning("stderr:\n" + result["stderr"])
+            path = directory / "stderr.txt"
+            with path.open(mode="w") as fd:
+                fd.write(result["stderr"])
 
-        for filename in result['files']:
-            if filename[0] == '@':
-                subdir, fname = filename[1:].split('+')
+        for filename in result["files"]:
+            if filename[0] == "@":
+                subdir, fname = filename[1:].split("+")
                 path = directory / subdir / fname
             else:
                 path = directory / filename
-            with path.open(mode='w') as fd:
-                if result[filename]['data'] is not None:
-                    fd.write(result[filename]['data'])
+            with path.open(mode="w") as fd:
+                if result[filename]["data"] is not None:
+                    fd.write(result[filename]["data"])
                 else:
-                    fd.write(result[filename]['exception'])
+                    fd.write(result[filename]["exception"])
 
         # Parse the results.tag file
-        if 'results.tag' in result['files']:
-            results = self.parse_results(result['results.tag']['data'])
+        if "results.tag" in result["files"]:
+            results = self.parse_results(result["results.tag"]["data"])
         else:
             results = {}
 
         # And a final structure
-        if 'geom.out.gen' in result['files']:
-            self.update_system(result['geom.out.gen']['data'])
+        if "geom.out.gen" in result["files"]:
+            self.update_system(result["geom.out.gen"]["data"])
 
         # Analyze the results
         self.analyze(data=results)
@@ -485,7 +479,7 @@ class Dftbplus(seamm.Node):
 
         return next_node
 
-    def analyze(self, indent='', data=None, **kwargs):
+    def analyze(self, indent="", data=None, **kwargs):
         """Do any analysis of the output from this step.
 
         Also print important results to the local step.out file using
@@ -497,13 +491,13 @@ class Dftbplus(seamm.Node):
             An extra indentation for the output
         """
         # Get the first real node
-        node = self.subflowchart.get_node('1').next()
+        node = self.subflowchart.get_node("1").next()
 
         # Loop over the subnodes, asking them to do their analysis
         while node is not None:
             for value in node.description:
                 printer.important(value)
-                printer.important(' ')
+                printer.important(" ")
 
             node.analyze(data=data)
 
@@ -528,10 +522,10 @@ class Dftbplus(seamm.Node):
             }
         }
         """
-        system_db = self.get_variable('_system_db')
+        system_db = self.get_variable("_system_db")
         configuration = system_db.system.configuration
 
-        result = 'Geometry = {\n'
+        result = "Geometry = {\n"
 
         elements = set(configuration.atoms.symbols)
         elements = sorted([*elements])
@@ -541,12 +535,12 @@ class Dftbplus(seamm.Node):
         result += "    TypesAndCoordinates [Angstrom] = {\n"
         for element, xyz in zip(
             configuration.atoms.symbols,
-            configuration.atoms.get_coordinates(fractionals=True)
+            configuration.atoms.get_coordinates(fractionals=True),
         ):
             index = elements.index(element)
             x, y, z = xyz
             result += f"        {index+1:>2} {x:10.6f} {y:10.6f} {z:10.6f}\n"
-        result += '    }\n'
+        result += "    }\n"
 
         if configuration.periodicity == 3:
             result += "   Periodic = Yes\n"
@@ -576,23 +570,22 @@ class Dftbplus(seamm.Node):
                 lineno, line = next(line_iter)
                 if line[0] == "#":
                     continue
-                if ':' not in line:
+                if ":" not in line:
                     raise RuntimeError(
-                        f"Problem parsing the results.tag file: {lineno}: "
-                        f"{line}"
+                        f"Problem parsing the results.tag file: {lineno}: " f"{line}"
                     )
-                key, _type, ndims, rest = line.split(':', maxsplit=3)
+                key, _type, ndims, rest = line.split(":", maxsplit=3)
                 ndims = int(ndims)
                 key = key.strip()
                 if ndims == 0:
                     # scalar
                     lineno, line = next(line_iter)
-                    if _type == 'real':
+                    if _type == "real":
                         property_data[key] = float(line)
                     else:
                         property_data[key] = line
                 else:
-                    dims = [int(x) for x in rest.split(',')]
+                    dims = [int(x) for x in rest.split(",")]
                     n_to_read = 1
                     for dim in dims:
                         n_to_read *= dim
@@ -601,17 +594,15 @@ class Dftbplus(seamm.Node):
                         lineno, line = next(line_iter)
                         values.extend(line.strip().split())
 
-                    if _type == 'real':
+                    if _type == "real":
                         tmp = [float(x) for x in values]
                         values = tmp
 
                     property_data[key] = redimension(values, dims)
                 if key not in properties:
-                    self.logger.warning(
-                        "Property '{}' not recognized.".format(key)
-                    )
-                if key in properties and 'units' in properties[key]:
-                    property_data[key + ',units'] = properties[key]['units']
+                    self.logger.warning("Property '{}' not recognized.".format(key))
+                if key in properties and "units" in properties[key]:
+                    property_data[key + ",units"] = properties[key]["units"]
         except StopIteration:
             pass
 
@@ -631,12 +622,11 @@ class Dftbplus(seamm.Node):
         """
         data = parse_gen_file(gen_data)
 
-        system_db = self.get_variable('_system_db')
+        system_db = self.get_variable("_system_db")
         configuration = system_db.system.configuration
 
         configuration.atoms.set_coordinates(
-            data['coordinates'],
-            fractionals=data['coordinate system'] == 'fractional'
+            data["coordinates"], fractionals=data["coordinate system"] == "fractional"
         )
 
 
@@ -660,39 +650,37 @@ def parse_gen_file(data):
     try:
         n_atoms, coord_flag = next(line).split()
         n_atoms = int(n_atoms)
-        if coord_flag == 'C':
-            result['periodicity'] = 0
-            result['coordinate system'] = 'Cartesian'
-        elif coord_flag == 'S':
-            result['periodicity'] = 3
-            result['coordinate system'] = 'Cartesian'
-        elif coord_flag == 'F':
-            result['periodicity'] = 3
-            result['coordinate system'] = 'fractional'
+        if coord_flag == "C":
+            result["periodicity"] = 0
+            result["coordinate system"] = "Cartesian"
+        elif coord_flag == "S":
+            result["periodicity"] = 3
+            result["coordinate system"] = "Cartesian"
+        elif coord_flag == "F":
+            result["periodicity"] = 3
+            result["coordinate system"] = "fractional"
         else:
-            raise RuntimeError(
-                f"Don't recognize the type of geometry '{coord_flag}'"
-            )
+            raise RuntimeError(f"Don't recognize the type of geometry '{coord_flag}'")
 
         elements = next(line).split()
 
         # And now the atoms
-        coordinates = result['coordinates'] = []
-        result['elements'] = []
+        coordinates = result["coordinates"] = []
+        result["elements"] = []
         for i in range(n_atoms):
             _, index, x, y, z = next(line).split()
-            result['elements'].append(elements[int(index) - 1])
+            result["elements"].append(elements[int(index) - 1])
             coordinates.append([float(x), float(y), float(z)])
 
         # Cell information if periodic
-        if result['periodicity'] == 3:
+        if result["periodicity"] == 3:
             data = next(line).split()
-            result['origin'] = [float(x) for x in data]
-            lattice = result['lattice vectors'] = []
+            result["origin"] = [float(x) for x in data]
+            lattice = result["lattice vectors"] = []
             for i in range(3):
                 data = next(line).split()
                 lattice.append([float(x) for x in data])
     except StopIteration:
-        raise EOFError('The gen file ended prematurely.')
+        raise EOFError("The gen file ended prematurely.")
 
     return result

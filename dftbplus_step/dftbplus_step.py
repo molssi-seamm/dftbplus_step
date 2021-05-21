@@ -28,12 +28,9 @@ class DftbplusStep(object):
     """
 
     my_description = {
-        'description':
-            (
-                'An interface for DFTB+'
-            ),
-        'group': 'Simulations',
-        'name': 'DFTB+'
+        "description": ("An interface for DFTB+"),
+        "group": "Simulations",
+        "name": "DFTB+",
     }  # yapf: disable
 
     def __init__(self, flowchart=None, gui=None):
@@ -44,8 +41,7 @@ class DftbplusStep(object):
         pass
 
     def description(self):
-        """Return a description of what this extension does
-        """
+        """Return a description of what this extension does"""
         return DftbplusStep.my_description
 
     def create_node(self, flowchart=None, **kwargs):

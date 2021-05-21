@@ -7,9 +7,9 @@ import dftbplus_step
 
 class EnergyStep(object):
     my_description = {
-        'description': 'Single-point energy with DFTB+',
-        'group': 'Simulations',
-        'name': 'Single-point Energy'
+        "description": "Single-point energy with DFTB+",
+        "group": "Simulations",
+        "name": "Single-point Energy",
     }
 
     def __init__(self, flowchart=None, gui=None):
@@ -20,8 +20,7 @@ class EnergyStep(object):
         pass
 
     def description(self):
-        """Return a description of what this extension does
-        """
+        """Return a description of what this extension does"""
         return EnergyStep.my_description
 
     def create_node(self, flowchart=None, **kwargs):

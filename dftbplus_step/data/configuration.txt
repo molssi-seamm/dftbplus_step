@@ -1,0 +1,37 @@
+[dftbplus-step]
+
+# Information about where/how the executables are installed
+# installation may be 'user', 'conda' or 'module'. If a module is
+# specified it will be loaded and those executables used.  In this
+# case, any path specified using dftbplus-path will be ignored.
+
+installation = 
+conda-environment = 
+modules = 
+
+# The path to the executable. Can be empty or not present, in which
+# case the default PATH is used.  If a path is given, dftb+
+# from this location will be used.
+#
+# Ignored if a module is used. The default is to use the PATH
+# environment variable.
+
+dftbplus-path = 
+
+# The path to the Slater-Koster functions
+
+slako-dir = 
+
+# Whether to use MPI to run parallel
+
+# use-mpi = False
+
+# Whether to use OpenMP to run parallel
+
+# use-openmp = True
+
+# The number of atoms to use per core/thread
+
+# natoms-per-core = 10
+
+
