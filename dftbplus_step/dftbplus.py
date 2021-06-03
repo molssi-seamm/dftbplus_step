@@ -18,6 +18,7 @@ import traceback
 
 import dftbplus_step
 import seamm
+import seamm_util
 import seamm_util.printing as printing
 from seamm_util.printing import FormattedText as __
 
@@ -241,7 +242,7 @@ class Dftbplus(seamm.Node):
         """Setup the command-line / config file parser"""
         # parser_name = 'dftbplus-step'
         parser_name = self.step_type
-        parser = seamm.getParser()
+        parser = seamm_util.getParser(name="SEAMM")
 
         # Remember if the parser exists ... this type of step may have been
         # found before
@@ -264,13 +265,16 @@ class Dftbplus(seamm.Node):
         parser.add_argument(
             parser_name,
             "--slako-dir",
-            default="~/slako",
+            default="${SEAMM:root}/Slater-Koster",
             help="the path to the Slater-Koster parameter files",
         )
 
         parser.add_argument(
-            parser_name, "--use-mpi", default=False, help="Whether to use mpi"
-        )  # yapf: disable
+            parser_name,
+            "--use-mpi",
+            default=False,
+            help="Whether to use mpi",
+        )
 
         parser.add_argument(
             parser_name,
