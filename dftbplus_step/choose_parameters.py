@@ -67,7 +67,7 @@ class ChooseParameters(seamm.Node):
 
         # Get the metadata for the Slater-Koster parameters
         slako = self.parent._slako
-        slako_dir = Path(self.parent.options["slako_dir"])
+        slako_dir = Path(self.parent.options["slako_dir"]).expanduser()
 
         # Create the directory
         directory = Path(self.directory)
