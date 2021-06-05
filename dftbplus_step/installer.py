@@ -125,7 +125,7 @@ class Installer(seamm_installer.InstallerBase):
 
         # Get the values from the configuration
         data = self.configuration.get_values(self.section)
-        if "slako-dir" in data:
+        if "slako-dir" in data and data["slako-dir"] != "":
             tmp = data["slako-dir"].replace("${root:SEAMM}", str(root))
             slako_dir = Path(tmp).expanduser().resolve()
             have_key = True
@@ -181,6 +181,7 @@ class Installer(seamm_installer.InstallerBase):
             self.install_files(slako_dir)
             self.configuration.set_value(self.section, "slako-dir", str(slako_dir))
             self.configuration.save()
+            print("Done!\n")
         else:
             result = False
 
@@ -245,7 +246,6 @@ class Installer(seamm_installer.InstallerBase):
             contents = tarfile.open(path)
 
             contents.extractall(location.parent)
-            print("Done!!!")
 
     def install(self):
         """Install DFTB+ and the Slater-Koster files
@@ -282,8 +282,9 @@ class Installer(seamm_installer.InstallerBase):
 
         # Get the values from the configuration
         data = self.configuration.get_values(self.section)
-        if "slako-dir" in data:
-            slako_dir = Path(data["slako-dir"]).expanduser().resolve()
+        if "slako-dir" in data and data["slako-dir"] != "":
+            tmp = data["slako-dir"].replace("${root:SEAMM}", str(root))
+            slako_dir = Path(tmp).expanduser().resolve()
         else:
             slako_dir = root / "Parameters" / "slako"
 
@@ -324,13 +325,21 @@ class Installer(seamm_installer.InstallerBase):
 
         # Get the values from the configuration
         data = self.configuration.get_values(self.section)
-        if "slako-dir" in data:
-            slako_dir = Path(data["slako-dir"]).expanduser().resolve()
+        if "slako-dir" in data and data["slako-dir"] != "":
+            # First read in the configuration file in the normal fashion
+            # to get the root directory (~/SEAMM usually), which may be needed.
+            parser = seamm_util.seamm_parser()
+            parser.parse_args([])
+            options = parser.get_options("SEAMM")
+            root = Path(options["root"]).expanduser().resolve()
+
+            tmp = data["slako-dir"].replace("${root:SEAMM}", str(root))
+            slako_dir = Path(tmp).expanduser().resolve()
 
             print(f"Deleting the Slater-Koster files in {slako_dir}.")
-            print(f"data['slako-dir']=")
+            print(f"{data['slako-dir']=}")
 
-            # shutil.rmtree(slako_dir, ignore_errors=True)
+            shutil.rmtree(slako_dir, ignore_errors=True)
 
             self.configuration.set_value(self.section, "slako-dir", "")
             self.configuration.save()
@@ -365,16 +374,29 @@ class Installer(seamm_installer.InstallerBase):
 
         # Get the values from the configuration
         data = self.configuration.get_values(self.section)
-        if "slako-dir" in data:
-            slako_dir = Path(data["slako-dir"]).expanduser().resolve()
+        if "slako-dir" in data and data["slako-dir"] != "":
+            # First read in the configuration file in the normal fashion
+            # to get the root directory (~/SEAMM usually), which may be needed.
+            parser = seamm_util.seamm_parser()
+            parser.parse_args([])
+            options = parser.get_options("SEAMM")
+            root = Path(options["root"]).expanduser().resolve()
+
+            tmp = data["slako-dir"].replace("${root:SEAMM}", str(root))
+            slako_dir = Path(tmp).expanduser().resolve()
 
             if not slako_dir.exists():
                 print(
                     f"The Slater-Koster files are not installed at {slako_dir}, "
-                    "\nwhere the configuration file indicates they should be. 
-            print(f"Updating the Slater-Koster files in {slako_dir}.")
-            slako_dir.parent.mkdir(parents=True, exist_ok=True)
-            self.install_files(slako_dir)
+                    "\nwhere the configuration file indicates they should be."
+                    "\nFixing the configuration file."
+                )
+                self.configuration.set_value(self.section, "slako-dir", "")
+                self.configuration.save()
+            else:
+                print(f"Updating the Slater-Koster files in {slako_dir}.")
+                slako_dir.parent.mkdir(parents=True, exist_ok=True)
+                self.install_files(slako_dir)
 
             print("Done!\n")
         else:
