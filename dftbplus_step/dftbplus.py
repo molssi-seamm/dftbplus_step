@@ -265,7 +265,7 @@ class Dftbplus(seamm.Node):
         parser.add_argument(
             parser_name,
             "--slako-dir",
-            default="${SEAMM:root}/Slater-Koster",
+            default="${SEAMM:root}/Parameters/slako",
             help="the path to the Slater-Koster parameter files",
         )
 
