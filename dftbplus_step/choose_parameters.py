@@ -100,10 +100,10 @@ class ChooseParameters(seamm.Node):
         if P["subset"] == "none":
             subset = None
         else:
-            subset = dataset[P["subset"]]
+            subset = datasets[P["subset"]]
             subpairs = subset["potential pairs"]
 
-        # Broadcast to the parent so that other substesp can use
+        # Broadcast to the parent so that other substeps can use
         self.parent._dataset = dataset
         self.parent._subset = subset
 
