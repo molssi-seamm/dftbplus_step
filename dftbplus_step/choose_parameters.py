@@ -110,14 +110,20 @@ class ChooseParameters(seamm.Node):
         for el1 in elements:
             for el2 in elements:
                 key = f"{el1}-{el2}"
+                # Not sure if flipping the key is valid....
+                key2 = f"{el2}-{el1}"
                 if subset is not None and key in subpairs:
                     md5sum = subpairs[key]["md5sum"]
                 elif key in pairs:
                     md5sum = pairs[key]["md5sum"]
+                elif subset is not None and key2 in subpairs:
+                    md5sum = subpairs[key2]["md5sum"]
+                elif key2 in pairs:
+                    md5sum = pairs[key2]["md5sum"]
                 else:
                     raise RuntimeError(
                         f"Could not find the Slater-Koster file for {key} "
-                        "for dataset {P['dataset']}, subset {P['subset']}."
+                        f"for dataset {P['dataset']}, subset {P['subset']}."
                     )
                 parameters[key] = str(slako_dir / potentials[md5sum]["filename"])
 
