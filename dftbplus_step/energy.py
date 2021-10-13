@@ -180,8 +180,8 @@ class Energy(seamm.Node):
                             damping = P["Damping Exponent"]
                         block["Exponent"] = damping
                 else:
-                    dftb["HCorrection"] = "No"
-                    PP["HCorrection"] = "No"
+                    dftb["HCorrection"] = "None {}"
+                    PP["HCorrection"] = "None {}"
             else:
                 dftb["HCorrection"] = hcorrection
                 if hcorrection == "Damping":
