@@ -102,6 +102,18 @@ class Energy(seamm.Node):
                     "using the D3H5 method."
                 )
 
+        kmethod = P["k-grid method"]
+        if kmethod == "grid spacing":
+            text += (
+                " If the system is periodic the integration will use a"
+                f" Monkhorst-Pack grid with a spacing of {P['k-spacing']}."
+            )
+        elif kmethod == "supercell folding":
+            text += (
+                " If the system is periodic, the integration will use a"
+                f" Monkhorst-Pack {P['na']} x{P['nb']} x{P['nc']} grid."
+            )
+
         return self.header + "\n" + __(text, indent=4 * " ").__str__()
 
     def get_input(self):
@@ -120,6 +132,10 @@ class Energy(seamm.Node):
         for key in PP:
             if isinstance(PP[key], units_class):
                 PP[key] = "{:~P}".format(PP[key])
+
+        # Set up the description.
+        self.description = []
+        self.description.append(__(self.description_text(PP), **PP, indent=self.indent))
 
         # Determine the input and as we do so, replace any default values
         # in PP so that we print what is actually done
@@ -195,8 +211,41 @@ class Energy(seamm.Node):
                         damping = P["Damping Exponent"]
                     dftb["Damping Exponent"] = damping
 
-        self.description = []
-        self.description.append(__(self.description_text(PP), **PP, indent=self.indent))
+        system, configuration = self.get_system_configuration(None)
+        if configuration.periodicity == 3:
+            kmethod = P["k-grid method"]
+            if kmethod == "grid spacing":
+                lengths = configuration.cell.reciprocal_lengths()
+                spacing = P["k-spacing"].to("1/Å").magnitude
+                na = round(lengths[0] / spacing)
+                nb = round(lengths[0] / spacing)
+                nc = round(lengths[0] / spacing)
+                na = na if na > 0 else 1
+                nb = nb if nb > 0 else 1
+                nc = nc if nc > 0 else 1
+            elif kmethod == "supercell folding":
+                na = P["na"]
+                nb = P["nb"]
+                nc = P["nc"]
+            oa = 0.0 if na % 2 == 1 else 0.5
+            ob = 0.0 if nb % 2 == 1 else 0.5
+            oc = 0.0 if nc % 2 == 1 else 0.5
+            kmesh = (
+                "SupercellFolding {\n"
+                f"    {na} 0 0\n"
+                f"    0 {nb} 0\n"
+                f"    0 0 {nc}\n"
+                f"    {oa} {ob} {oc}\n"
+                "}"
+            )
+            dftb["KPointsAndWeights"] = kmesh
+            self.description.append(
+                __(
+                    f"The mesh for the Brillouin zone integration is {na} x {nb} x {nc}"
+                    f" with offsets of {oa}, {ob}, and {oc}",
+                    indent=self.indent + 4 * " ",
+                )
+            )
 
         return result
 

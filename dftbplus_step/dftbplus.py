@@ -290,6 +290,8 @@ class Dftbplus(seamm.Node):
             help="How many atoms to have per core or thread",
         )
 
+        return result
+
     def set_id(self, node_id):
         """Set the id for node to a given tuple"""
         self._id = node_id
@@ -371,6 +373,10 @@ class Dftbplus(seamm.Node):
             self.logger.error("DFTB+ run(): there is no structure!")
             raise RuntimeError("DFTB+ run(): there is no structure!")
 
+        # Print our header to the main output
+        printer.important(self.header)
+        printer.important("")
+
         # Access the options
         options = self.options
 
@@ -395,8 +401,6 @@ class Dftbplus(seamm.Node):
         }  # yapf: disable
         while node is not None:
             result = node.get_input()
-            for value in node.description:
-                printer.important(value)
             deep_merge(input_data, result)
             node = node.next()
 
@@ -536,27 +540,34 @@ class Dftbplus(seamm.Node):
         names = '{"' + '" "'.join(elements) + '"}'
         result += f"    TypeNames = {names}\n"
 
-        result += "    TypesAndCoordinates [Angstrom] = {\n"
-        for element, xyz in zip(
-            configuration.atoms.symbols,
-            configuration.atoms.get_coordinates(fractionals=True),
-        ):
-            index = elements.index(element)
-            x, y, z = xyz
-            result += f"        {index+1:>2} {x:10.6f} {y:10.6f} {z:10.6f}\n"
-        result += "    }\n"
-
-        if configuration.periodicity == 3:
+        if configuration.periodicity == 0:
+            result += "    TypesAndCoordinates [Angstrom] = {\n"
+            for element, xyz in zip(
+                configuration.atoms.symbols,
+                configuration.atoms.get_coordinates(fractionals=False),
+            ):
+                index = elements.index(element)
+                x, y, z = xyz
+                result += f"        {index+1:>2} {x:10.6f} {y:10.6f} {z:10.6f}\n"
+            result += "    }\n"
+        elif configuration.periodicity == 3:
             result += "   Periodic = Yes\n"
             result += "   LatticeVectors [Angstrom] = {\n"
-
             uvw = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
             XYZ = configuration.cell.to_cartesians(uvw)
             for xyz in XYZ:
                 x, y, z = xyz
                 result += f"        {x:10.6f} {y:10.6f} {z:10.6f}\n"
             result += "    }\n"
-
+            result += "    TypesAndCoordinates [relative] = {\n"
+            for element, xyz in zip(
+                configuration.atoms.symbols,
+                configuration.atoms.get_coordinates(fractionals=True),
+            ):
+                index = elements.index(element)
+                x, y, z = xyz
+                result += f"        {index+1:>2} {x:10.6f} {y:10.6f} {z:10.6f}\n"
+            result += "    }\n"
         result += "}\n"
 
         return result

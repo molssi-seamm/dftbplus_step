@@ -75,7 +75,7 @@ class TkEnergy(seamm.TkNode):
                 self[key] = P[key].widget(e_frame)
 
         # Set the callbacks for changes
-        for widget in ("SCC", "HCorrection"):
+        for widget in ("SCC", "HCorrection", "k-grid method"):
             w = self[widget]
             w.combobox.bind("<<ComboboxSelected>>", self.reset_energy_frame)
             w.combobox.bind("<Return>", self.reset_energy_frame)
@@ -130,6 +130,26 @@ class TkEnergy(seamm.TkNode):
                 self["Damping Exponent"].grid(row=row, column=1, sticky=tk.EW)
                 widgets2.append(self["Damping Exponent"])
                 row += 1
+
+        # The Brillouin zone integration grid
+        kmethod = self["k-grid method"].get()
+        self["k-grid method"].grid(row=row, column=0, columnspan=3, sticky=tk.EW)
+        widgets.append(self["k-grid method"])
+        row += 1
+        if kmethod == "grid spacing":
+            self["k-spacing"].grid(row=row, column=1, columnspan=2, sticky=tk.EW)
+            widgets1.append(self["k-spacing"])
+            row += 1
+        elif kmethod == "supercell folding":
+            self["na"].grid(row=row, column=1, columnspan=2, sticky=tk.EW)
+            widgets1.append(self["na"])
+            row += 1
+            self["nb"].grid(row=row, column=1, columnspan=2, sticky=tk.EW)
+            widgets1.append(self["nb"])
+            row += 1
+            self["nc"].grid(row=row, column=1, columnspan=2, sticky=tk.EW)
+            widgets1.append(self["nc"])
+            row += 1
 
         sw.align_labels(widgets)
         sw.align_labels(widgets1)

@@ -150,6 +150,57 @@ class EnergyParameters(seamm.Parameters):
                 "results being saved into tables."
             ),
         },
+        "k-grid method": {
+            "default": "grid spacing",
+            "kind": "string",
+            "default_units": "",
+            "enumeration": ("supercell folding", "grid spacing"),
+            "format_string": "",
+            "description": "Specify k-space grid using:",
+            "help_text": ("How to specify the k-space integration grid."),
+        },
+        "na": {
+            "default": 4,
+            "kind": "integer",
+            "default_units": "",
+            "enumeration": None,
+            "format_string": "",
+            "description": "NPoints in a:",
+            "help_text": (
+                "Number of points in the first direction of the Brillouin zone."
+            ),
+        },
+        "nb": {
+            "default": 4,
+            "kind": "integer",
+            "default_units": "",
+            "enumeration": None,
+            "format_string": "",
+            "description": "NPoints in b:",
+            "help_text": (
+                "Number of points in the second direction of the Brillouin zone."
+            ),
+        },
+        "nc": {
+            "default": 4,
+            "kind": "integer",
+            "default_units": "",
+            "enumeration": None,
+            "format_string": "",
+            "description": "NPoints in c:",
+            "help_text": (
+                "Number of points in the third direction of the Brillouin zone."
+            ),
+        },
+        "k-spacing": {
+            "default": 0.2,
+            "kind": "float",
+            "default_units": "1/Å",
+            "enumeration": None,
+            "format_string": "",
+            "description": "K-spacing:",
+            "help_text": "The spacing of the grid in reciprocal space.",
+        },
     }
 
     def __init__(self, defaults={}, data=None):
