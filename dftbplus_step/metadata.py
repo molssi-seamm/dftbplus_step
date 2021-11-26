@@ -122,4 +122,15 @@ properties = {
         "type": "float",
         "units": "hartree/bohr",
     },
+    "cell_volume": {
+        "calculation": [
+            "energy",
+            "optimization",
+        ],
+        "description": "The volume of the unti cell",
+        "dimensionality": "scalar",
+        "methods": [],
+        "type": "float",
+        "units": "Å^2",
+    },
 }
