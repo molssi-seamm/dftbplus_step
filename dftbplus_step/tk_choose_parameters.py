@@ -147,29 +147,45 @@ class TkChooseParameters(seamm.TkNode):
         # Sort out the dataset widget
         tmp = [*possible_datasets.keys()]
         ds.combobox.config(values=tmp)
-        if dataset not in tmp:
-            dataset = tmp[0]
+        if len(tmp) == 0:
+            # No parameter set covers all the elements!
+            dataset = ""
+            tk.messagebox.showwarning(
+                title="No Potentials Available for Elements",
+                message=(
+                    "There is no dataset available that covers the elements\n\t"
+                    + ", ".join(elements)
+                ),
+            )
+        else:
+            if dataset not in tmp:
+                dataset = tmp[0]
         ds.set(dataset)
 
         # and subset widget
-        tmp = possible_datasets[dataset]
-        ss.combobox.config(values=tmp)
-        if subset not in tmp:
-            subset = tmp[0]
+        if dataset == "":
+            ss.combobox.config(values="")
+            subset = "none"
+        else:
+            tmp = possible_datasets[dataset]
+            ss.combobox.config(values=tmp)
+            if subset not in tmp:
+                subset = tmp[0]
         ss.set(subset)
 
         # Note current elements in the dataset/subset with red labels
         pt.set_text_color("all", "black")
-        data = datasets[dataset]
-        current = set()
-        if subset == "none":
-            for element_set in data["element sets"]:
-                current.update(element_set)
-        else:
-            subdata = datasets[subset]
-            for element_set in subdata["element sets"]:
-                current.update(element_set)
-        pt.set_text_color(current, "red")
+        if dataset != "":
+            data = datasets[dataset]
+            current = set()
+            if subset == "none":
+                for element_set in data["element sets"]:
+                    current.update(element_set)
+            else:
+                subdata = datasets[subset]
+                for element_set in subdata["element sets"]:
+                    current.update(element_set)
+            pt.set_text_color(current, "red")
 
         # and grid the widgets in place
         widgets = []
@@ -180,7 +196,7 @@ class TkChooseParameters(seamm.TkNode):
         widgets.append(self["dataset"])
         row += 1
         # only grid the subset if there are choices
-        if possible_datasets[dataset] != ["none"]:
+        if dataset != "" and possible_datasets[dataset] != ["none"]:
             self["subset"].grid(row=row, column=0, sticky=tk.EW)
             widgets.append(self["subset"])
             row += 1
