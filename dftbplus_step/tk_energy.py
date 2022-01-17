@@ -151,8 +151,10 @@ class TkEnergy(seamm.TkNode):
             widgets1.append(self["nc"])
             row += 1
 
-        sw.align_labels(widgets)
-        sw.align_labels(widgets1)
-        sw.align_labels(widgets2)
+        sw.align_labels(widgets, sticky=tk.E)
+        sw.align_labels(widgets1, sticky=tk.E)
+        sw.align_labels(widgets2, sticky=tk.E)
+
+        frame.columnconfigure(0, minsize=30)
 
         return row
