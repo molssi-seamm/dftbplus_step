@@ -13,13 +13,11 @@ class OptimizationParameters(dftbplus_step.EnergyParameters):
 
     parameters = {
         "optimization method": {
-            "default": "Direct inversion of iterative subspace (gDIIS)",
+            "default": "Rational Function",
             "kind": "enumeration",
             "default_units": "",
             "enumeration": (
-                "Steepest descents",
-                "Conjugate gradients",
-                "Direct inversion of iterative subspace (gDIIS)",
+                "Rational Function",
                 "Limited-memory Broyden-Fletcher-Goldfarb-Shanno (LBFGS)",
                 "Fast inertial relaxation engine (FIRE)",
             ),
@@ -58,57 +56,12 @@ class OptimizationParameters(dftbplus_step.EnergyParameters):
             "default_units": "",
             "enumeration": ("Yes", "No"),
             "format_string": "",
-            "description": "Optimize the cell:",
+            "description": "Optimize the cell (if periodic):",
             "help_text": (
                 "Allow the lattice vectors to change during optimisation. "
                 "MovedAtoms can be optionally used with lattice optimisation "
                 "if the atomic coordinates are to be co-optimised with the "
                 "lattice."
-            ),
-        },
-        "constrain_cell": {
-            "default": "No",
-            "kind": "string",
-            "default_units": "",
-            "enumeration": ("No", "Angles", "Isotropically"),
-            "format_string": "",
-            "description": "Constrain the cell:",
-            "help_text": ("Constrain the cell during optimisation."),
-        },
-        "fix_a": {
-            "default": "No",
-            "kind": "string",
-            "default_units": "",
-            "enumeration": ("Yes", "No"),
-            "format_string": "",
-            "description": "Fix length 'a':",
-            "help_text": (
-                "Keep the length of the first lattice vector ('a') fixed "
-                "during the optimisation."
-            ),
-        },
-        "fix_b": {
-            "default": "No",
-            "kind": "string",
-            "default_units": "",
-            "enumeration": ("Yes", "No"),
-            "format_string": "",
-            "description": "Fix length 'b':",
-            "help_text": (
-                "Keep the length of the second lattice vector ('b') fixed "
-                "during the optimisation."
-            ),
-        },
-        "fix_c": {
-            "default": "No",
-            "kind": "string",
-            "default_units": "",
-            "enumeration": ("Yes", "No"),
-            "format_string": "",
-            "description": "Fix length 'c':",
-            "help_text": (
-                "Keep the length of the third lattice vector ('c') fixed "
-                "during the optimisation."
             ),
         },
         "pressure": {
@@ -120,39 +73,29 @@ class OptimizationParameters(dftbplus_step.EnergyParameters):
             "description": "Pressure:",
             "help_text": ("The applied pressure."),
         },
-        "MaxAtomStep": {
-            "default": 0.2,
+        "DiagLimit": {
+            "default": 0.01,
             "kind": "float",
             "default_units": "",
             "enumeration": tuple(),
-            "format_string": ".1f",
-            "description": "Maximum atom step:",
-            "help_text": (
-                "The maximum possible line search step size for atomic " "relaxation."
-            ),
-        },
-        "MaxLatticeStep": {
-            "default": 0.2,
-            "kind": "float",
-            "default_units": "",
-            "enumeration": tuple(),
-            "format_string": ".1f",
-            "description": "Maximum step in the lattice:",
-            "help_text": (
-                "The maximum possible line search step size for the cell "
-                "relaxation. For fixed angles it is a percentage of the "
-                "lattice parameter; for isotropic constraint, of the volume."
-            ),
-        },
-        "stop_if_scc_fails": {
-            "default": "Yes",
-            "kind": "string",
-            "default_units": "",
-            "enumeration": ("Yes", "No"),
             "format_string": "",
-            "description": "Stop if SCC fails:",
+            "description": "Limit for diagonal Hessian elements:",
             "help_text": (
-                "Stop if the self consistent charge calculation fails to " "converge."
+                "The lower limit for the diagonal Hessian elements in the BFGS-like "
+                "update step in the rational optimizer."
+            ),
+        },
+        "Memory": {
+            "default": 20,
+            "kind": "integer",
+            "default_units": "",
+            "enumeration": tuple(),
+            "format_string": "",
+            "description": "Number of steps to remember:",
+            "help_text": (
+                "Number of last steps which are saved and used to calculate "
+                "the next step via the LBFGS algorithm. The literature "
+                "recommends that Memory should between 3 and 20."
             ),
         },
         "StepSize": {
@@ -169,52 +112,83 @@ class OptimizationParameters(dftbplus_step.EnergyParameters):
                 "and m is the mass of the atom."
             ),
         },
-        "Alpha": {
+        "nMin": {
+            "default": 5,
+            "kind": "integer",
+            "default_units": "",
+            "enumeration": tuple(),
+            "format_string": "",
+            "description": "Steps before increasing stepsize:",
+            "help_text": (
+                "The minimum number of steps before the step size is increased."
+            ),
+        },
+        "aPar": {
             "default": 0.1,
             "kind": "float",
             "default_units": "",
             "enumeration": tuple(),
             "format_string": "",
-            "description": "Initial scaling parameter:",
-            "help_text": (
-                "Initial scaling parameter to prevent the iterative space "
-                "becoming exhausted (this is dynamically adjusted during the "
-                "run)."
-            ),
+            "description": "Velocity update parameter:",
+            "help_text": "Parameter for the update of the velocities.",
         },
-        "Generations": {
-            "default": 8,
-            "kind": "integer",
+        "fInc": {
+            "default": 1.1,
+            "kind": "float",
             "default_units": "",
             "enumeration": tuple(),
             "format_string": "",
-            "description": "Generations:",
-            "help_text": "Number of generations to consider for the mixing.",
+            "description": "Stepsize increase factor:",
+            "help_text": "The factor to increase the step size",
         },
-        "Memory": {
-            "default": 20,
-            "kind": "integer",
+        "fDec": {
+            "default": 0.5,
+            "kind": "float",
             "default_units": "",
             "enumeration": tuple(),
             "format_string": "",
-            "description": "Number of steps to remember:",
+            "description": "Stepsize decrease factor:",
+            "help_text": "The factor to decrease the step size",
+        },
+        "fAlpha": {
+            "default": 0.99,
+            "kind": "float",
+            "default_units": "",
+            "enumeration": tuple(),
+            "format_string": "",
+            "description": "Alpha update on reset:",
+            "help_text": "The factor for the update the alpha parameter on reset.",
+        },
+        # Put in the configuration handling options needed
+        "structure handling": {
+            "default": "Create a new configuration",
+            "kind": "enum",
+            "default_units": "",
+            "enumeration": (
+                "Overwrite the current configuration",
+                "Create a new configuration",
+            ),
+            "format_string": "s",
+            "description": "Configuration handling:",
             "help_text": (
-                "Number of last steps which are saved and used to calculate "
-                "the next step via the LBFGS algorithm. The literature "
-                "recommends that Memory should between 3 and 20."
+                "Whether to overwrite the current configuration, or create a new "
+                "configuration or system and configuration for the new structure"
             ),
         },
-        "LineSearch": {
-            "default": "No",
+        "configuration name": {
+            "default": "optimized with <Hamiltonian>",
             "kind": "string",
             "default_units": "",
-            "enumeration": ("Yes", "No"),
-            "format_string": "",
-            "description": "Use a linesearch rather than Newton step:",
-            "help_text": (
-                "Should a line search be performed, instead of a quasi-Newton "
-                "step along the LBFGS direction."
+            "enumeration": (
+                "optimized with <Hamiltonian>",
+                "keep current name",
+                "use SMILES string",
+                "use Canonical SMILES string",
+                "use configuration number",
             ),
+            "format_string": "s",
+            "description": "Configuration name:",
+            "help_text": "The name for the new configuration",
         },
     }
 
@@ -225,3 +199,25 @@ class OptimizationParameters(dftbplus_step.EnergyParameters):
         super().__init__(
             defaults={**OptimizationParameters.parameters, **defaults}, data=data
         )
+
+    def update(self, data):
+        """Update values from a dict
+
+        This version filters out old, obsolete parameters for compatibility
+        """
+        for key in (
+            "constrain_cell",
+            "fix_a",
+            "fix_b",
+            "fix_c",
+            "MaxAtomStep",
+            "MaxLatticeStep",
+            "stop_if_scc_fails",
+            "Alpha",
+            "Generations",
+            "LineSearch",
+        ):
+            if key in data:
+                del data[key]
+
+        super().update(data)
