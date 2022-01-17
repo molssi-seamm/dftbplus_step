@@ -180,7 +180,7 @@ class Optimization(dftbplus_step.Energy):
             "The geometry optimization converged in {nsteps} steps to a total "
             "energy of {total_energy:.6f} Ha."
         )
-        # Calculate the energy of formation 
+        # Calculate the energy of formation
         if self.parent._reference_energy is not None:
             dE = data["total_energy"] - self.parent._reference_energy
             dE = Q_(dE, "Ha").to("kJ/mol").magnitude
