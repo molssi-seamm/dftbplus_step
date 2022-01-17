@@ -122,15 +122,26 @@ properties = {
         "type": "float",
         "units": "hartree/bohr",
     },
+    "stress": {
+        "calculation": [
+            "energy",
+            "optimization",
+        ],
+        "description": "The stress",
+        "dimensionality": [3, 3],
+        "methods": [],
+        "type": "float",
+        "units": "Å^3",
+    },
     "cell_volume": {
         "calculation": [
             "energy",
             "optimization",
         ],
-        "description": "The volume of the unti cell",
+        "description": "The volume of the unit cell",
         "dimensionality": "scalar",
         "methods": [],
         "type": "float",
-        "units": "Å^2",
+        "units": "Å^3",
     },
 }
