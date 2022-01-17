@@ -16,18 +16,20 @@
                 "Br": {
 		    "citations": ["3ob:JCTC2015-2"],
                     "Hubbard derivative": "-0.0573",
-                    "maximum angular momentum": "d"
+                    "maximum angular momentum": "d",
+		    "reference energy": "-2.986596"
                 },
                 "C": {
 		    "citations": ["3ob:JCTC2013"],
                     "Hubbard derivative": "-0.1492",
                     "maximum angular momentum": "p",
-		    "reference energy": "-1.718278"
+		    "reference energy": "-1.718265"
                 },
                 "Ca": {
 		    "citations": ["3ob:JCTC2015-2"],
                     "Hubbard derivative": "-0.0340",
-                    "maximum angular momentum": "p"
+                    "maximum angular momentum": "p",
+		    "reference energy": "-0.302242"
                 },
                 "Cl": {
 		    "citations": ["3ob:JCTC2015-2"],
@@ -45,12 +47,13 @@
 		    "citations": ["3ob:JCTC2013"],
                     "Hubbard derivative": "-0.1857",
                     "maximum angular momentum": "s",
-		    "reference energy": "-0.238600",
+		    "reference energy": "-0.335278"
                 },
                 "I": {
 		    "citations": ["3ob:JCTC2015-2"],
                     "Hubbard derivative": "-0.0433",
-                    "maximum angular momentum": "d"
+                    "maximum angular momentum": "d",
+		    "reference energy": "-2.638390"
                 },
                 "K": {
 		    "citations": ["3ob:JCTC2015-2"],
@@ -61,7 +64,8 @@
                 "Mg": {
 		    "citations": ["3ob:JCTC2015-1"],
                     "Hubbard derivative": "-0.02",
-                    "maximum angular momentum": "p"
+                    "maximum angular momentum": "p",
+		    "reference energy": "-0.390200"
                 },
                 "N": {
 		    "citations": ["3ob:JCTC2013"],
@@ -73,7 +77,7 @@
 		    "citations": ["3ob:JCTC2015-2"],
                     "Hubbard derivative": "-0.0454",
                     "maximum angular momentum": "p",
-		    "reference energy":"-2.102184"
+		    "reference energy":"-0.165040"
                 },
                 "O": {
 		    "citations": ["3ob:JCTC2013"],
@@ -90,12 +94,14 @@
                 "S": {
 		    "citations": ["3ob:JCTC2014"],
                     "Hubbard derivative": "-0.11",
-                    "maximum angular momentum": "d"
+                    "maximum angular momentum": "d",
+		    "reference energy": "-2.417442"
                 },
                 "Zn": {
 		    "citations": ["3ob:JCTC2015-1"],
                     "Hubbard derivative": "-0.03",
-                    "maximum angular momentum": "d"
+                    "maximum angular momentum": "d",
+		    "reference energy": "-4.346580"
                 }
             },
             "element sets": [
