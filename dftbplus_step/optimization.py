@@ -166,14 +166,6 @@ class Optimization(dftbplus_step.Energy):
                 elif P["configuration name"] == "use configuration number":
                     configuration.name = str(configuration.n_configurations)
 
-        # Put any requested results into variables or tables
-        self.store_results(
-            data=data,
-            properties=dftbplus_step.properties,
-            results=self.parameters["results"].value,
-            create_tables=self.parameters["create tables"].get(),
-        )
-
         # Print the key results
         data["nsteps"] = 25
         text = (
@@ -183,10 +175,20 @@ class Optimization(dftbplus_step.Energy):
         # Calculate the energy of formation
         if self.parent._reference_energy is not None:
             dE = data["total_energy"] - self.parent._reference_energy
-            dE = Q_(dE, "Ha").to("kJ/mol").magnitude
+            dE = Q_(dE, "hartree").to("kJ/mol").magnitude
             text += f" The calculated formation energy is {dE:.2f} kJ/mol."
+            data["energy of formation"] = dE
         else:
             text += " Could not calculate the formation energy because some reference "
             text += "energies are missing."
+            data["energy of formation"] = None
 
         printer.normal(__(text, **data, indent=self.indent + 4 * " "))
+
+        # Put any requested results into variables or tables
+        self.store_results(
+            data=data,
+            properties=dftbplus_step.properties,
+            results=self.parameters["results"].value,
+            create_tables=self.parameters["create tables"].get(),
+        )
