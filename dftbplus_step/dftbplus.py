@@ -228,6 +228,11 @@ class Dftbplus(seamm.Node):
         data = files[0].read_text()
         self._slako = json.loads(data)
 
+        # Data to pass between substeps
+        self._dataset = None  # SLAKO dataset used
+        self._subset = None  # SLAKO modifier dataset applied to dataset
+        self._reference_energy = None  # for calculating energy of formation
+
     @property
     def version(self):
         """The semantic version of this module."""
@@ -366,8 +371,7 @@ class Dftbplus(seamm.Node):
         seamm.Node
             The next node object in the flowchart.
         """
-        system_db = self.get_variable("_system_db")
-        configuration = system_db.system.configuration
+        system, configuration = self.get_system_configuration(None)
         n_atoms = configuration.n_atoms
         if n_atoms == 0:
             self.logger.error("DFTB+ run(): there is no structure!")
@@ -476,7 +480,7 @@ class Dftbplus(seamm.Node):
 
         # And a final structure
         if "geom.out.gen" in result["files"]:
-            self.update_system(result["geom.out.gen"]["data"])
+            results["final structure"] = parse_gen_file(result["geom.out.gen"]["data"])
 
         # Analyze the results
         self.analyze(data=results)
@@ -530,8 +534,7 @@ class Dftbplus(seamm.Node):
             }
         }
         """
-        system_db = self.get_variable("_system_db")
-        configuration = system_db.system.configuration
+        _, configuration = self.get_system_configuration(None)
 
         result = "Geometry = {\n"
 
@@ -622,27 +625,6 @@ class Dftbplus(seamm.Node):
             pass
 
         return property_data
-
-    def update_system(self, gen_data):
-        """Update the system with the changed coordinates and cell.
-
-        Parameters
-        ----------
-        gen_data : str
-            The contents of a gen file, as a single string.
-
-        Returns
-        -------
-        None
-        """
-        data = parse_gen_file(gen_data)
-
-        system_db = self.get_variable("_system_db")
-        configuration = system_db.system.configuration
-
-        configuration.atoms.set_coordinates(
-            data["coordinates"], fractionals=data["coordinate system"] == "fractional"
-        )
 
 
 def parse_gen_file(data):

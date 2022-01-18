@@ -16,77 +16,92 @@
                 "Br": {
 		    "citations": ["3ob:JCTC2015-2"],
                     "Hubbard derivative": "-0.0573",
-                    "maximum angular momentum": "d"
+                    "maximum angular momentum": "d",
+		    "reference energy": "-2.986596"
                 },
                 "C": {
 		    "citations": ["3ob:JCTC2013"],
                     "Hubbard derivative": "-0.1492",
-                    "maximum angular momentum": "p"
+                    "maximum angular momentum": "p",
+		    "reference energy": "-1.718265"
                 },
                 "Ca": {
 		    "citations": ["3ob:JCTC2015-2"],
                     "Hubbard derivative": "-0.0340",
-                    "maximum angular momentum": "p"
+                    "maximum angular momentum": "p",
+		    "reference energy": "-0.302242"
                 },
                 "Cl": {
 		    "citations": ["3ob:JCTC2015-2"],
                     "Hubbard derivative": "-0.0697",
-                    "maximum angular momentum": "d"
+                    "maximum angular momentum": "d",
+		    "reference energy": "-3.170509"
                 },
                 "F": {
 		    "citations": ["3ob:JCTC2015-2"],
                     "Hubbard derivative": "-0.1623",
-                    "maximum angular momentum": "p"
+                    "maximum angular momentum": "p",
+		    "reference energy": "-4.314741"
                 },
                 "H": {
 		    "citations": ["3ob:JCTC2013"],
                     "Hubbard derivative": "-0.1857",
-                    "maximum angular momentum": "s"
+                    "maximum angular momentum": "s",
+		    "reference energy": "-0.372096"
                 },
                 "I": {
 		    "citations": ["3ob:JCTC2015-2"],
                     "Hubbard derivative": "-0.0433",
-                    "maximum angular momentum": "d"
+                    "maximum angular momentum": "d",
+		    "reference energy": "-2.638390"
                 },
                 "K": {
 		    "citations": ["3ob:JCTC2015-2"],
                     "Hubbard derivative": "-0.0339",
-                    "maximum angular momentum": "p"
+                    "maximum angular momentum": "p",
+		    "reference energy": "-0.128203"
                 },
                 "Mg": {
 		    "citations": ["3ob:JCTC2015-1"],
                     "Hubbard derivative": "-0.02",
-                    "maximum angular momentum": "p"
+                    "maximum angular momentum": "p",
+		    "reference energy": "-0.390200"
                 },
                 "N": {
 		    "citations": ["3ob:JCTC2013"],
                     "Hubbard derivative": "-0.1535",
-                    "maximum angular momentum": "p"
+                    "maximum angular momentum": "p",
+		    "reference energy": "-2.405185"
                 },
                 "Na": {
 		    "citations": ["3ob:JCTC2015-2"],
                     "Hubbard derivative": "-0.0454",
-                    "maximum angular momentum": "p"
+                    "maximum angular momentum": "p",
+		    "reference energy":"-0.165040"
                 },
                 "O": {
 		    "citations": ["3ob:JCTC2013"],
                     "Hubbard derivative": "-0.1575",
-                    "maximum angular momentum": "p"
+                    "maximum angular momentum": "p",
+		    "reference energy": "-3.224295"
                 },
                 "P": {
 		    "citations": ["3ob:JCTC2014"],
                     "Hubbard derivative": "-0.14",
-                    "maximum angular momentum": "d"
+                    "maximum angular momentum": "d",
+		    "reference energy": "-1.815025"
                 },
                 "S": {
 		    "citations": ["3ob:JCTC2014"],
                     "Hubbard derivative": "-0.11",
-                    "maximum angular momentum": "d"
+                    "maximum angular momentum": "d",
+		    "reference energy": "-2.417442"
                 },
                 "Zn": {
 		    "citations": ["3ob:JCTC2015-1"],
                     "Hubbard derivative": "-0.03",
-                    "maximum angular momentum": "d"
+                    "maximum angular momentum": "d",
+		    "reference energy": "-4.346580"
                 }
             },
             "element sets": [
@@ -2062,22 +2077,28 @@
         "mio": {
             "element data": {
                 "C": {
-                    "maximum angular momentum": "p"
+                    "maximum angular momentum": "p",
+		    "reference energy": "-1.735096215"
                 },
                 "H": {
-                    "maximum angular momentum": "s"
+                    "maximum angular momentum": "s",
+		    "reference energy": "-0.365638735"
                 },
                 "N": {
-                    "maximum angular momentum": "p"
+                    "maximum angular momentum": "p",
+		    "reference energy": "-2.382230928"
                 },
                 "O": {
-                    "maximum angular momentum": "p"
+                    "maximum angular momentum": "p",
+		    "reference energy": "-3.238419083"
                 },
                 "P": {
-                    "maximum angular momentum": "d"
+                    "maximum angular momentum": "d",
+		    "reference energy": "-1.799486413"
                 },
                 "S": {
-                    "maximum angular momentum": "d"
+                    "maximum angular momentum": "d",
+		    "reference energy": "-2.446672"
                 }
             },
             "element sets": [

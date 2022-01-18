@@ -169,6 +169,25 @@ class ChooseParameters(seamm.Node):
         if len(derivative) > 0:
             result["Hamiltonian"]["DFTB"]["HubbardDerivs"] = derivative
 
+        # Check if we have reference energies
+        key = "reference energy"
+        tmp = {}
+        for el in elements:
+            if subdata is not None and el in subdata and key in subdata[el]:
+                tmp[el] = float(subdata[el][key])
+            elif el in data and key in data[el]:
+                tmp[el] = float(data[el][key])
+            else:
+                tmp = None
+                break
+        if tmp is None:
+            self.parent._reference_energy = None
+        else:
+            energy = 0.0
+            for el in configuration.atoms.symbols:
+                energy += tmp[el]
+            self.parent._reference_energy = energy
+
         # Add the references
         for reference in references:
             self.references.cite(

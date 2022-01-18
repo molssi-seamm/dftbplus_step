@@ -8,7 +8,7 @@ from pathlib import Path
 import dftbplus_step
 import seamm
 import seamm.data
-from seamm_util import units_class
+from seamm_util import Q_, units_class
 import seamm_util.printing as printing
 from seamm_util.printing import FormattedText as __
 
@@ -75,27 +75,40 @@ class Optimization(dftbplus_step.Energy):
         self.description = []
         self.description.append(__(self.description_text(PP), **PP, indent=self.indent))
 
+        _, configuration = self.get_system_configuration(None)
+
         # Template
         result = super().get_input()
-        result["Driver"] = {}
 
         method = P["optimization method"]
-        if method == "Steepest descents":
-            block = result["Driver"]["SteepestDescent"] = {}
-        elif method == "Conjugate gradients":
-            block = result["Driver"]["ConjugateGradient"] = {}
-        elif "gDIIS" in method:
-            block = result["Driver"]["gDIIS"] = {}
+        block = result["Driver = GeometryOptimization"] = {}
+
+        if "Rational" in method:
+            subblock = block["Optimizer = Rational"] = {}
+            subblock["DiagLimit"] = P["DiagLimit"]
         elif "LBFGS" in method:
-            block = result["Driver"]["LBFGS"] = {}
+            subblock = block["Optimizer = LBFGS"] = {}
+            subblock["Memory"] = P["Memory"]
         elif "FIRE" in method:
-            block = result["Driver"]["FIRE"] = {}
+            subblock = block["Optimizer = FIRE"] = {}
+            subblock["FIRE"] = {}
+            for key in (
+                "StepSize",
+                "nMin",
+                "aPar",
+                "fInc",
+                "fDec",
+                "fAlpha",
+            ):
+                subblock[key] = P[key]
         else:
             raise RuntimeError(f"Don't recognize optimization method '{method}'")
 
         max_force = P["MaxForceComponent"].to("hartree/bohr")
-        block["MaxForceComponent"] = max_force.magnitude
+        block["Convergence"] = {"GradAMax": max_force.magnitude}
         block["MaxSteps"] = P["MaxSteps"]
+        if configuration.periodicity == 3:
+            block["LatticeOpt"] = P["LatticeOpt"]
         block["OutputPrefix"] = "geom.out"
 
         return result
@@ -104,13 +117,54 @@ class Optimization(dftbplus_step.Energy):
         """Parse the output and generating the text output and store the
         data in variables for other stages to access
         """
-        # Put any requested results into variables or tables
-        self.store_results(
-            data=data,
-            properties=dftbplus_step.properties,
-            results=self.parameters["results"].value,
-            create_tables=self.parameters["create tables"].get(),
+        # Get the parameters used
+        P = self.parameters.current_values_to_dict(
+            context=seamm.flowchart_variables._data
         )
+
+        # Update the structure
+        if "final structure" in data:
+            sdata = data["final structure"]
+
+            system, starting_configuration = self.get_system_configuration(None)
+            periodicity = starting_configuration.periodicity
+            if (
+                "structure handling" in P
+                and P["structure handling"] == "Create a new configuration"
+            ):
+                configuration = system.create_configuration(
+                    periodicity=periodicity,
+                    atomset=starting_configuration.atomset,
+                    bondset=starting_configuration.bondset,
+                    cell_id=starting_configuration.cell_id,
+                )
+            else:
+                configuration = starting_configuration
+
+            configuration.atoms.set_coordinates(
+                sdata["coordinates"],
+                fractionals=sdata["coordinate system"] == "fractional",
+            )
+
+            if "lattice vectors" in sdata:
+                configuration.cell.from_vectors(sdata["lattice vectors"])
+
+            # And the name of the configuration.
+            if "configuration name" in P:
+                if P["configuration name"] == "optimized with <Hamiltonian>":
+                    hamiltonian = self.parent._dataset
+                    if self.parent._subset is not None:
+                        hamiltonian += " + " + self.parent._subset
+
+                    configuration.name = f"optimized with {hamiltonian}"
+                elif P["configuration name"] == "keep current name":
+                    pass
+                elif P["configuration name"] == "use SMILES string":
+                    configuration.name = configuration.smiles
+                elif P["configuration name"] == "use Canonical SMILES string":
+                    configuration.name = configuration.canonical_smiles
+                elif P["configuration name"] == "use configuration number":
+                    configuration.name = str(configuration.n_configurations)
 
         # Print the key results
         data["nsteps"] = 25
@@ -118,5 +172,23 @@ class Optimization(dftbplus_step.Energy):
             "The geometry optimization converged in {nsteps} steps to a total "
             "energy of {total_energy:.6f} Ha."
         )
+        # Calculate the energy of formation
+        if self.parent._reference_energy is not None:
+            dE = data["total_energy"] - self.parent._reference_energy
+            dE = Q_(dE, "hartree").to("kJ/mol").magnitude
+            text += f" The calculated formation energy is {dE:.2f} kJ/mol."
+            data["energy of formation"] = dE
+        else:
+            text += " Could not calculate the formation energy because some reference "
+            text += "energies are missing."
+            data["energy of formation"] = None
 
         printer.normal(__(text, **data, indent=self.indent + 4 * " "))
+
+        # Put any requested results into variables or tables
+        self.store_results(
+            data=data,
+            properties=dftbplus_step.properties,
+            results=self.parameters["results"].value,
+            create_tables=self.parameters["create tables"].get(),
+        )

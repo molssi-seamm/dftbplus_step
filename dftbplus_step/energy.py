@@ -8,7 +8,7 @@ from pathlib import Path
 import dftbplus_step
 import seamm
 import seamm.data
-from seamm_util import units_class
+from seamm_util import Q_, units_class
 import seamm_util.printing as printing
 from seamm_util.printing import FormattedText as __
 
@@ -253,6 +253,22 @@ class Energy(seamm.Node):
         """Parse the output and generating the text output and store the
         data in variables for other stages to access
         """
+        # Print the key results
+        text = "The total energy is {total_energy:.6f} Ha."
+
+        # Calculate the energy of formation
+        if self.parent._reference_energy is not None:
+            dE = data["total_energy"] - self.parent._reference_energy
+            dE = Q_(dE, "hartree").to("kJ/mol").magnitude
+            text += f" The calculated formation energy is {dE:.2f} kJ/mol."
+            data["energy of formation"] = dE
+        else:
+            text += " Could not calculate the formation energy because some reference "
+            text += "energies are missing."
+            data["energy of formation"] = None
+
+        printer.normal(__(text, **data, indent=self.indent + 4 * " "))
+
         # Put any requested results into variables or tables
         self.store_results(
             data=data,
@@ -260,8 +276,3 @@ class Energy(seamm.Node):
             results=self.parameters["results"].value,
             create_tables=self.parameters["create tables"].get(),
         )
-
-        # Print the key results
-        text = "The total energy is {total_energy:.6f} Ha."
-
-        printer.normal(__(text, **data, indent=self.indent + 4 * " "))
