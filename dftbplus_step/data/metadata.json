@@ -2077,22 +2077,28 @@
         "mio": {
             "element data": {
                 "C": {
-                    "maximum angular momentum": "p"
+                    "maximum angular momentum": "p",
+		    "reference energy": "-1.735096215"
                 },
                 "H": {
-                    "maximum angular momentum": "s"
+                    "maximum angular momentum": "s",
+		    "reference energy": "-0.365638735"
                 },
                 "N": {
-                    "maximum angular momentum": "p"
+                    "maximum angular momentum": "p",
+		    "reference energy": "-2.382230928"
                 },
                 "O": {
-                    "maximum angular momentum": "p"
+                    "maximum angular momentum": "p",
+		    "reference energy": "-3.238419083"
                 },
                 "P": {
-                    "maximum angular momentum": "d"
+                    "maximum angular momentum": "d",
+		    "reference energy": "-1.799486413"
                 },
                 "S": {
-                    "maximum angular momentum": "d"
+                    "maximum angular momentum": "d",
+		    "reference energy": "-2.446672"
                 }
             },
             "element sets": [
