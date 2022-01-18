@@ -15,6 +15,17 @@ properties = {
         "type": "float",
         "units": "hartree",
     },
+    "energy of formation": {
+        "calculation": [
+            "energy",
+            "optimization",
+        ],
+        "description": "The energy of formation",
+        "dimensionality": "scalar",
+        "methods": [],
+        "type": "float",
+        "units": "kJ/mol",
+    },
     "fermi_level": {
         "calculation": [
             "energy",
