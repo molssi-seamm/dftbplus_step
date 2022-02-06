@@ -20,7 +20,7 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-with open('requirements_install.txt') as fd:
+with open('requirements.txt') as fd:
     requirements = fd.read()
 
 setup(
@@ -88,13 +88,15 @@ setup(
             'DFTB+ = dftbplus_step:DftbplusStep',
         ],
         'org.molssi.seamm.dftbplus': [
-            'Energy = dftbplus_step:EnergyStep',
+            'BandStructure = dftbplus_step:BandStructureStep',
             'ChooseParameters = dftbplus_step:ChooseParametersStep',
+            'Energy = dftbplus_step:EnergyStep',
             'Optimization = dftbplus_step:OptimizationStep',
         ],
         'org.molssi.seamm.dftbplus.tk': [
-            'Energy = dftbplus_step:EnergyStep',
+            'BandStructure = dftbplus_step:BandStructureStep',
             'ChooseParameters = dftbplus_step:ChooseParametersStep',
+            'Energy = dftbplus_step:EnergyStep',
             'Optimization = dftbplus_step:OptimizationStep',
         ],
     }
