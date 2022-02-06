@@ -117,6 +117,8 @@ class Optimization(dftbplus_step.Energy):
         """Parse the output and generating the text output and store the
         data in variables for other stages to access
         """
+        text = ""
+
         # Get the parameters used
         P = self.parameters.current_values_to_dict(
             context=seamm.flowchart_variables._data
@@ -141,21 +143,34 @@ class Optimization(dftbplus_step.Energy):
             else:
                 configuration = starting_configuration
 
-            configuration.atoms.set_coordinates(
-                sdata["coordinates"],
-                fractionals=sdata["coordinate system"] == "fractional",
-            )
+            if periodicity == 3:
+                (
+                    lattice_in,
+                    fractionals_in,
+                    atomic_numbers,
+                ) = starting_configuration.primitive_cell()
 
-            if "lattice vectors" in sdata:
-                configuration.cell.from_vectors(sdata["lattice vectors"])
+                tmp = configuration.update(
+                    sdata["coordinates"],
+                    fractionals=sdata["coordinate system"] == "fractional",
+                    atomic_numbers=atomic_numbers,
+                    lattice=sdata["lattice vectors"],
+                    space_group=starting_configuration.symmetry.group,
+                    symprec=0.01,
+                )
+
+                if tmp != "":
+                    text += f"\n\nWarning: {tmp}\n\n"
+            else:
+                configuration.atoms.set_coordinates(
+                    sdata["coordinates"],
+                    fractionals=sdata["coordinate system"] == "fractional",
+                )
 
             # And the name of the configuration.
             if "configuration name" in P:
                 if P["configuration name"] == "optimized with <Hamiltonian>":
-                    hamiltonian = self.parent._dataset
-                    if self.parent._subset is not None:
-                        hamiltonian += " + " + self.parent._subset
-
+                    hamiltonian = self.parent._hamiltonian
                     configuration.name = f"optimized with {hamiltonian}"
                 elif P["configuration name"] == "keep current name":
                     pass
@@ -168,7 +183,7 @@ class Optimization(dftbplus_step.Energy):
 
         # Print the key results
         data["nsteps"] = 25
-        text = (
+        text += (
             "The geometry optimization converged in {nsteps} steps to a total "
             "energy of {total_energy:.6f} Ha."
         )
@@ -182,6 +197,10 @@ class Optimization(dftbplus_step.Energy):
             text += " Could not calculate the formation energy because some reference "
             text += "energies are missing."
             data["energy of formation"] = None
+
+        # Prepare the DOS graph(s)
+        wd = Path(self.directory)
+        self.dos(wd / "band.out")
 
         printer.normal(__(text, **data, indent=self.indent + 4 * " "))
 
