@@ -6,9 +6,12 @@ extract the metadata from them.
 
 import hashlib
 import json  # noqa: F401
+import logging
 from pathlib import Path
 
 import xmltodict
+
+logger = logging.getLogger(__name__)
 
 
 def parse_file(filename):
@@ -60,6 +63,8 @@ def analyze_directory(root="data/slako"):
     """
     if not isinstance(root, Path):
         root = Path(root)
+    root = root.expanduser().resolve()
+    print(f"Analyzing directory {root}")
 
     comments = []
     metadata = {
@@ -85,6 +90,7 @@ def analyze_directory(root="data/slako"):
             parent = parent.parent
         grandparent = parent.parent
         parameterization = grandparent.name
+        logger.debug(f"{path}: {parameterization}")
         version = ".".join(parent.name.split("-")[1:])
         if parameterization not in parameterizations:
             parameterizations.append(parameterization)
@@ -119,6 +125,7 @@ def analyze_directory(root="data/slako"):
             data["md5 mismatch"] = False
 
         if parameterization not in metadata:
+            logger.info(f"   adding {parameterization}")
             pdata = metadata[parameterization] = {}
         else:
             pdata = metadata[parameterization]
@@ -187,31 +194,33 @@ def find_sets(metadata, parameterizations):
     # Find the pairs in all the parameterizations
     elements = []
     for parameterization in parameterizations:
-        pdata = metadata[parameterization]
-        version = [*pdata.keys()][0]
-        vdata = pdata[version]
-        potentials = vdata["potentials"]
-        for stem in potentials.keys():
-            el1, el2 = stem.split("-")
-            if el1 not in elements:
-                elements.append(el1)
-            if el2 not in elements:
-                elements.append(el2)
+        if parameterization in metadata:
+            pdata = metadata[parameterization]
+            version = [*pdata.keys()][0]
+            vdata = pdata[version]
+            potentials = vdata["potentials"]
+            for stem in potentials.keys():
+                el1, el2 = stem.split("-")
+                if el1 not in elements:
+                    elements.append(el1)
+                if el2 not in elements:
+                    elements.append(el2)
 
     elements.sort()
     pairs = {el: [] for el in elements}
 
     for parameterization in parameterizations:
-        pdata = metadata[parameterization]
-        version = [*pdata.keys()][0]
-        vdata = pdata[version]
-        potentials = vdata["potentials"]
-        for stem in potentials.keys():
-            el1, el2 = stem.split("-")
-            if el2 not in pairs[el1]:
-                pairs[el1].append(el2)
-            if el1 not in pairs[el2]:
-                pairs[el2].append(el1)
+        if parameterization in metadata:
+            pdata = metadata[parameterization]
+            version = [*pdata.keys()][0]
+            vdata = pdata[version]
+            potentials = vdata["potentials"]
+            for stem in potentials.keys():
+                el1, el2 = stem.split("-")
+                if el2 not in pairs[el1]:
+                    pairs[el1].append(el2)
+                if el1 not in pairs[el2]:
+                    pairs[el2].append(el1)
 
     # Build up sets element by element, starting with pairs
     sets = {}
@@ -396,7 +405,7 @@ def list_partners(metadata, parameterization):
     return inside, outside
 
 
-def create_datafile():
+def create_datafile(directory="~/SEAMM/Parameters/slako"):
     """Parse the files and get the data needed for the metadata-file"""
     datasets = {
         "3ob": ["3ob-freq", "3ob-hhmod", "3ob-nhmod", "3ob-ophyd"],
@@ -405,17 +414,21 @@ def create_datafile():
         "auorg": [],
         "borg": [],
         "halorg": [],
-        "ob2": [],
         "pbc": [],
         "siband": [],
         "rare": [],
     }
+    # "ob2": [],
+
+    if not isinstance(directory, Path):
+        directory = Path(directory)
+    directory = directory.expanduser().resolve()
 
     # The result dictionary
     result = {}
 
     # Read in all the potentials
-    metadata, comments = analyze_directory("data/slako")
+    metadata, comments = analyze_directory(directory)
     print("\n".join(comments))
     print("")
     all_potentials = metadata["potentials"]
@@ -475,11 +488,15 @@ def create_datafile():
             if dv not in result["potentials"][md5sum]["datasets"]:
                 result["potentials"][md5sum]["datasets"].append(dv)
 
+            shell_order = ("s", "p", "d", "f", "g", "h")
             if el1 == el2:
                 sk_table = data["SK_table"]
                 basis = sk_table["Basis"]
                 shells = basis["Shells"]
-                highest = shells.split()[-1][1]
+                highest = -1
+                for shell in shells.split():
+                    highest = max(highest, shell_order.index(shell[1]))
+                highest = shell_order[highest]
                 if "HubbDerivative" in basis:
                     hder = basis["HubbDerivative"]
                     elements[el1] = {
@@ -493,7 +510,7 @@ def create_datafile():
     # Print and save the results
     data = json.dumps(result, indent=4, sort_keys=True)
     # print(data)
-    with open("data/slako/metadata.json", "w") as fd:
+    with open(directory / "metadata.json", "w") as fd:
         fd.write(data)
 
 
