@@ -32,6 +32,11 @@ class ChooseParameters(seamm.Node):
         self.description = ["Choose Slater-Koster parameters for DFTB+"]
 
     @property
+    def is_runable(self):
+        """Indicate whether this not runs or just adds input."""
+        return False
+
+    @property
     def header(self):
         """A printable header for this section of output"""
         return "Step {}: {}".format(".".join(str(e) for e in self._id), self.title)
@@ -97,9 +102,12 @@ class ChooseParameters(seamm.Node):
         dataset = datasets[P["dataset"]]
         pairs = dataset["potential pairs"]
 
+        self.parent._hamiltonian = P["dataset"]
+
         if P["subset"] == "none":
             subset = None
         else:
+            self.parent._hamiltonian += " + " + P["subset"]
             subset = datasets[P["subset"]]
             subpairs = subset["potential pairs"]
 
@@ -180,13 +188,7 @@ class ChooseParameters(seamm.Node):
             else:
                 tmp = None
                 break
-        if tmp is None:
-            self.parent._reference_energy = None
-        else:
-            energy = 0.0
-            for el in configuration.atoms.symbols:
-                energy += tmp[el]
-            self.parent._reference_energy = energy
+        self.parent._reference_energies = tmp
 
         # Add the references
         for reference in references:
