@@ -9,7 +9,7 @@ A step for DFTB+ in a SEAMM flowchart
 # the dftbplus_step package.
 
 # Main classes
-from dftbplus_step.dftbplus import Dftbplus  # noqa: F401
+from dftbplus_step.dftbplus import Dftbplus, deep_merge, dict_to_hsd  # noqa: F401
 from dftbplus_step.dftbplus_parameters import DftbplusParameters  # noqa: F401
 from dftbplus_step.dftbplus_step import DftbplusStep  # noqa: F401
 from dftbplus_step.tk_dftbplus import TkDftbplus  # noqa: F401
@@ -38,6 +38,13 @@ from dftbplus_step.optimization_parameters import (  # noqa: F401
 )
 from dftbplus_step.optimization_step import OptimizationStep  # noqa: F401
 from dftbplus_step.tk_optimization import TkOptimization  # noqa: F401
+
+from dftbplus_step.band_structure import BandStructure  # noqa: F401
+from dftbplus_step.band_structure_parameters import (  # noqa: F401
+    BandStructureParameters,
+)
+from dftbplus_step.band_structure_step import BandStructureStep  # noqa: F401
+from dftbplus_step.tk_band_structure import TkBandStructure  # noqa: F401
 
 # Handle versioneer
 from ._version import get_versions

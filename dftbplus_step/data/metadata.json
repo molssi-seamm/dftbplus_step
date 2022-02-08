@@ -2261,82 +2261,6 @@
             },
             "subsets": []
         },
-        "ob2": {
-            "element data": {
-                "C": {
-                    "maximum angular momentum": "p"
-                },
-                "H": {
-                    "maximum angular momentum": "s"
-                },
-                "N": {
-                    "maximum angular momentum": "p"
-                },
-                "O": {
-                    "maximum angular momentum": "p"
-                }
-            },
-            "element sets": [
-                [
-                    "C",
-                    "H",
-                    "N",
-                    "O"
-                ]
-            ],
-            "parent": null,
-            "potential pairs": {
-                "C-C": {
-                    "md5sum": "8a2588bb7435107fe2b1e4fe28ac8538"
-                },
-                "C-H": {
-                    "md5sum": "13413e20dd3926a8c5b75aa312b872e6"
-                },
-                "C-N": {
-                    "md5sum": "10f5f8237ae487a6936789852a81bacf"
-                },
-                "C-O": {
-                    "md5sum": "2f15434711147538da1f7c5d667b0953"
-                },
-                "H-C": {
-                    "md5sum": "c162dd09464f99995ce05443f1a9a30c"
-                },
-                "H-H": {
-                    "md5sum": "13e6d8f286231cfd348ae26a6c849ff5"
-                },
-                "H-N": {
-                    "md5sum": "8fa8afe4dd348c101d95f3bd5a9bf604"
-                },
-                "H-O": {
-                    "md5sum": "483614593520338c3ae906c920224959"
-                },
-                "N-C": {
-                    "md5sum": "8e34d8381129571066097842ca94cb24"
-                },
-                "N-H": {
-                    "md5sum": "e8f767aa10fb44ceaaf0b93446731ae2"
-                },
-                "N-N": {
-                    "md5sum": "5a49bc582cd3185870d9dfdb9b97129c"
-                },
-                "N-O": {
-                    "md5sum": "442f15ff9d0bd25bf6054a490984e3dc"
-                },
-                "O-C": {
-                    "md5sum": "ae95c5625e9ad0835e2ccd63ac8978b0"
-                },
-                "O-H": {
-                    "md5sum": "9457e1aa7c823ed2c97ff0044c3aaed6"
-                },
-                "O-N": {
-                    "md5sum": "f3a3f187df06787668071b76b4b9dec0"
-                },
-                "O-O": {
-                    "md5sum": "20fe5af2b13b6428dd603de959c1514d"
-                }
-            },
-            "subsets": []
-        },
         "pbc": {
             "element data": {
                 "C": {
@@ -2346,7 +2270,7 @@
                     "maximum angular momentum": "p"
                 },
                 "Fe": {
-                    "maximum angular momentum": "p"
+                    "maximum angular momentum": "d"
                 },
                 "H": {
                     "maximum angular momentum": "s"
@@ -2585,7 +2509,7 @@
         "tiorg": {
             "element data": {
                 "Ti": {
-                    "maximum angular momentum": "p"
+                    "maximum angular momentum": "d"
                 }
             },
             "element sets": [
@@ -2647,19 +2571,19 @@
         "trans3d": {
             "element data": {
                 "Co": {
-                    "maximum angular momentum": "p"
+                    "maximum angular momentum": "d"
                 },
                 "Fe": {
-                    "maximum angular momentum": "p"
+                    "maximum angular momentum": "d"
                 },
                 "Ni": {
-                    "maximum angular momentum": "p"
+                    "maximum angular momentum": "d"
                 },
                 "Sc": {
-                    "maximum angular momentum": "p"
+                    "maximum angular momentum": "d"
                 },
                 "Ti": {
-                    "maximum angular momentum": "p"
+                    "maximum angular momentum": "d"
                 }
             },
             "element sets": [
@@ -2850,7 +2774,7 @@
         "znorg": {
             "element data": {
                 "Zn": {
-                    "maximum angular momentum": "s"
+                    "maximum angular momentum": "d"
                 }
             },
             "element sets": [
@@ -3072,7 +2996,6 @@
             "c4f6531ae6635fff8f95da938d6ad98e"
         ],
         "C-C": [
-            "8a2588bb7435107fe2b1e4fe28ac8538",
             "1b821d0213c1df95c26a00eeed2ab199",
             "62eed18f9a6a550df47e0d0d9e79c454",
             "189fc2c622b3da48bca026e553a1b191",
@@ -3103,7 +3026,6 @@
             "e0a73132419893e23cff39c4ce98a87f"
         ],
         "C-H": [
-            "13413e20dd3926a8c5b75aa312b872e6",
             "a6bf57c02d791611b4da579f3e88adb8",
             "cf918da422d635ed3123ee0a73be7396",
             "017bfdd5f93a046298843df45fe906f4"
@@ -3119,7 +3041,6 @@
             "e5ceb2fa4fd324191a676aa8e56a5775"
         ],
         "C-N": [
-            "10f5f8237ae487a6936789852a81bacf",
             "e9b05d72f7a8c5f28f717bd5c8da2b52",
             "98c5245ed6909c5b0cc9348eac3b606e",
             "2fb8cdb6a115336c2764f66050169a4b",
@@ -3135,7 +3056,6 @@
             "1e1d055d8fc01bde015f8812d16d741d"
         ],
         "C-O": [
-            "2f15434711147538da1f7c5d667b0953",
             "b29b287da910d7983e91cf4f4a56aebb",
             "ff892f9d7736779681b0bb696150b227",
             "6e631d6844031701ef9871dbb3e74035",
@@ -3437,7 +3357,6 @@
             "1808d4799eb376b9f8690cba490b0561"
         ],
         "H-C": [
-            "c162dd09464f99995ce05443f1a9a30c",
             "05ae31c22ecd65ac061eb46370719c0a",
             "e51f7fca0a5b8bde340863d407938e96",
             "12cc09b79ae4df1cac440cfdb9bf75a8",
@@ -3467,7 +3386,6 @@
             "6df24101bc420f744a49507c9f1dab3f"
         ],
         "H-H": [
-            "13e6d8f286231cfd348ae26a6c849ff5",
             "42ec1b19548e6c648df07c4a9e63b353",
             "a3937493d11003bf80e2e03ed8e0a69a",
             "899f0bca0d424a7e655b640ab49cedc1",
@@ -3489,7 +3407,6 @@
             "e8886dfdc2f5774b1d143611290f8693"
         ],
         "H-N": [
-            "8fa8afe4dd348c101d95f3bd5a9bf604",
             "a94a9271794aba9a65c059e6386ad864",
             "9e2eb4fba1e48e086cf6166471a658ed",
             "6b3ab1d46d422f195ff719c870caa600",
@@ -3508,7 +3425,6 @@
             "2760ba3e252005ae31869ff4bde84586"
         ],
         "H-O": [
-            "483614593520338c3ae906c920224959",
             "169c444591955529b0ead9c57e57dc4d",
             "1187a573e4b49fdd04bf7a77bb70f0cc",
             "7e1972a31bc248863117d5f3a843e0a2",
@@ -3705,7 +3621,6 @@
             "8ca2a1cb72d9cb2d5a54f0f3ee8eabac"
         ],
         "N-C": [
-            "8e34d8381129571066097842ca94cb24",
             "af9661470cc583b82ff073886da40e14",
             "27fb70687e6ffe43d6b82d187bdb46e1",
             "50b86a09120ce94a3a65399b1d3d8f77",
@@ -3739,7 +3654,6 @@
             "2393ecaf4753291e8a23a385da12e426"
         ],
         "N-H": [
-            "e8f767aa10fb44ceaaf0b93446731ae2",
             "ecf2ac972b841a0f112bcd041ac0ca93",
             "23b91d1c62358ce19f1f5e8ca80ea1d9",
             "b6753861bf983cb437008f9bbde9c2ef",
@@ -3756,7 +3670,6 @@
             "8f39bce06fcd491198f2de4305edbbb6"
         ],
         "N-N": [
-            "5a49bc582cd3185870d9dfdb9b97129c",
             "1bfae53b0590bd550b5de4dd2bd18aae",
             "ff20b8954fda7d674b3c46d8b5b69a9b",
             "088d46e9c419db62b501e7ef45707202",
@@ -3772,7 +3685,6 @@
             "0c10ee46623bc5cbaece74ab1fefc95c"
         ],
         "N-O": [
-            "442f15ff9d0bd25bf6054a490984e3dc",
             "7b6548e867fe2d2255a6555f7f549dba",
             "ff04acdafa4e26a86321a1aaab64bd28",
             "18dd6422f5d1f23905fe57c30293514d",
@@ -3897,7 +3809,6 @@
             "1cfb90fae0ba68becf2501b81da460ff"
         ],
         "O-C": [
-            "ae95c5625e9ad0835e2ccd63ac8978b0",
             "f15dbc744a38cc9508fde3483a1174d8",
             "563789f6882590b3d806e31161fab289",
             "9e4674ec9f96ac1264d7b3eaad7189df",
@@ -3931,7 +3842,6 @@
             "71441cd7b803da68a01b8dbcb2cd02e9"
         ],
         "O-H": [
-            "9457e1aa7c823ed2c97ff0044c3aaed6",
             "388557dff7b4a2ab40122acd9b477f08",
             "5bc02cd79e56749ec83540d0fdca8c4a",
             "3c02b17b701df679bb3ee346471e882d",
@@ -3952,7 +3862,6 @@
             "386c03adad1c8450b1a23495544eeb7f"
         ],
         "O-N": [
-            "f3a3f187df06787668071b76b4b9dec0",
             "497cc1c6573bc70a0b2677413321772f",
             "53486a971828664f67cd85314a76d985",
             "1922daba1bea2b7e201cce05171614b8",
@@ -3968,7 +3877,6 @@
             "d6449f39d8f15d88050faeb5d23b60cf"
         ],
         "O-O": [
-            "20fe5af2b13b6428dd603de959c1514d",
             "0c653c9abd566f16b35fce4e6df7ec4f",
             "3709579f5263e8519624aaddbf8f61d1",
             "628961896840b65dc025e3b12319892c",
@@ -4827,16 +4735,6 @@
             ],
             "filename": "hyb/hyb-0-2/Ga-Ga.skf"
         },
-        "10f5f8237ae487a6936789852a81bacf": {
-            "datasets": [
-                "ob2@1.1"
-            ],
-            "elements": [
-                "C",
-                "N"
-            ],
-            "filename": "ob2/ob2-1-1/base/C-N.skf"
-        },
         "110583528186e0519d57988829ccbd65": {
             "datasets": [
                 "3ob@3.1"
@@ -4937,16 +4835,6 @@
             ],
             "filename": "mio/mio-1-1/O-O.skf"
         },
-        "13413e20dd3926a8c5b75aa312b872e6": {
-            "datasets": [
-                "ob2@1.1"
-            ],
-            "elements": [
-                "C",
-                "H"
-            ],
-            "filename": "ob2/ob2-1-1/base/C-H.skf"
-        },
         "13979fc771b57b954c325d0c0a2bb589": {
             "datasets": [
                 "halorg@0.1"
@@ -4956,16 +4844,6 @@
                 "H"
             ],
             "filename": "halorg/halorg-0-1/S-H.skf"
-        },
-        "13e6d8f286231cfd348ae26a6c849ff5": {
-            "datasets": [
-                "ob2@1.1"
-            ],
-            "elements": [
-                "H",
-                "H"
-            ],
-            "filename": "ob2/ob2-1-1/base/H-H.skf"
         },
         "13eb6882645980d24d8f4fde74ad028c": {
             "datasets": [
@@ -5357,16 +5235,6 @@
             ],
             "filename": "3ob/3ob-3-1/O-F.skf"
         },
-        "20fe5af2b13b6428dd603de959c1514d": {
-            "datasets": [
-                "ob2@1.1"
-            ],
-            "elements": [
-                "O",
-                "O"
-            ],
-            "filename": "ob2/ob2-1-1/base/O-O.skf"
-        },
         "20ff9c705c83540b1c33cfcaa12a0640": {
             "datasets": [
                 "halorg@0.1"
@@ -5656,16 +5524,6 @@
                 "P"
             ],
             "filename": "halorg/halorg-0-1/S-P.skf"
-        },
-        "2f15434711147538da1f7c5d667b0953": {
-            "datasets": [
-                "ob2@1.1"
-            ],
-            "elements": [
-                "C",
-                "O"
-            ],
-            "filename": "ob2/ob2-1-1/base/C-O.skf"
         },
         "2fb8cdb6a115336c2764f66050169a4b": {
             "datasets": [
@@ -6207,16 +6065,6 @@
             ],
             "filename": "matsci/matsci-0-3/Cu-O.skf"
         },
-        "442f15ff9d0bd25bf6054a490984e3dc": {
-            "datasets": [
-                "ob2@1.1"
-            ],
-            "elements": [
-                "N",
-                "O"
-            ],
-            "filename": "ob2/ob2-1-1/base/N-O.skf"
-        },
         "4496f9e83ec56ef7cc066543f96f7dac": {
             "datasets": [
                 "3ob@3.1"
@@ -6286,16 +6134,6 @@
                 "N"
             ],
             "filename": "mio/mio-1-1/O-N.skf"
-        },
-        "483614593520338c3ae906c920224959": {
-            "datasets": [
-                "ob2@1.1"
-            ],
-            "elements": [
-                "H",
-                "O"
-            ],
-            "filename": "ob2/ob2-1-1/base/H-O.skf"
         },
         "4845b2d49426b1b5a7317430f29aca37": {
             "datasets": [
@@ -6836,16 +6674,6 @@
                 "Mg"
             ],
             "filename": "3ob/3ob-3-1/I-Mg.skf"
-        },
-        "5a49bc582cd3185870d9dfdb9b97129c": {
-            "datasets": [
-                "ob2@1.1"
-            ],
-            "elements": [
-                "N",
-                "N"
-            ],
-            "filename": "ob2/ob2-1-1/base/N-N.skf"
         },
         "5ae9a9bb74565be5408610c4d191dd7e": {
             "datasets": [
@@ -8147,16 +7975,6 @@
             ],
             "filename": "3ob/3ob-3-1/O-Ca.skf"
         },
-        "8a2588bb7435107fe2b1e4fe28ac8538": {
-            "datasets": [
-                "ob2@1.1"
-            ],
-            "elements": [
-                "C",
-                "C"
-            ],
-            "filename": "ob2/ob2-1-1/base/C-C.skf"
-        },
         "8b646a7aae1255fbb7e387216307975c": {
             "datasets": [
                 "matsci@0.3"
@@ -8247,16 +8065,6 @@
             ],
             "filename": "matsci/matsci-0-3/Na-H.skf"
         },
-        "8e34d8381129571066097842ca94cb24": {
-            "datasets": [
-                "ob2@1.1"
-            ],
-            "elements": [
-                "N",
-                "C"
-            ],
-            "filename": "ob2/ob2-1-1/base/N-C.skf"
-        },
         "8e37a698c558c8567353d214705f4098": {
             "datasets": [
                 "3ob@3.1"
@@ -8306,16 +8114,6 @@
                 "Cl"
             ],
             "filename": "halorg/halorg-0-1/N-Cl.skf"
-        },
-        "8fa8afe4dd348c101d95f3bd5a9bf604": {
-            "datasets": [
-                "ob2@1.1"
-            ],
-            "elements": [
-                "H",
-                "N"
-            ],
-            "filename": "ob2/ob2-1-1/base/H-N.skf"
         },
         "8fec315d1f4b7f2e8e53d8666bc1b431": {
             "datasets": [
@@ -8426,16 +8224,6 @@
                 "F"
             ],
             "filename": "halorg/halorg-0-1/S-F.skf"
-        },
-        "9457e1aa7c823ed2c97ff0044c3aaed6": {
-            "datasets": [
-                "ob2@1.1"
-            ],
-            "elements": [
-                "O",
-                "H"
-            ],
-            "filename": "ob2/ob2-1-1/base/O-H.skf"
         },
         "953bcda0f6c89498441dc7c95a25c9d9": {
             "datasets": [
@@ -8937,16 +8725,6 @@
             ],
             "filename": "halorg/halorg-0-1/F-Cl.skf"
         },
-        "ae95c5625e9ad0835e2ccd63ac8978b0": {
-            "datasets": [
-                "ob2@1.1"
-            ],
-            "elements": [
-                "O",
-                "C"
-            ],
-            "filename": "ob2/ob2-1-1/base/O-C.skf"
-        },
         "aeaca983eadd97af359ee1f8f0f4d07f": {
             "datasets": [
                 "hyb@0.2"
@@ -9416,16 +9194,6 @@
                 "K"
             ],
             "filename": "3ob/3ob-3-1/O-K.skf"
-        },
-        "c162dd09464f99995ce05443f1a9a30c": {
-            "datasets": [
-                "ob2@1.1"
-            ],
-            "elements": [
-                "H",
-                "C"
-            ],
-            "filename": "ob2/ob2-1-1/base/H-C.skf"
         },
         "c23ada54ae3c0d885ef50ba7354f4bbf": {
             "datasets": [
@@ -10337,16 +10105,6 @@
             ],
             "filename": "3ob/3ob-3-1/H-Mg.skf"
         },
-        "e8f767aa10fb44ceaaf0b93446731ae2": {
-            "datasets": [
-                "ob2@1.1"
-            ],
-            "elements": [
-                "N",
-                "H"
-            ],
-            "filename": "ob2/ob2-1-1/base/N-H.skf"
-        },
         "e93fdce979aa66a12e5f7e0d93438ea9": {
             "datasets": [
                 "matsci@0.3"
@@ -10706,16 +10464,6 @@
                 "O"
             ],
             "filename": "pbc/pbc-0-3/F-O.skf"
-        },
-        "f3a3f187df06787668071b76b4b9dec0": {
-            "datasets": [
-                "ob2@1.1"
-            ],
-            "elements": [
-                "O",
-                "N"
-            ],
-            "filename": "ob2/ob2-1-1/base/O-N.skf"
         },
         "f45a302957e863e1c97da32b78c94bf4": {
             "datasets": [

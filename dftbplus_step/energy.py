@@ -12,12 +12,15 @@ from seamm_util import Q_, units_class
 import seamm_util.printing as printing
 from seamm_util.printing import FormattedText as __
 
+from .base import DftbBase
+
+
 logger = logging.getLogger(__name__)
 job = printing.getPrinter()
 printer = printing.getPrinter("DFTB+")
 
 
-class Energy(seamm.Node):
+class Energy(DftbBase):
     def __init__(
         self, flowchart=None, title="Single-Point Energy", extension=None, logger=logger
     ):
@@ -156,7 +159,12 @@ class Energy(seamm.Node):
             defaults = {}
 
         # template
-        result = {"Hamiltonian": {"DFTB": {}}}  # yapf: disable
+        result = {
+            "Analysis": {
+                "CalculateForces": "Yes",
+            },
+            "Hamiltonian": {"DFTB": {}},
+        }
         dftb = result["Hamiltonian"]["DFTB"]
 
         if P["SCC"] == "Yes":
@@ -266,6 +274,10 @@ class Energy(seamm.Node):
             text += " Could not calculate the formation energy because some reference "
             text += "energies are missing."
             data["energy of formation"] = None
+
+        # Prepare the DOS graph(s)
+        wd = Path(self.directory)
+        self.dos(wd / "band.out")
 
         printer.normal(__(text, **data, indent=self.indent + 4 * " "))
 

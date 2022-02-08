@@ -11,12 +11,11 @@ except Exception:
     import importlib_metadata as implib
 import json
 import logging
-from pathlib import Path
 import pprint  # noqa: F401
 import sys
-import traceback
 
 import dftbplus_step
+from molsystem.elements import to_symbols
 import seamm
 import seamm_util
 import seamm_util.printing as printing
@@ -102,51 +101,60 @@ def dict_to_hsd(d, indent=0):
     return hsd
 
 
-def redimension(values, dimensions):
-    """Change the dimensions on values to the new dimensions.
+def parse_gen_file(data):
+    """Parse a DFTB+ gen datafile into coordinates, etc.
 
     Parameters
     ----------
-    values : []
-        The incoming values
-    dimensions : [int]
-        The desired dimensions
+    data : str
+        The contents of the file as a string
 
     Returns
     -------
-    values : [[]...]
-        The redimensioned values.
+    dict
+       A dictionary with labeled coordinates, periodicity, etc.
     """
-    # Check that the number of values is OK
-    nvalues = 1
-    for dim in dimensions:
-        nvalues *= dim
-    if len(values) != nvalues:
-        raise ValueError(
-            f"Number of values given, {len(values)}, is not equal to the "
-            f"dimensions: {dimensions} --> {nvalues} values"
-        )
+
+    result = {}
+    line = iter(data.splitlines())
+
     try:
-        _, result = _redimension_helper(values, dimensions)
-    except Exception as e:
-        print(f"Exception in redimension {type(e)}: {e}")
-        print(traceback.format_exc())
-        raise
+        n_atoms, coord_flag = next(line).split()
+        n_atoms = int(n_atoms)
+        if coord_flag == "C":
+            result["periodicity"] = 0
+            result["coordinate system"] = "Cartesian"
+        elif coord_flag == "S":
+            result["periodicity"] = 3
+            result["coordinate system"] = "Cartesian"
+        elif coord_flag == "F":
+            result["periodicity"] = 3
+            result["coordinate system"] = "fractional"
+        else:
+            raise RuntimeError(f"Don't recognize the type of geometry '{coord_flag}'")
+
+        elements = next(line).split()
+
+        # And now the atoms
+        coordinates = result["coordinates"] = []
+        result["elements"] = []
+        for i in range(n_atoms):
+            _, index, x, y, z = next(line).split()
+            result["elements"].append(elements[int(index) - 1])
+            coordinates.append([float(x), float(y), float(z)])
+
+        # Cell information if periodic
+        if result["periodicity"] == 3:
+            data = next(line).split()
+            result["origin"] = [float(x) for x in data]
+            lattice = result["lattice vectors"] = []
+            for i in range(3):
+                data = next(line).split()
+                lattice.append([float(x) for x in data])
+    except StopIteration:
+        raise EOFError("The gen file ended prematurely.")
 
     return result
-
-
-def _redimension_helper(values, dimensions):
-    dim = dimensions[-1]
-    remaining = dimensions[0:-1]
-    if len(remaining) == 0:
-        return values[dim:], values[0:dim]
-    else:
-        result = []
-        for i in range(dim):
-            values, tmp = _redimension_helper(values, remaining)
-            result.append(tmp)
-    return values, result
 
 
 class Dftbplus(seamm.Node):
@@ -231,7 +239,10 @@ class Dftbplus(seamm.Node):
         # Data to pass between substeps
         self._dataset = None  # SLAKO dataset used
         self._subset = None  # SLAKO modifier dataset applied to dataset
+        self._hamiltonian = None  # String name of the Hamiltonian
+        self._reference_energies = None  # Reference energies per element.
         self._reference_energy = None  # for calculating energy of formation
+        self._steps = None  # The nodes for the steps run so far.
 
     @property
     def version(self):
@@ -293,6 +304,13 @@ class Dftbplus(seamm.Node):
             "--natoms-per-core",
             default=10,
             help="How many atoms to have per core or thread",
+        )
+
+        parser.add_argument(
+            parser_name,
+            "--html",
+            action="store_true",
+            help="whether to write out html files for graphs, etc.",
         )
 
         return result
@@ -381,9 +399,6 @@ class Dftbplus(seamm.Node):
         printer.important(self.header)
         printer.important("")
 
-        # Access the options
-        options = self.options
-
         # Add the main citation for DFTB+
         self.references.cite(
             raw=self._bibliography["dftbplus"],
@@ -395,95 +410,27 @@ class Dftbplus(seamm.Node):
 
         next_node = super().run(printer)
         # Get the first real node
-        node = self.subflowchart.get_node("1").next()
+        start = self.subflowchart.get_node("1")
+        node = start.next()
 
         input_data = {
             "Options": {
                 "WriteResultsTag": "Yes",
                 "WriteChargesAsText": "Yes",
             }
-        }  # yapf: disable
+        }
+        self._steps = steps = [start]
         while node is not None:
-            result = node.get_input()
-            deep_merge(input_data, result)
-            node = node.next()
-
-        hsd = dict_to_hsd(input_data)
-        hsd += self.geometry()
-
-        files = {"dftb_in.hsd": hsd}
-        logger.info("dftb_in.hsd:\n" + files["dftb_in.hsd"])
-
-        # Write the input files to the current directory
-        directory = Path(self.directory)
-        directory.mkdir(parents=True, exist_ok=True)
-        for filename in files:
-            path = directory / filename
-            with path.open(mode="w") as fd:
-                fd.write(files[filename])
-
-        return_files = [
-            "*.out",
-            "charges.*",
-            "dftb_pin.hsd",
-            "geom.out.*",
-            "output",
-            "results.tag",
-        ]  # yapf: disable
-
-        # Run the calculation
-        local = seamm.ExecLocal()
-        exe = Path(options["dftbplus_path"]) / "dftb+"
-        result = local.run(
-            cmd=[str(exe)], files=files, return_files=return_files
-        )  # yapf: disable
-
-        if result is None:
-            logger.error("There was an error running DFTB+")
-            return None
-
-        logger.debug("\n" + pprint.pformat(result))
-
-        logger.info("stdout:\n" + result["stdout"])
-        if result["stderr"] != "":
-            logger.warning("stderr:\n" + result["stderr"])
-
-        # Write the output files to the current directory
-        if "stdout" in result and result["stdout"] != "":
-            path = directory / "stdout.txt"
-            with path.open(mode="w") as fd:
-                fd.write(result["stdout"])
-
-        if result["stderr"] != "":
-            self.logger.warning("stderr:\n" + result["stderr"])
-            path = directory / "stderr.txt"
-            with path.open(mode="w") as fd:
-                fd.write(result["stderr"])
-
-        for filename in result["files"]:
-            if filename[0] == "@":
-                subdir, fname = filename[1:].split("+")
-                path = directory / subdir / fname
+            steps.append(node)
+            if node.is_runable:
+                node.run(input_data)
             else:
-                path = directory / filename
-            with path.open(mode="w") as fd:
-                if result[filename]["data"] is not None:
-                    fd.write(result[filename]["data"])
-                else:
-                    fd.write(result[filename]["exception"])
-
-        # Parse the results.tag file
-        if "results.tag" in result["files"]:
-            results = self.parse_results(result["results.tag"]["data"])
-        else:
-            results = {}
-
-        # And a final structure
-        if "geom.out.gen" in result["files"]:
-            results["final structure"] = parse_gen_file(result["geom.out.gen"]["data"])
-
-        # Analyze the results
-        self.analyze(data=results)
+                result = node.get_input()
+                deep_merge(input_data, result)
+                for value in node.description:
+                    printer.important(value)
+                    printer.important(" ")
+            node = node.next()
 
         # Add other citations here or in the appropriate place in the code.
         # Add the bibtex to data/references.bib, and add a self.reference.cite
@@ -553,131 +500,43 @@ class Dftbplus(seamm.Node):
                 x, y, z = xyz
                 result += f"        {index+1:>2} {x:10.6f} {y:10.6f} {z:10.6f}\n"
             result += "    }\n"
+
+            # The reference energy, if available
+            if self._reference_energies is None:
+                self._reference_energy = None
+            else:
+                energy = 0.0
+                for el in configuration.atoms.symbols:
+                    energy += self._reference_energies[el]
+                self._reference_energy = energy
         elif configuration.periodicity == 3:
+            # Write the structure using the primitive cell
+            lattice, fractionals, atomic_numbers = configuration.primitive_cell()
+            symbols = to_symbols(atomic_numbers)
+
             result += "   Periodic = Yes\n"
             result += "   LatticeVectors [Angstrom] = {\n"
-            uvw = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
-            XYZ = configuration.cell.to_cartesians(uvw)
-            for xyz in XYZ:
+
+            for xyz in lattice:
                 x, y, z = xyz
-                result += f"        {x:10.6f} {y:10.6f} {z:10.6f}\n"
+                result += f"        {x:15.9f} {y:15.9f} {z:15.9f}\n"
             result += "    }\n"
             result += "    TypesAndCoordinates [relative] = {\n"
-            for element, xyz in zip(
-                configuration.atoms.symbols,
-                configuration.atoms.get_coordinates(fractionals=True),
-            ):
+            for element, xyz in zip(symbols, fractionals):
                 index = elements.index(element)
                 x, y, z = xyz
-                result += f"        {index+1:>2} {x:10.6f} {y:10.6f} {z:10.6f}\n"
+                result += f"        {index+1:>2} {x:15.9f} {y:15.9f} {z:15.9f}\n"
             result += "    }\n"
+
+            # The reference energy, if available
+            if self._reference_energies is None:
+                self._reference_energy = None
+            else:
+                energy = 0.0
+                for el in symbols:
+                    energy += self._reference_energies[el]
+                self._reference_energy = energy
+
         result += "}\n"
 
         return result
-
-    def parse_results(self, lines):
-        """Digest the data in the results.tag file."""
-
-        properties = dftbplus_step.properties
-
-        property_data = {}
-        line_iter = enumerate(lines.splitlines(), start=1)
-
-        try:
-            while True:
-                lineno, line = next(line_iter)
-                if line[0] == "#":
-                    continue
-                if ":" not in line:
-                    raise RuntimeError(
-                        f"Problem parsing the results.tag file: {lineno}: " f"{line}"
-                    )
-                key, _type, ndims, rest = line.split(":", maxsplit=3)
-                ndims = int(ndims)
-                key = key.strip()
-                if ndims == 0:
-                    # scalar
-                    lineno, line = next(line_iter)
-                    if _type == "real":
-                        property_data[key] = float(line)
-                    else:
-                        property_data[key] = line
-                else:
-                    dims = [int(x) for x in rest.split(",")]
-                    n_to_read = 1
-                    for dim in dims:
-                        n_to_read *= dim
-                    values = []
-                    while len(values) < n_to_read:
-                        lineno, line = next(line_iter)
-                        values.extend(line.strip().split())
-
-                    if _type == "real":
-                        tmp = [float(x) for x in values]
-                        values = tmp
-
-                    property_data[key] = redimension(values, dims)
-                if key not in properties:
-                    self.logger.warning("Property '{}' not recognized.".format(key))
-                if key in properties and "units" in properties[key]:
-                    property_data[key + ",units"] = properties[key]["units"]
-        except StopIteration:
-            pass
-
-        return property_data
-
-
-def parse_gen_file(data):
-    """Parse a DFTB+ gen datafile into coordinates, etc.
-
-    Parameters
-    ----------
-    data : str
-        The contents of the file as a string
-
-    Returns
-    -------
-    dict
-       A dictionary with labeled coordinates, periodicity, etc.
-    """
-
-    result = {}
-    line = iter(data.splitlines())
-
-    try:
-        n_atoms, coord_flag = next(line).split()
-        n_atoms = int(n_atoms)
-        if coord_flag == "C":
-            result["periodicity"] = 0
-            result["coordinate system"] = "Cartesian"
-        elif coord_flag == "S":
-            result["periodicity"] = 3
-            result["coordinate system"] = "Cartesian"
-        elif coord_flag == "F":
-            result["periodicity"] = 3
-            result["coordinate system"] = "fractional"
-        else:
-            raise RuntimeError(f"Don't recognize the type of geometry '{coord_flag}'")
-
-        elements = next(line).split()
-
-        # And now the atoms
-        coordinates = result["coordinates"] = []
-        result["elements"] = []
-        for i in range(n_atoms):
-            _, index, x, y, z = next(line).split()
-            result["elements"].append(elements[int(index) - 1])
-            coordinates.append([float(x), float(y), float(z)])
-
-        # Cell information if periodic
-        if result["periodicity"] == 3:
-            data = next(line).split()
-            result["origin"] = [float(x) for x in data]
-            lattice = result["lattice vectors"] = []
-            for i in range(3):
-                data = next(line).split()
-                lattice.append([float(x) for x in data])
-    except StopIteration:
-        raise EOFError("The gen file ended prematurely.")
-
-    return result
