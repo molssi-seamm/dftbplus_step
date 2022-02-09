@@ -12,6 +12,18 @@ class ChooseParametersParameters(seamm.Parameters):
     """The control parameters for initializing DFTB+"""
 
     parameters = {
+        "model": {
+            "default": "Density Functional Tight Binding (DFTB)",
+            "kind": "string",
+            "default_units": None,
+            "enumeration": (
+                "Density Functional Tight Binding (DFTB)",
+                "eXtended Tight Binding (XTB)",
+            ),
+            "format_string": "",
+            "description": "Slater-Koster dataset:",
+            "help_text": ("The main set of Slater-Koster potentials to use."),
+        },
         "elements": {
             "default": "",
             "kind": "periodic table",
@@ -46,6 +58,18 @@ class ChooseParametersParameters(seamm.Parameters):
             "kind": "string",
             "default_units": None,
             "enumeration": ("none", "3ob-freq", "3ob-hhmod", "3ob-nhmod", "3ob-ophyd"),
+            "format_string": "",
+            "description": "Specialized Slater-Koster potentials to add:",
+            "help_text": (
+                "The specialized set of Slater-Koster potentials to add to "
+                "the main set."
+            ),
+        },
+        "xtb dataset": {
+            "default": "GFN2-xTB",
+            "kind": "string",
+            "default_units": None,
+            "enumeration": ("IPEA1-xTB", "GFN1-xTB", "GFN2-xTB"),
             "format_string": "",
             "description": "Specialized Slater-Koster potentials to add:",
             "help_text": (
