@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 class BandStructureParameters(seamm.Parameters):
     """The control parameters for the band structure."""
 
+    #:
     parameters = {
         "nPoints": {
             "default": 100,

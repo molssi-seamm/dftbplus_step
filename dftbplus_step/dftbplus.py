@@ -465,21 +465,21 @@ class Dftbplus(seamm.Node):
     def geometry(self):
         """Create the input for DFTB+ for the geometry.
 
-        Example:
+        Example::
 
-        Geometry = {
-            TypeNames = { "Ga" "As" }
-            TypesAndCoordinates [Angstrom] = {
-                1 0.000000 0.000000 0.000000
-                2 1.356773 1.356773 1.356773
+            Geometry = {
+                TypeNames = { "Ga" "As" }
+                TypesAndCoordinates [Angstrom] = {
+                    1 0.000000 0.000000 0.000000
+                    2 1.356773 1.356773 1.356773
+                }
+                Periodic = Yes
+                LatticeVectors [Angstrom] = {
+                    2.713546 2.713546 0.
+                    0. 2.713546 2.713546
+                    2.713546 0. 2.713546
+                }
             }
-            Periodic = Yes
-            LatticeVectors [Angstrom] = {
-                2.713546 2.713546 0.
-                0. 2.713546 2.713546
-                2.713546 0. 2.713546
-            }
-        }
         """
         _, configuration = self.get_system_configuration(None)
 
