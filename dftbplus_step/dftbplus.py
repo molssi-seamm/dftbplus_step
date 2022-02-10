@@ -216,7 +216,7 @@ class Dftbplus(seamm.Node):
         logger.debug("Creating DFTB+ {}".format(self))
         self.subflowchart = seamm.Flowchart(
             parent=self, name="DFTB+", namespace=namespace
-        )  # yapf: disable
+        )
 
         super().__init__(
             flowchart=flowchart,
@@ -224,7 +224,7 @@ class Dftbplus(seamm.Node):
             extension=extension,
             module=__name__,
             logger=logger,
-        )  # yapf: disable
+        )
 
         self.parameters = dftbplus_step.DftbplusParameters()
 
@@ -234,7 +234,7 @@ class Dftbplus(seamm.Node):
         if len(files) != 1:
             raise RuntimeError("Can't find Slater-Koster metadata.json file")
         data = files[0].read_text()
-        self._slako = json.loads(data)
+        self._metadata = json.loads(data)
 
         # Data to pass between substeps
         self._dataset = None  # SLAKO dataset used

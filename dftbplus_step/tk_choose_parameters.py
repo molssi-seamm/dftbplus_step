@@ -8,7 +8,6 @@ except Exception:
     import importlib_metadata as implib
 import json
 import logging
-import pprint
 import tkinter as tk
 
 import seamm
@@ -119,10 +118,6 @@ class TkChooseParameters(seamm.TkNode):
 
         pt = self["elements"]
         elements = set(pt.elements)
-        print("Elements")
-        pprint.pprint(elements)
-        print("Available elements")
-        pprint.pprint(available)
         not_available = elements - available
         pt.disable(not_available)
 
@@ -163,7 +158,6 @@ class TkChooseParameters(seamm.TkNode):
             datasets = self._metadata[tmp_model]["datasets"]
             if tmp_model == "DFTB":
                 for dset, data in datasets.items():
-                    dset = "DFTB - " + dset
                     if data["parent"] is None:
                         for element_set in data["element sets"]:
                             coverage = set(element_set)
@@ -183,7 +177,6 @@ class TkChooseParameters(seamm.TkNode):
                                 possible_elements.update(coverage)
             elif tmp_model == "xTB":
                 for dset, data in datasets.items():
-                    dset = "xTB - " + dset
                     coverage = set(
                         atno_to_symbol[atno]
                         for atno in expand_range_list(data["elements"])
@@ -192,13 +185,28 @@ class TkChooseParameters(seamm.TkNode):
                         possible_datasets[dset] = ["none"]
                         possible_elements.update(coverage)
 
-        pprint.pprint(possible_datasets)
-        pprint.pprint(possible_elements)
+        # Show which elements are available
+        available = set()
+        for model, metadata in self._metadata.items():
+            for dataset, data in metadata["datasets"].items():
+                if "element sets" in data:
+                    for element_set in data["element sets"]:
+                        for element in element_set:
+                            if element not in available:
+                                available.add(element)
+                elif "elements" in data:
+                    for atno in expand_range_list(data["elements"]):
+                        available.add(atno_to_symbol[atno])
+
+        pt = self["elements"]
+        elements = set(pt.elements)
+        not_available = elements - available
+        pt.disable(not_available)
 
         # Enable and disable the elements to reflect possible choices
-        # all_elements = set(pt.elements)
-        # pt.disable(all_elements - possible_elements)
-        # pt.enable(possible_elements)
+        all_elements = set(pt.elements)
+        pt.disable(all_elements - possible_elements)
+        pt.enable(possible_elements)
 
         # Sort out the dataset widget
         tmp = [*possible_datasets.keys()]
@@ -232,9 +240,9 @@ class TkChooseParameters(seamm.TkNode):
         # Note current elements in the dataset/subset with green labels
         pt.set_text_color("all", "black")
         if dataset != "":
-            tmp_model, dset = dataset.split(" - ", 1)
+            tmp_model = dataset.split(" - ", 1)[0]
             datasets = self._metadata[tmp_model]["datasets"]
-            data = datasets[dset]
+            data = datasets[dataset]
             current = set()
             if subset == "none":
                 if "element sets" in data:
@@ -255,6 +263,9 @@ class TkChooseParameters(seamm.TkNode):
         row = 0
         self["elements"].grid(row=row, column=0, sticky=tk.EW)
         row += 1
+        self["model"].grid(row=row, column=0, sticky=tk.EW)
+        widgets.append(self["model"])
+        row += 1
         self["dataset"].grid(row=row, column=0, sticky=tk.EW)
         widgets.append(self["dataset"])
         row += 1
@@ -264,6 +275,6 @@ class TkChooseParameters(seamm.TkNode):
             widgets.append(self["subset"])
             row += 1
 
-        sw.align_labels(widgets)
+        sw.align_labels(widgets, sticky=tk.W)
 
         return row

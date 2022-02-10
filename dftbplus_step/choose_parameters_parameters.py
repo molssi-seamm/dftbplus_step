@@ -22,8 +22,8 @@ class ChooseParametersParameters(seamm.Parameters):
                 "eXtended Tight Binding (xTB)",
             ),
             "format_string": "",
-            "description": "Slater-Koster dataset:",
-            "help_text": ("The main set of Slater-Koster potentials to use."),
+            "description": "Model:",
+            "help_text": "The model to use.",
         },
         "elements": {
             "default": "",
@@ -52,7 +52,7 @@ class ChooseParametersParameters(seamm.Parameters):
             ),
             "format_string": "",
             "description": "Parameterization:",
-            "help_text": ("The parameterization to use."),
+            "help_text": "The parameterization to use.",
         },
         "subset": {
             "default": "none",
@@ -61,9 +61,7 @@ class ChooseParametersParameters(seamm.Parameters):
             "enumeration": ("none", "3ob-freq", "3ob-hhmod", "3ob-nhmod", "3ob-ophyd"),
             "format_string": "",
             "description": "Specialized parameterization to add:",
-            "help_text": (
-                "The specialized set parameters to add to the main set."
-            ),
+            "help_text": "The specialized set parameters to add to the main set.",
         },
     }
 

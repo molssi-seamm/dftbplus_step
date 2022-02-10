@@ -1,14 +1,17 @@
 {
     "xTB": {
 	"datasets": {
-	    "xTB - IPEA1-xTB": {
-		"elements": "1-84"
+	    "xTB - GFN2": {
+		"elements": "1-86",
+		"citations": ["xTB", "GFN2"]
 	    },
-	    "xTB - GFN1-xTB": {
-		"elements": "1-84"
+	    "xTB - GFN1": {
+		"elements": "1-86",
+		"citations": ["xTB", "GFN1"]
 	    },
-	    "xtb - GFN2-xTB": {
-		"elements": "1-84"
+	    "xTB - IPEA1": {
+		"elements": "1-86",
+		"citations": ["xTB", "IPEA1"]
 	    }
 	}
     },
