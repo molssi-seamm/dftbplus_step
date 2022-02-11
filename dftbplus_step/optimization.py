@@ -185,7 +185,7 @@ class Optimization(dftbplus_step.Energy):
         data["nsteps"] = 25
         text += (
             "The geometry optimization converged in {nsteps} steps to a total "
-            "energy of {total_energy:.6f} Ha."
+            "energy of {total_energy:.6f} Eh."
         )
         # Calculate the energy of formation
         if self.parent._reference_energy is not None:

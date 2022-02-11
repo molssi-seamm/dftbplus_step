@@ -125,6 +125,17 @@ properties = {
         "type": "float",
         "units": "",
     },
+    "atomic_dipole_moment": {
+        "calculation": [
+            "energy",
+            "optimization",
+        ],
+        "description": "The dipole moments of the atoms",
+        "dimensionality": [3, "natoms"],
+        "methods": [],
+        "type": "float",
+        "units": "",
+    },
     "forces": {
         "calculation": ["optimization"],
         "description": "The forces on the atoms",
