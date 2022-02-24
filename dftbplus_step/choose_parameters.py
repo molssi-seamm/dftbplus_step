@@ -204,6 +204,11 @@ class ChooseParameters(seamm.Node):
                     note="A reference for the DFTB+ Slater-Koster parameters.",
                 )
         elif model == "xTB":
+            # Broadcast to the parent so that other substeps can use
+            self.parent._hamiltonian = P["dataset"]
+            self.parent._dataset = dataset
+            self.parent._subset = None
+
             parameter_set_name = parameter_set_name + "-xTB"
             result = {
                 "Hamiltonian": {

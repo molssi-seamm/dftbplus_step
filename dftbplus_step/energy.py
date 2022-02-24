@@ -144,82 +144,111 @@ class Energy(DftbBase):
         # in PP so that we print what is actually done
 
         dataset = self.parent._dataset
-        if "defaults" in dataset:
-            all_defaults = {**dataset["defaults"]}
-        else:
-            all_defaults = {}
-        if self.parent._subset is not None:
-            subset = self.parent._subset
-            if "defaults" in subset:
-                all_defaults.update(subset["defaults"])
+        parameter_set = self.parent._hamiltonian
+        model, parameter_set_name = parameter_set.split(" - ", 1)
 
-        if "Energy" in all_defaults and "SCC" in all_defaults["Energy"]:
-            defaults = all_defaults["Energy"]["SCC"]
-        else:
-            defaults = {}
-
-        # template
-        result = {
-            "Analysis": {
-                "CalculateForces": "Yes",
-            },
-            "Hamiltonian": {"DFTB": {}},
-        }
-        dftb = result["Hamiltonian"]["DFTB"]
-
-        if P["SCC"] == "Yes":
-            dftb["SCC"] = "Yes"
-            dftb["SCCTolerance"] = P["SCCTolerance"]
-            dftb["MaxSCCIterations"] = P["MaxSCCIterations"]
-
-            third_order = P["ThirdOrder"]
-            if third_order == "Default for parameters":
-                if "ThirdOrder" in defaults:
-                    third_order = defaults["ThirdOrder"]
-                    PP["ThirdOrder"] = defaults["ThirdOrder"]
-                else:
-                    third_order = "No"
-                    PP["ThirdOrder"] = "No"
-            if third_order == "Full":
-                dftb["ThirdOrderFull"] = "Yes"
-            elif third_order == "Partial":
-                dftb["ThirdOrder"] = "Yes"
-            elif third_order == "No":
-                dftb["ThirdOrder"] = "No"
+        if model == "DFTB":
+            if "defaults" in dataset:
+                all_defaults = {**dataset["defaults"]}
             else:
-                raise RuntimeError(f"Don't recognize ThirdOrder = '{third_order}'")
+                all_defaults = {}
+            if self.parent._subset is not None:
+                subset = self.parent._subset
+                if "defaults" in subset:
+                    all_defaults.update(subset["defaults"])
 
-            hcorrection = P["HCorrection"]
-            if hcorrection == "Default for parameters":
-                if "HCorrection" in defaults:
-                    hcorrection = defaults["HCorrection"]["value"]
-                    dftb["HCorrection"] = {hcorrection: {}}
-                    block = dftb["HCorrection"][hcorrection]
-                    PP["HCorrection"] = hcorrection
+            if "Energy" in all_defaults and "SCC" in all_defaults["Energy"]:
+                defaults = all_defaults["Energy"]["SCC"]
+            else:
+                defaults = {}
+
+            # template
+            result = {
+                "Analysis": {
+                    "CalculateForces": "Yes",
+                },
+                "Hamiltonian": {"DFTB": {}},
+            }
+            hamiltonian = result["Hamiltonian"]["DFTB"]
+
+            if P["SCC"] == "Yes":
+                hamiltonian["SCC"] = "Yes"
+                hamiltonian["SCCTolerance"] = P["SCCTolerance"]
+                hamiltonian["MaxSCCIterations"] = P["MaxSCCIterations"]
+
+                third_order = P["ThirdOrder"]
+                if third_order == "Default for parameters":
+                    if "ThirdOrder" in defaults:
+                        third_order = defaults["ThirdOrder"]
+                        PP["ThirdOrder"] = defaults["ThirdOrder"]
+                    else:
+                        third_order = "No"
+                        PP["ThirdOrder"] = "No"
+                if third_order == "Full":
+                    hamiltonian["ThirdOrderFull"] = "Yes"
+                elif third_order == "Partial":
+                    hamiltonian["ThirdOrder"] = "Yes"
+                elif third_order == "No":
+                    hamiltonian["ThirdOrder"] = "No"
+                else:
+                    raise RuntimeError(f"Don't recognize ThirdOrder = '{third_order}'")
+
+                hcorrection = P["HCorrection"]
+                if hcorrection == "Default for parameters":
+                    if "HCorrection" in defaults:
+                        hcorrection = defaults["HCorrection"]["value"]
+                        hamiltonian["HCorrection"] = {hcorrection: {}}
+                        block = hamiltonian["HCorrection"][hcorrection]
+                        PP["HCorrection"] = hcorrection
+                        if hcorrection == "Damping":
+                            if "Damping Exponent" in defaults["HCorrection"]:
+                                damping = defaults["HCorrection"]["Damping Exponent"]
+                                PP["Damping Exponent"] = damping
+                            else:
+                                damping = P["Damping Exponent"]
+                            block["Exponent"] = damping
+                    else:
+                        hamiltonian["HCorrection"] = "None {}"
+                        PP["HCorrection"] = "None {}"
+                else:
+                    hamiltonian["HCorrection"] = hcorrection
                     if hcorrection == "Damping":
-                        if "Damping Exponent" in defaults["HCorrection"]:
+                        if (
+                            "HCorrection" in defaults
+                            and "Damping Exponent" in defaults["HCorrection"]
+                        ):
                             damping = defaults["HCorrection"]["Damping Exponent"]
                             PP["Damping Exponent"] = damping
                         else:
                             damping = P["Damping Exponent"]
-                        block["Exponent"] = damping
-                else:
-                    dftb["HCorrection"] = "None {}"
-                    PP["HCorrection"] = "None {}"
-            else:
-                dftb["HCorrection"] = hcorrection
-                if hcorrection == "Damping":
-                    if (
-                        "HCorrection" in defaults
-                        and "Damping Exponent" in defaults["HCorrection"]
-                    ):
-                        damping = defaults["HCorrection"]["Damping Exponent"]
-                        PP["Damping Exponent"] = damping
-                    else:
-                        damping = P["Damping Exponent"]
-                    dftb["Damping Exponent"] = damping
+                        hamiltonian["Damping Exponent"] = damping
+        elif model == "xTB":
+            result = {
+                "Analysis": {
+                    "CalculateForces": "Yes",
+                },
+                "Hamiltonian": {"xTB": {}},
+            }
+            hamiltonian = result["Hamiltonian"]["xTB"]
+            hamiltonian["SCC"] = "Yes"
+            hamiltonian["SCCTolerance"] = P["SCCTolerance"]
+            hamiltonian["MaxSCCIterations"] = P["MaxSCCIterations"]
 
         system, configuration = self.get_system_configuration(None)
+
+        # Handle charge and spin
+        hamiltonian["Charge"] = configuration.charge
+
+        multiplicity = configuration.spin_multiplicity
+        if multiplicity > 1:
+            # Need to run spinpolarized
+            hamiltonian["SpinPolarisation"] = {
+                "Colinear": {
+                    "UnpairedElectrons": multiplicity - 1
+                }
+            }
+
+        # Integration grid in reciprocal space
         if configuration.periodicity == 3:
             kmethod = P["k-grid method"]
             if kmethod == "grid spacing":
@@ -246,7 +275,7 @@ class Energy(DftbBase):
                 f"    {oa} {ob} {oc}\n"
                 "}"
             )
-            dftb["KPointsAndWeights"] = kmesh
+            hamiltonian["KPointsAndWeights"] = kmesh
             self.description.append(
                 __(
                     f"The mesh for the Brillouin zone integration is {na} x {nb} x {nc}"
@@ -262,7 +291,7 @@ class Energy(DftbBase):
         data in variables for other stages to access
         """
         # Print the key results
-        text = "The total energy is {total_energy:.6f} Ha."
+        text = "The total energy is {total_energy:.6f} E_h."
 
         # Calculate the energy of formation
         if self.parent._reference_energy is not None:
