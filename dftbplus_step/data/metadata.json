@@ -1,20 +1,4 @@
 {
-    "xTB": {
-	"datasets": {
-	    "xTB - GFN2": {
-		"elements": "1-86",
-		"citations": ["xTB", "GFN2"]
-	    },
-	    "xTB - GFN1": {
-		"elements": "1-86",
-		"citations": ["xTB", "GFN1"]
-	    },
-	    "xTB - IPEA1": {
-		"elements": "1-86",
-		"citations": ["xTB", "IPEA1"]
-	    }
-	}
-    },
     "DFTB": {
 	"datasets": {
 	    "DFTB - 3ob": {
@@ -10721,6 +10705,22 @@
 		    "O"
 		],
 		"filename": "3ob/3ob-3-1/Zn-O.skf"
+	    }
+	}
+    },
+    "xTB": {
+	"datasets": {
+	    "xTB - GFN2": {
+		"elements": "1-86",
+		"citations": ["xTB", "GFN2"]
+	    },
+	    "xTB - GFN1": {
+		"elements": "1-86",
+		"citations": ["xTB", "GFN1"]
+	    },
+	    "xTB - IPEA1": {
+		"elements": "1-86",
+		"citations": ["xTB", "IPEA1"]
 	    }
 	}
     }
