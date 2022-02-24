@@ -144,6 +144,9 @@ class TkChooseParameters(seamm.TkNode):
 
         elements = set(pt.get())
         dataset = ds.get()
+        # Catch older flowcharts with the old names.
+        if "-" not in dataset:
+            dataset = "DFTB - " + dataset
         subset = ss.get()
 
         # Find the datasets that contain all the requested elements
@@ -188,7 +191,7 @@ class TkChooseParameters(seamm.TkNode):
         # Show which elements are available
         available = set()
         for model, metadata in self._metadata.items():
-            for dataset, data in metadata["datasets"].items():
+            for dset, data in metadata["datasets"].items():
                 if "element sets" in data:
                     for element_set in data["element sets"]:
                         for element in element_set:
