@@ -71,7 +71,7 @@ class ChooseParameters(seamm.Node):
         """Get the input for the Slater-Koster parameters for DFTB+"""
 
         # Get the metadata for the Slater-Koster parameters
-        slako = self.parent._slako
+        metadata = self.parent._metadata
         slako_dir = Path(self.parent.options["slako_dir"]).expanduser()
 
         # Create the directory
@@ -90,115 +90,144 @@ class ChooseParameters(seamm.Node):
         self.description = []
         self.description.append(__(self.description_text(PP), **PP, indent=self.indent))
 
-        # The Slater-Koster files
+        # The parameter data
+        parameter_set = P["dataset"]
+        model, parameter_set_name = parameter_set.split(" - ", 1)
+        datasets = metadata[model]["datasets"]
+        dataset = datasets[parameter_set]
+
         system_db = self.get_variable("_system_db")
         configuration = system_db.system.configuration
         parameters = {}
         elements = set(configuration.atoms.symbols)
         elements = sorted([*elements])
-        datasets = slako["datasets"]
-        potentials = slako["potentials"]
 
-        dataset = datasets[P["dataset"]]
-        pairs = dataset["potential pairs"]
+        if model == "DFTB":
+            potentials = metadata[model]["potentials"]
+            pairs = dataset["potential pairs"]
 
-        self.parent._hamiltonian = P["dataset"]
+            self.parent._hamiltonian = P["dataset"]
 
-        if P["subset"] == "none":
-            subset = None
-        else:
-            self.parent._hamiltonian += " + " + P["subset"]
-            subset = datasets[P["subset"]]
-            subpairs = subset["potential pairs"]
-
-        # Broadcast to the parent so that other substeps can use
-        self.parent._dataset = dataset
-        self.parent._subset = subset
-
-        for el1 in elements:
-            for el2 in elements:
-                key = f"{el1}-{el2}"
-                # Not sure if flipping the key is valid....
-                key2 = f"{el2}-{el1}"
-                if subset is not None and key in subpairs:
-                    md5sum = subpairs[key]["md5sum"]
-                elif key in pairs:
-                    md5sum = pairs[key]["md5sum"]
-                elif subset is not None and key2 in subpairs:
-                    md5sum = subpairs[key2]["md5sum"]
-                elif key2 in pairs:
-                    md5sum = pairs[key2]["md5sum"]
-                else:
-                    raise RuntimeError(
-                        f"Could not find the Slater-Koster file for {key} "
-                        f"for dataset {P['dataset']}, subset {P['subset']}."
-                    )
-                parameters[key] = str(slako_dir / potentials[md5sum]["filename"])
-
-        # The maximum angular momentum
-        data = dataset["element data"]
-        if subset is not None and "element data" in subset:
-            subdata = subset["element data"]
-        else:
-            subdata = None
-
-        references = set()
-        max_momentum = {}
-        key = "maximum angular momentum"
-        for el in elements:
-            if subdata is not None and el in subdata and key in subdata[el]:
-                max_momentum[el] = subdata[el][key]
-                if "citations" in subdata[el]:
-                    for reference in subdata[el]["citations"]:
-                        references.add(reference)
+            if P["subset"] == "none":
+                subset = None
             else:
-                max_momentum[el] = data[el][key]
-                if "citations" in data[el]:
-                    for reference in data[el]["citations"]:
-                        references.add(reference)
+                self.parent._hamiltonian += " + " + P["subset"].split(" - ")[1]
+                subset = datasets[P["subset"]]
+                subpairs = subset["potential pairs"]
 
-        result = {
-            "Hamiltonian": {
-                "DFTB": {
-                    "SlaterKosterFiles": parameters,
-                    "MaxAngularMomentum": max_momentum,
+            # Broadcast to the parent so that other substeps can use
+            self.parent._dataset = dataset
+            self.parent._subset = subset
+
+            for el1 in elements:
+                for el2 in elements:
+                    key = f"{el1}-{el2}"
+                    # Not sure if flipping the key is valid....
+                    key2 = f"{el2}-{el1}"
+                    if subset is not None and key in subpairs:
+                        md5sum = subpairs[key]["md5sum"]
+                    elif key in pairs:
+                        md5sum = pairs[key]["md5sum"]
+                    elif subset is not None and key2 in subpairs:
+                        md5sum = subpairs[key2]["md5sum"]
+                    elif key2 in pairs:
+                        md5sum = pairs[key2]["md5sum"]
+                    else:
+                        raise RuntimeError(
+                            f"Could not find the Slater-Koster file for {key} "
+                            f"for dataset {P['dataset']}, subset {P['subset']}."
+                        )
+                    parameters[key] = str(slako_dir / potentials[md5sum]["filename"])
+
+            # The maximum angular momentum
+            data = dataset["element data"]
+            if subset is not None and "element data" in subset:
+                subdata = subset["element data"]
+            else:
+                subdata = None
+
+            references = set()
+            max_momentum = {}
+            key = "maximum angular momentum"
+            for el in elements:
+                if subdata is not None and el in subdata and key in subdata[el]:
+                    max_momentum[el] = subdata[el][key]
+                    if "citations" in subdata[el]:
+                        for reference in subdata[el]["citations"]:
+                            references.add(reference)
+                else:
+                    max_momentum[el] = data[el][key]
+                    if "citations" in data[el]:
+                        for reference in data[el]["citations"]:
+                            references.add(reference)
+
+            result = {
+                "Hamiltonian": {
+                    "DFTB": {
+                        "SlaterKosterFiles": parameters,
+                        "MaxAngularMomentum": max_momentum,
+                    }
                 }
             }
-        }
 
-        # Check if we have Hubbard derivatives
-        key = "Hubbard derivative"
-        derivative = {}
-        for el in elements:
-            if subdata is not None and el in subdata and key in subdata[el]:
-                derivative[el] = subdata[el][key]
-            elif el in data and key in data[el]:
-                derivative[el] = data[el][key]
-        if len(derivative) > 0:
-            result["Hamiltonian"]["DFTB"]["HubbardDerivs"] = derivative
+            # Check if we have Hubbard derivatives
+            key = "Hubbard derivative"
+            derivative = {}
+            for el in elements:
+                if subdata is not None and el in subdata and key in subdata[el]:
+                    derivative[el] = subdata[el][key]
+                elif el in data and key in data[el]:
+                    derivative[el] = data[el][key]
+            if len(derivative) > 0:
+                result["Hamiltonian"]["DFTB"]["HubbardDerivs"] = derivative
 
-        # Check if we have reference energies
-        key = "reference energy"
-        tmp = {}
-        for el in elements:
-            if subdata is not None and el in subdata and key in subdata[el]:
-                tmp[el] = float(subdata[el][key])
-            elif el in data and key in data[el]:
-                tmp[el] = float(data[el][key])
-            else:
-                tmp = None
-                break
-        self.parent._reference_energies = tmp
+            # Check if we have reference energies
+            key = "reference energy"
+            tmp = {}
+            for el in elements:
+                if subdata is not None and el in subdata and key in subdata[el]:
+                    tmp[el] = float(subdata[el][key])
+                elif el in data and key in data[el]:
+                    tmp[el] = float(data[el][key])
+                else:
+                    tmp = None
+                    break
+            self.parent._reference_energies = tmp
 
-        # Add the references
-        for reference in references:
-            self.references.cite(
-                raw=self._bibliography[reference],
-                alias=reference,
-                module="dftb+ step",
-                level=1,
-                note="A reference for the DFTB+ Slater-Koster parameters.",
-            )
+            # Add the references
+            for reference in references:
+                self.references.cite(
+                    raw=self._bibliography[reference],
+                    alias=reference,
+                    module="dftb+ step",
+                    level=1,
+                    note="A reference for the DFTB+ Slater-Koster parameters.",
+                )
+        elif model == "xTB":
+            # Broadcast to the parent so that other substeps can use
+            self.parent._hamiltonian = P["dataset"]
+            self.parent._dataset = dataset
+            self.parent._subset = None
+
+            parameter_set_name = parameter_set_name + "-xTB"
+            result = {
+                "Hamiltonian": {
+                    "xTB": {
+                        "Method": parameter_set_name,
+                    }
+                }
+            }
+
+            # Add the references
+            references = dataset["citations"]
+            for reference in references:
+                self.references.cite(
+                    raw=self._bibliography[reference],
+                    alias=reference,
+                    module="dftb+ step",
+                    level=1,
+                    note="A reference for the xTB method and parameters.",
+                )
 
         return result
 

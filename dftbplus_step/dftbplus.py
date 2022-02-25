@@ -216,7 +216,7 @@ class Dftbplus(seamm.Node):
         logger.debug("Creating DFTB+ {}".format(self))
         self.subflowchart = seamm.Flowchart(
             parent=self, name="DFTB+", namespace=namespace
-        )  # yapf: disable
+        )
 
         super().__init__(
             flowchart=flowchart,
@@ -224,7 +224,7 @@ class Dftbplus(seamm.Node):
             extension=extension,
             module=__name__,
             logger=logger,
-        )  # yapf: disable
+        )
 
         self.parameters = dftbplus_step.DftbplusParameters()
 
@@ -234,7 +234,7 @@ class Dftbplus(seamm.Node):
         if len(files) != 1:
             raise RuntimeError("Can't find Slater-Koster metadata.json file")
         data = files[0].read_text()
-        self._slako = json.loads(data)
+        self._metadata = json.loads(data)
 
         # Data to pass between substeps
         self._dataset = None  # SLAKO dataset used
@@ -465,21 +465,21 @@ class Dftbplus(seamm.Node):
     def geometry(self):
         """Create the input for DFTB+ for the geometry.
 
-        Example:
+        Example::
 
-        Geometry = {
-            TypeNames = { "Ga" "As" }
-            TypesAndCoordinates [Angstrom] = {
-                1 0.000000 0.000000 0.000000
-                2 1.356773 1.356773 1.356773
+            Geometry = {
+                TypeNames = { "Ga" "As" }
+                TypesAndCoordinates [Angstrom] = {
+                    1 0.000000 0.000000 0.000000
+                    2 1.356773 1.356773 1.356773
+                }
+                Periodic = Yes
+                LatticeVectors [Angstrom] = {
+                    2.713546 2.713546 0.
+                    0. 2.713546 2.713546
+                    2.713546 0. 2.713546
+                }
             }
-            Periodic = Yes
-            LatticeVectors [Angstrom] = {
-                2.713546 2.713546 0.
-                0. 2.713546 2.713546
-                2.713546 0. 2.713546
-            }
-        }
         """
         _, configuration = self.get_system_configuration(None)
 

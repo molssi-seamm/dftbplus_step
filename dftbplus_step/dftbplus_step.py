@@ -31,7 +31,7 @@ class DftbplusStep(object):
         "description": ("An interface for DFTB+"),
         "group": "Simulations",
         "name": "DFTB+",
-    }  # yapf: disable
+    }
 
     def __init__(self, flowchart=None, gui=None):
         """Initialize this helper class, which is used by

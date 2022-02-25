@@ -1,5 +1,6 @@
 MODULE := dftbplus_step
-.PHONY: clean clean-test clean-pyc clean-build docs help
+.PHONY: help clean clean-build clean-pyc clean-test lint format typing test dependencies
+.PHONY: test-all coverage html docs servedocs release check-release dist install uninstall
 .DEFAULT_GOAL := help
 define BROWSER_PYSCRIPT
 import os, webbrowser, sys
@@ -75,12 +76,14 @@ coverage: ## check code coverage quickly with the default Python
 	coverage html
 	$(BROWSER) htmlcov/index.html
 
-docs: ## generate Sphinx HTML documentation, including API docs
+html: ## generate Sphinx HTML documentation, including API docs
 	rm -f docs/developer/$(MODULE).rst
 	rm -f docs/developer/modules.rst
 	sphinx-apidoc -o docs/developer $(MODULE)
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
+
+docs: html ## Make the html docs and show in the browser
 	$(BROWSER) docs/_build/html/index.html
 
 servedocs: docs ## compile the docs watching for changes

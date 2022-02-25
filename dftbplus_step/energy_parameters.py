@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 class EnergyParameters(seamm.Parameters):
     """The control parameters for the DFTB+ Hamiltonian
 
-    Example:
+    Example::
 
         Hamiltonian = DFTB {
           Scc = Yes

@@ -12,6 +12,19 @@ class ChooseParametersParameters(seamm.Parameters):
     """The control parameters for initializing DFTB+"""
 
     parameters = {
+        "model": {
+            "default": "any",
+            "kind": "string",
+            "default_units": None,
+            "enumeration": (
+                "any",
+                "Density Functional Tight Binding (DFTB)",
+                "eXtended Tight Binding (xTB)",
+            ),
+            "format_string": "",
+            "description": "Model:",
+            "help_text": "The model to use.",
+        },
         "elements": {
             "default": "",
             "kind": "periodic table",
@@ -26,20 +39,20 @@ class ChooseParametersParameters(seamm.Parameters):
             "kind": "string",
             "default_units": None,
             "enumeration": (
-                "3ob",
-                "matsci",
-                "mio",
-                "auorg",
-                "borg",
-                "halorg",
-                "ob2",
-                "pbc",
-                "siband",
-                "rare",
+                "DFTB - 3ob",
+                "DFTB - matsci",
+                "DFTB - mio",
+                "DFTB - auorg",
+                "DFTB - borg",
+                "DFTB - halorg",
+                "DFTB - ob2",
+                "DFTB - pbc",
+                "DFTB - siband",
+                "DFTB - rare",
             ),
             "format_string": "",
-            "description": "Slater-Koster dataset:",
-            "help_text": ("The main set of Slater-Koster potentials to use."),
+            "description": "Parameterization:",
+            "help_text": "The parameterization to use.",
         },
         "subset": {
             "default": "none",
@@ -47,11 +60,8 @@ class ChooseParametersParameters(seamm.Parameters):
             "default_units": None,
             "enumeration": ("none", "3ob-freq", "3ob-hhmod", "3ob-nhmod", "3ob-ophyd"),
             "format_string": "",
-            "description": "Specialized Slater-Koster potentials to add:",
-            "help_text": (
-                "The specialized set of Slater-Koster potentials to add to "
-                "the main set."
-            ),
+            "description": "Specialized parameterization to add:",
+            "help_text": "The specialized set parameters to add to the main set.",
         },
     }
 

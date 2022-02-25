@@ -22,8 +22,7 @@ class DftbplusParameters(seamm.Parameters):
 
     Attributes
     ----------
-    parameters : {'kind', 'default', 'default_units', 'enumeration',
-                  'format_string', description', help_text'}
+    parameters : {str: str}
         A dictionary containing the parameters for the current step.
         Each key of the dictionary is a dictionary that contains the
         the following keys: kind, default, default_units, enumeration,
@@ -61,19 +60,20 @@ class DftbplusParameters(seamm.Parameters):
     Dftbplus, TkDftbplus, Dftbplus
     DftbplusParameters, DFTB+Step
 
-    Examples
-    --------
-    parameters = {
-        "time": {
-            "default": 100.0,
-            "kind": "float",
-            "default_units": "ps",
-            "enumeration": tuple(),
-            "format_string": ".1f",
-            "description": "Simulation time:",
-            "help_text": ("The time to simulate in the dynamics run.")
-        },
-    }
+    Examples::
+
+        parameters = {
+            "time": {
+                "default": 100.0,
+                "kind": "float",
+                "default_units": "ps",
+                "enumeration": tuple(),
+                "format_string": ".1f",
+                "description": "Simulation time:",
+                "help_text": ("The time to simulate in the dynamics run.")
+            },
+        }
+
     """
 
     parameters = {

@@ -41,7 +41,7 @@ class Installer(seamm_installer.InstallerBase):
            to `seamm.ini`.
         3. If a module system is in use, a module may need to be loaded to give
            access to Dftbplus.
-        3. They cannot be found automatically, so the user needs to locate the
+        4. They cannot be found automatically, so the user needs to locate the
            executables for the installer.
 
     2. Dftbplus is not installed on the machine. In this case they can be
