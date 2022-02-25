@@ -243,9 +243,7 @@ class Energy(DftbBase):
         if multiplicity > 1:
             # Need to run spinpolarized
             hamiltonian["SpinPolarisation"] = {
-                "Colinear": {
-                    "UnpairedElectrons": multiplicity - 1
-                }
+                "Colinear": {"UnpairedElectrons": multiplicity - 1}
             }
 
         # Integration grid in reciprocal space
