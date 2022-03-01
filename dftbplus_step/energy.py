@@ -13,7 +13,7 @@ from pathlib import Path
 import dftbplus_step
 import seamm
 import seamm.data
-from seamm_util import Q_, units_class
+from seamm_util import Q_, units_class, element_data
 import seamm_util.printing as printing
 from seamm_util.printing import FormattedText as __
 
@@ -244,13 +244,12 @@ class Energy(DftbBase):
 
         # Handle charge and spin
         hamiltonian["Charge"] = configuration.charge
+        multiplicity = configuration.spin_multiplicity
 
         print(
             f"Charge = {configuration.charge}, multiplicity = "
             f"{configuration.spin_multiplicity}"
         )
-
-        multiplicity = configuration.spin_multiplicity
 
         if multiplicity == 1 and P["SpinPolarisation"] == "none":
             hamiltonian["SpinPolarisation"] = {}
@@ -270,6 +269,8 @@ class Energy(DftbBase):
                 else:
                     section["UnpairedElectrons"] = multiplicity - 1
 
+            print(f"{P['RelaxTotalSpin']=}")
+
             section["RelaxTotalSpin"] = P["RelaxTotalSpin"].capitalize()
 
             # Get the spin constants
@@ -282,23 +283,68 @@ class Energy(DftbBase):
                     "Can't find spin-constants.json file. Check the installation!"
                 )
             data = files[0].read_text()
-            spin_constants = json.loads(data)
+            spin_constant_data = json.loads(data)
 
-            # And add them...
-            section = hamiltonian["SpinConstants"] = {}
-            section["ShellResolvedSpin"] = P["ShellResolvedSpin"].capitalize()
+            # First check if we have shell resolved constants or not
+            spin_constants = hamiltonian["SpinConstants"] = {}
             symbols = sorted([*set(atoms.symbols)])
             dataset_name = self.parent._hamiltonian
             # e.g. "DFTB - mio"
             key = dataset_name.split(" - ")[1]
-            if key in spin_constants:
-                constants = spin_constants[key]
+            if key in spin_constant_data:
+                constants = spin_constant_data[key]
             else:
-                constants = spin_constants["GGA"]
+                constants = spin_constant_data["GGA"]
+
+            # Bit of a kludgy test. If not shell-resolved there is one constant
+            # per shell, i.e. 1, 2 or 3 for s, p, d. If reolved, there are 1, 4, 9.
+            shell_resolved = False
             for symbol in symbols:
-                section[symbol] = (
-                    "{" + " ".join([str(c) for c in constants[symbol]]) + "}"
-                )
+                if len(constants[symbol]) > 3:
+                    shell_resolved = True
+                    break
+
+            if shell_resolved:
+                if P["ShellResolvedSpin"] == "yes":
+                    spin_constants["ShellResolvedSpin"] = "Yes"
+                else:
+                    spin_constants["ShellResolvedSpin"] = "No"
+                    shell_resolved = False
+            else:
+                spin_constants["ShellResolvedSpin"] = "No"
+
+            # And add them and the control parameters
+            if shell_resolved:
+                for symbol in symbols:
+                    spin_constants[symbol] = (
+                        "{" + " ".join([str(c) for c in constants[symbol]]) + "}"
+                    )
+            else:
+                for symbol in symbols:
+                    shells = element_data[symbol]["electron configuration"]
+                    shell = shells.split()[-1]
+                    print(f"{shell=}")
+                    tmp = constants[symbol]
+                    if "s" in shell:
+                        spin_constants[symbol] = str(tmp[0])
+                    elif "p" in shell:
+                        if len(tmp) == 4:
+                            spin_constants[symbol] = str(tmp[3])
+                        elif len(tmp) == 9:
+                            spin_constants[symbol] = str(tmp[4])
+                        else:
+                            raise RuntimeError(
+                                f"Error in spin constants for {symbol}: {tmp}"
+                            )
+                    elif "d" in shell:
+                        if len(tmp) == 9:
+                            spin_constants[symbol] = str(tmp[8])
+                        else:
+                            raise RuntimeError(
+                                f"Error in spin constants for {symbol}: {tmp}"
+                            )
+                    else:
+                        raise RuntimeError(f"Can't handle spin constants for {symbol}")
 
         # Integration grid in reciprocal space
         if configuration.periodicity == 3:
