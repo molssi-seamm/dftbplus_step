@@ -198,11 +198,21 @@ class DftbBase(seamm.Node):
             data = pandas.read_csv(
                 fd,
                 sep=r"\s+",
-                header=0,
+                header=None,
                 comment="!",
-                names=("E", "DOS"),
-                index_col="E",
+                index_col=0,
             )
+
+        n_columns = data.shape[1]
+        if n_columns == 1:
+            spin_polarized = False
+            data.rename(columns={0: "E", 1: "DOS"}, inplace=True)
+        elif n_columns == 3:
+            spin_polarized = True
+            data.rename(columns={0: "E", 1: "DOS", 2: "Up", 3: "Down"}, inplace=True)
+        else:
+            raise RuntimeError(f"DOS has {n_columns} columns of data.")
+
         dE = data.index[1] - data.index[0]
         x0 = data.index[0]
 
@@ -219,20 +229,47 @@ class DftbBase(seamm.Node):
         y_axis = plot.add_axis("y", label="DOS", anchor=x_axis)
         x_axis.anchor = y_axis
 
-        plot.add_trace(
-            x_axis=x_axis,
-            y_axis=y_axis,
-            name="DOS",
-            x0=x0,
-            dx=dE,
-            xlabel="t",
-            xunits="eV",
-            y=list(data["DOS"]),
-            ylabel="DOS",
-            yunits="",
-            color="black",
-        )
-
+        if spin_polarized:
+            plot.add_trace(
+                x_axis=x_axis,
+                y_axis=y_axis,
+                name="SpinUp",
+                x0=x0,
+                dx=dE,
+                xlabel="t",
+                xunits="eV",
+                y=list(data["Up"]),
+                ylabel="Spin up",
+                yunits="",
+                color="red",
+            )
+            plot.add_trace(
+                x_axis=x_axis,
+                y_axis=y_axis,
+                name="SpinDown",
+                x0=x0,
+                dx=dE,
+                xlabel="t",
+                xunits="eV",
+                y=list(data["Down"]),
+                ylabel="Spin down",
+                yunits="",
+                color="blue",
+            )
+        else:
+            plot.add_trace(
+                x_axis=x_axis,
+                y_axis=y_axis,
+                name="DOS",
+                x0=x0,
+                dx=dE,
+                xlabel="t",
+                xunits="eV",
+                y=list(data["DOS"]),
+                ylabel="DOS",
+                yunits="",
+                color="black",
+            )
         figure.grid_plots("DOS")
 
         # Write it out.

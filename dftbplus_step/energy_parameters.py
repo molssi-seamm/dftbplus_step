@@ -96,6 +96,18 @@ class EnergyParameters(seamm.Parameters):
                 "steps, the program stops unless requested elsewhere."
             ),
         },
+        "ShellResolvedSCC": {
+            "default": "no",
+            "kind": "string",
+            "default_units": "",
+            "enumeration": ("yes", "no"),
+            "format_string": "",
+            "description": "Shell-resolved charges:",
+            "help_text": (
+                "Whether to use shell-resolved charges. If the parameter set does not "
+                "support this, it will be ignored."
+            ),
+        },
         "ThirdOrder": {
             "default": "Default for parameters",
             "kind": "string",
@@ -200,6 +212,36 @@ class EnergyParameters(seamm.Parameters):
             "format_string": "",
             "description": "K-spacing:",
             "help_text": "The spacing of the grid in reciprocal space.",
+        },
+        "SpinPolarisation": {
+            "default": "none",
+            "kind": "string",
+            "default_units": "",
+            "enumeration": ("none", "collinear", "noncollinear"),
+            "format_string": "",
+            "description": "Spin polarization:",
+            "help_text": "How to handle spin polarization",
+        },
+        "RelaxTotalSpin": {
+            "default": "yes",
+            "kind": "string",
+            "default_units": "",
+            "enumeration": ("no", "yes"),
+            "format_string": "",
+            "description": "Optimize the spin:",
+            "help_text": "Whether to optimize the spin polarization or leave it fixed.",
+        },
+        "ShellResolvedSpin": {
+            "default": "yes",
+            "kind": "string",
+            "default_units": "",
+            "enumeration": ("yes", "no"),
+            "format_string": "",
+            "description": "Shell-resolved spins:",
+            "help_text": (
+                "Whether to use shell-resolved spin. If the parameter set does not "
+                "support this, it will be ignored."
+            ),
         },
     }
 

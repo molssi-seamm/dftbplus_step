@@ -2,6 +2,11 @@
 
 """Setup DFTB+"""
 
+try:
+    import importlib.metadata as implib
+except Exception:
+    import importlib_metadata as implib
+import json
 import logging
 from pathlib import Path
 
@@ -175,6 +180,7 @@ class Energy(DftbBase):
                 hamiltonian["SCC"] = "Yes"
                 hamiltonian["SCCTolerance"] = P["SCCTolerance"]
                 hamiltonian["MaxSCCIterations"] = P["MaxSCCIterations"]
+                hamiltonian["ShellResolvedSCC"] = P["ShellResolvedSCC"].capitalize()
 
                 third_order = P["ThirdOrder"]
                 if third_order == "Default for parameters":
@@ -239,12 +245,60 @@ class Energy(DftbBase):
         # Handle charge and spin
         hamiltonian["Charge"] = configuration.charge
 
+        print(
+            f"Charge = {configuration.charge}, multiplicity = "
+            f"{configuration.spin_multiplicity}"
+        )
+
         multiplicity = configuration.spin_multiplicity
-        if multiplicity > 1:
-            # Need to run spinpolarized
-            hamiltonian["SpinPolarisation"] = {
-                "Colinear": {"UnpairedElectrons": multiplicity - 1}
-            }
+
+        if multiplicity == 1 and P["SpinPolarisation"] == "none":
+            hamiltonian["SpinPolarisation"] = {}
+        else:
+            noncolinear = P["SpinPolarisation"] == "noncolinear"
+
+            atoms = configuration.atoms
+            have_spins = "spin" in atoms
+
+            H = hamiltonian["SpinPolarisation"] = {}
+            if noncolinear:
+                section = H["NonColinear"] = {}
+            else:
+                section = H["Colinear"] = {}
+                if have_spins:
+                    section["InitialSpins"] = {"AllAtomSpins": [*atoms["spin"]]}
+                else:
+                    section["UnpairedElectrons"] = multiplicity - 1
+
+            section["RelaxTotalSpin"] = P["RelaxTotalSpin"].capitalize()
+
+            # Get the spin constants
+            package = self.__module__.split(".")[0]
+            files = [
+                p for p in implib.files(package) if p.name == "spin-constants.json"
+            ]
+            if len(files) != 1:
+                raise RuntimeError(
+                    "Can't find spin-constants.json file. Check the installation!"
+                )
+            data = files[0].read_text()
+            spin_constants = json.loads(data)
+
+            # And add them...
+            section = hamiltonian["SpinConstants"] = {}
+            section["ShellResolvedSpin"] = P["ShellResolvedSpin"].capitalize()
+            symbols = sorted([*set(atoms.symbols)])
+            dataset_name = self.parent._hamiltonian
+            # e.g. "DFTB - mio"
+            key = dataset_name.split(" - ")[1]
+            if key in spin_constants:
+                constants = spin_constants[key]
+            else:
+                constants = spin_constants["GGA"]
+            for symbol in symbols:
+                section[symbol] = (
+                    "{" + " ".join([str(c) for c in constants[symbol]]) + "}"
+                )
 
         # Integration grid in reciprocal space
         if configuration.periodicity == 3:

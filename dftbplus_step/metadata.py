@@ -125,6 +125,17 @@ properties = {
         "type": "float",
         "units": "",
     },
+    "gross_atomic_spins": {
+        "calculation": [
+            "energy",
+            "optimization",
+        ],
+        "description": "The spins on the atoms",
+        "dimensionality": ["natoms"],
+        "methods": [],
+        "type": "float",
+        "units": "",
+    },
     "atomic_dipole_moment": {
         "calculation": [
             "energy",
