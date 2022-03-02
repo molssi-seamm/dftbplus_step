@@ -8,7 +8,7 @@ from pathlib import Path
 import dftbplus_step
 import seamm
 import seamm.data
-from seamm_util import Q_, units_class
+from seamm_util import units_class
 import seamm_util.printing as printing
 from seamm_util.printing import FormattedText as __
 
@@ -49,13 +49,22 @@ class Optimization(dftbplus_step.Energy):
         if not P:
             P = self.parameters.values_to_dict()
 
+        tmp = super().description_text(P)
+        energy_description = "\n".join(tmp.splitlines()[1:])
+
         text = (
             f"Structural optimization using the {P['optimization method']} "
             f"method with a convergence criterion of {P['MaxForceComponent']}."
-            f" A maximum of {P['MaxSteps']} will be used."
+            f" A maximum of {P['MaxSteps']} steps will be used."
         )
 
-        return self.header + "\n" + __(text, indent=4 * " ").__str__()
+        return (
+            self.header
+            + "\n"
+            + __(text, indent=4 * " ").__str__()
+            + "\n\n"
+            + energy_description
+        )
 
     def get_input(self):
         """Get the input for an optimization calculation for DFTB+"""
@@ -181,22 +190,30 @@ class Optimization(dftbplus_step.Energy):
                 elif P["configuration name"] == "use configuration number":
                     configuration.name = str(configuration.n_configurations)
 
+        # Read the detailed output file to get the number of iterations
+        directory = Path(self.directory)
+        path = directory / "detailed.out"
+        lines = iter(path.read_text().splitlines())
+        data["nsteps"] = "unknown number of"
+        data["ediff"] = "unknown"
+        data["scc error"] = None
+        for line in lines:
+            if "Geometry optimization step:" in line:
+                data["nsteps"] = line.split()[3]
+            if "Diff electronic" in line:
+                tmp = next(lines).split()
+                data["ediff"] = float(tmp[2])
+
         # Print the key results
-        data["nsteps"] = 25
+
         text += (
-            "The geometry optimization converged in {nsteps} steps to a total "
-            "energy of {total_energy:.6f} Eh."
+            "The geometry optimization converged in {nsteps} steps. "
+            "The last change in energy was {ediff:.6} Eh"
         )
-        # Calculate the energy of formation
-        if self.parent._reference_energy is not None:
-            dE = data["total_energy"] - self.parent._reference_energy
-            dE = Q_(dE, "hartree").to("kJ/mol").magnitude
-            text += f" The calculated formation energy is {dE:.2f} kJ/mol."
-            data["energy of formation"] = dE
+        if P["SCC"] == "Yes" and data["scc error"] is not None:
+            text += " and the error in the charges of {scc error:.6}."
         else:
-            text += " Could not calculate the formation energy because some reference "
-            text += "energies are missing."
-            data["energy of formation"] = None
+            text += "."
 
         # Prepare the DOS graph(s)
         wd = Path(self.directory)
@@ -204,10 +221,5 @@ class Optimization(dftbplus_step.Energy):
 
         printer.normal(__(text, **data, indent=self.indent + 4 * " "))
 
-        # Put any requested results into variables or tables
-        self.store_results(
-            data=data,
-            properties=dftbplus_step.properties,
-            results=self.parameters["results"].value,
-            create_tables=self.parameters["create tables"].get(),
-        )
+        printer.normal("\n")
+        super().analyze(indent=indent, data=data, out=out)

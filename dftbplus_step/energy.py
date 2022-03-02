@@ -2,6 +2,8 @@
 
 """Setup DFTB+"""
 
+import csv
+
 try:
     import importlib.metadata as implib
 except Exception:
@@ -9,6 +11,9 @@ except Exception:
 import json
 import logging
 from pathlib import Path
+import textwrap
+
+from tabulate import tabulate
 
 import dftbplus_step
 import seamm
@@ -110,16 +115,36 @@ class Energy(DftbBase):
                     "using the D3H5 method."
                 )
 
+        if P["SpinPolarisation"] == "none":
+            text += (
+                " Closed shell systems will be spin-restricted. Open-shell will be "
+                "spin-unrestricted. "
+            )
+        elif P["SpinPolarisation"] == "colinear":
+            text += (
+                " The system will be handled with spin, starting either from spins on "
+                "the structure, if present, or the spin-multiplicity of the system."
+            )
+        elif P["SpinPolarisation"] == "noncolinear":
+            text += (
+                " The system will be handled using noncolinear spins, starting "
+                "from spins on the atoms in the structure."
+            )
+        if P["RelaxTotalSpin"] == "no":
+            text += " Any spins will be fixed at the initial value."
+        else:
+            text += " Any spins will be optimized."
+
         kmethod = P["k-grid method"]
         if kmethod == "grid spacing":
             text += (
-                " If the system is periodic the integration will use a"
-                f" Monkhorst-Pack grid with a spacing of {P['k-spacing']}."
+                " For periodic system a Monkhorst-Pack grid with a spacing of "
+                f"{P['k-spacing']} will be used."
             )
         elif kmethod == "supercell folding":
             text += (
-                " If the system is periodic, the integration will use a"
-                f" Monkhorst-Pack {P['na']} x{P['nb']} x{P['nc']} grid."
+                " For periodic systems a {P['na']} x{P['nb']} x{P['nc']} "
+                "Monkhorst-Pack grid will be used."
             )
 
         return self.header + "\n" + __(text, indent=4 * " ").__str__()
@@ -246,11 +271,6 @@ class Energy(DftbBase):
         hamiltonian["Charge"] = configuration.charge
         multiplicity = configuration.spin_multiplicity
 
-        print(
-            f"Charge = {configuration.charge}, multiplicity = "
-            f"{configuration.spin_multiplicity}"
-        )
-
         if multiplicity == 1 and P["SpinPolarisation"] == "none":
             hamiltonian["SpinPolarisation"] = {}
         else:
@@ -268,8 +288,6 @@ class Energy(DftbBase):
                     section["InitialSpins"] = {"AllAtomSpins": [*atoms["spin"]]}
                 else:
                     section["UnpairedElectrons"] = multiplicity - 1
-
-            print(f"{P['RelaxTotalSpin']=}")
 
             section["RelaxTotalSpin"] = P["RelaxTotalSpin"].capitalize()
 
@@ -323,7 +341,6 @@ class Energy(DftbBase):
                 for symbol in symbols:
                     shells = element_data[symbol]["electron configuration"]
                     shell = shells.split()[-1]
-                    print(f"{shell=}")
                     tmp = constants[symbol]
                     if "s" in shell:
                         spin_constants[symbol] = str(tmp[0])
@@ -388,14 +405,26 @@ class Energy(DftbBase):
         """Parse the output and generating the text output and store the
         data in variables for other stages to access
         """
+        # Read the detailed output file to get the number of iterations
+        directory = Path(self.directory)
+        path = directory / "detailed.out"
+        lines = iter(path.read_text().splitlines())
+        data["scc error"] = None
+        for line in lines:
+            if "SCC error" in line:
+                tmp = next(lines).split()
+                data["scc error"] = float(tmp[3])
+
         # Print the key results
         text = "The total energy is {total_energy:.6f} E_h."
+        if data["scc error"] is not None:
+            text += " The charges converged to {scc error:.6f}."
 
         # Calculate the energy of formation
         if self.parent._reference_energy is not None:
             dE = data["total_energy"] - self.parent._reference_energy
             dE = Q_(dE, "hartree").to("kJ/mol").magnitude
-            text += f" The calculated formation energy is {dE:.2f} kJ/mol."
+            text += f" The calculated formation energy is {dE:.1f} kJ/mol."
             data["energy of formation"] = dE
         else:
             text += " Could not calculate the formation energy because some reference "
@@ -406,7 +435,55 @@ class Energy(DftbBase):
         wd = Path(self.directory)
         self.dos(wd / "band.out")
 
-        printer.normal(__(text, **data, indent=self.indent + 4 * " "))
+        text_lines = []
+        # Get charges and spins, etc.
+        system, configuration = self.get_system_configuration(None)
+        symbols = configuration.atoms.symbols
+
+        if "gross_atomic_charges" in data:
+            table = {
+                "Atom": [*range(1, len(symbols) + 1)],
+                "Element": symbols,
+                "Charge": [],
+            }
+            with open(directory / "atom_properties.csv", "w", newline="") as fd:
+                writer = csv.writer(fd)
+                if "gross_atomic_spins" in data:
+                    text_lines.append("        Atomic charges and spins")
+                    table["Spin"] = []
+                    writer.writerow(["Atom", "Element", "Charge", "Spin"])
+                    for atom, symbol, q, s in zip(
+                        range(1, len(symbols) + 1),
+                        symbols,
+                        data["gross_atomic_charges"],
+                        data["gross_atomic_spins"][0],
+                    ):
+                        q = f"{q:.3f}"
+                        s = f"{s:.3f}"
+
+                        writer.writerow([atom, symbol, q, s])
+
+                        table["Charge"].append(q)
+                        table["Spin"].append(s)
+                else:
+                    text_lines.append("        Atomic charges")
+                    writer.writerow(["Atom", "Element", "Charge"])
+                    for atom, symbol, q in zip(
+                        range(1, len(symbols) + 1),
+                        symbols,
+                        data["gross_atomic_charges"],
+                    ):
+                        q = f"{q:.2f}"
+                        writer.writerow([atom, symbol, q])
+
+                        table["Charge"].append(q)
+            text_lines.append(tabulate(table, headers="keys", tablefmt="grid"))
+
+        text = str(__(text, **data, indent=self.indent + 4 * " "))
+        text += "\n\n"
+        text += textwrap.indent("\n".join(text_lines), self.indent + 7 * " ")
+
+        printer.normal(text)
 
         # Put any requested results into variables or tables
         self.store_results(

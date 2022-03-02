@@ -318,8 +318,7 @@ class DftbBase(seamm.Node):
                         values.extend(line.strip().split())
 
                     if _type == "real":
-                        tmp = [float(x) for x in values]
-                        values = tmp
+                        values = [float(x) for x in values]
 
                     property_data[key] = redimension(values, dims)
                 if key not in properties:
