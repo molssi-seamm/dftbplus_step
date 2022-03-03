@@ -160,6 +160,10 @@ class Energy(DftbBase):
             context=seamm.flowchart_variables._data
         )
 
+        # Need the configuration for charges, spins, etc.
+        system, configuration = self.get_system_configuration(None)
+        atoms = configuration.atoms
+
         # Have to fix formatting for printing...
         PP = dict(P)
         for key in PP:
@@ -206,6 +210,11 @@ class Energy(DftbBase):
                 hamiltonian["SCCTolerance"] = P["SCCTolerance"]
                 hamiltonian["MaxSCCIterations"] = P["MaxSCCIterations"]
                 hamiltonian["ShellResolvedSCC"] = P["ShellResolvedSCC"].capitalize()
+
+                if P["use atom charges"] == "yes" and "charge" in atoms:
+                    hamiltonian["InitialCharges"] = {
+                        "AllAtomCharges": [*atoms["charge"]]
+                    }
 
                 third_order = P["ThirdOrder"]
                 if third_order == "Default for parameters":
@@ -265,8 +274,6 @@ class Energy(DftbBase):
             hamiltonian["SCCTolerance"] = P["SCCTolerance"]
             hamiltonian["MaxSCCIterations"] = P["MaxSCCIterations"]
 
-        system, configuration = self.get_system_configuration(None)
-
         # Handle charge and spin
         hamiltonian["Charge"] = configuration.charge
         multiplicity = configuration.spin_multiplicity
@@ -276,7 +283,6 @@ class Energy(DftbBase):
         else:
             noncolinear = P["SpinPolarisation"] == "noncolinear"
 
-            atoms = configuration.atoms
             have_spins = "spin" in atoms
 
             H = hamiltonian["SpinPolarisation"] = {}
@@ -442,10 +448,10 @@ class Energy(DftbBase):
         system, configuration = self.get_system_configuration(None)
         symbols = configuration.atoms.symbols
 
+        system, configuration = self.get_system_configuration(None)
+        atoms = configuration.atoms
         if "gross_atomic_charges" in data:
             # Add to atoms (in coordinate table)
-            system, configuration = self.get_system_configuration(None)
-            atoms = configuration.atoms
             if "charge" not in atoms:
                 atoms.add_attribute(
                     "charge", coltype="float", configuration_dependent=True
@@ -499,6 +505,13 @@ class Energy(DftbBase):
                         colalign=("center", "center"),
                     )
                 )
+        if "gross_atomic_spins" in data:
+            # Add to atoms (in coordinate table)
+            if "spin" not in atoms:
+                atoms.add_attribute(
+                    "spin", coltype="float", configuration_dependent=True
+                )
+            atoms["spin"][0:] = data["gross_atomic_spins"][0]
 
         text = str(__(text, **data, indent=self.indent + 4 * " "))
         text += "\n\n"

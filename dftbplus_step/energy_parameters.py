@@ -108,6 +108,15 @@ class EnergyParameters(seamm.Parameters):
                 "support this, it will be ignored."
             ),
         },
+        "use atom charges": {
+            "default": "yes",
+            "kind": "string",
+            "default_units": "",
+            "enumeration": ("yes", "no"),
+            "format_string": "",
+            "description": "Use existing atomic charges:",
+            "help_text": "Whether to use existing charges on the atoms.",
+        },
         "ThirdOrder": {
             "default": "Default for parameters",
             "kind": "string",
@@ -242,6 +251,15 @@ class EnergyParameters(seamm.Parameters):
                 "Whether to use shell-resolved spin. If the parameter set does not "
                 "support this, it will be ignored."
             ),
+        },
+        "use atom spins": {
+            "default": "yes",
+            "kind": "string",
+            "default_units": "",
+            "enumeration": ("yes", "no"),
+            "format_string": "",
+            "description": "Use existing atomic spins:",
+            "help_text": "Whether to use existing spins on the atoms.",
         },
     }
 
