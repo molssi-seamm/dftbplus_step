@@ -308,6 +308,13 @@ class Dftbplus(seamm.Node):
 
         parser.add_argument(
             parser_name,
+            "--max-atoms-to-print",
+            default=25,
+            help="Maximum number of atoms to print charges, etc.",
+        )
+
+        parser.add_argument(
+            parser_name,
             "--html",
             action="store_true",
             help="whether to write out html files for graphs, etc.",

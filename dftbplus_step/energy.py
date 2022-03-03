@@ -405,6 +405,8 @@ class Energy(DftbBase):
         """Parse the output and generating the text output and store the
         data in variables for other stages to access
         """
+        options = self.parent.options
+
         # Read the detailed output file to get the number of iterations
         directory = Path(self.directory)
         path = directory / "detailed.out"
@@ -441,6 +443,16 @@ class Energy(DftbBase):
         symbols = configuration.atoms.symbols
 
         if "gross_atomic_charges" in data:
+            # Add to atoms (in coordinate table)
+            system, configuration = self.get_system_configuration(None)
+            atoms = configuration.atoms
+            if "charge" not in atoms:
+                atoms.add_attribute(
+                    "charge", coltype="float", configuration_dependent=True
+                )
+            atoms["charge"][0:] = data["gross_atomic_charges"]
+
+            # Print the charges and dump to a csv file
             table = {
                 "Atom": [*range(1, len(symbols) + 1)],
                 "Element": symbols,
@@ -449,7 +461,7 @@ class Energy(DftbBase):
             with open(directory / "atom_properties.csv", "w", newline="") as fd:
                 writer = csv.writer(fd)
                 if "gross_atomic_spins" in data:
-                    text_lines.append("        Atomic charges and spins")
+                    header = "        Atomic charges and spins"
                     table["Spin"] = []
                     writer.writerow(["Atom", "Element", "Charge", "Spin"])
                     for atom, symbol, q, s in zip(
@@ -466,7 +478,7 @@ class Energy(DftbBase):
                         table["Charge"].append(q)
                         table["Spin"].append(s)
                 else:
-                    text_lines.append("        Atomic charges")
+                    header = "        Atomic charges"
                     writer.writerow(["Atom", "Element", "Charge"])
                     for atom, symbol, q in zip(
                         range(1, len(symbols) + 1),
@@ -477,7 +489,16 @@ class Energy(DftbBase):
                         writer.writerow([atom, symbol, q])
 
                         table["Charge"].append(q)
-            text_lines.append(tabulate(table, headers="keys", tablefmt="grid"))
+            if len(symbols) <= int(options["max_atoms_to_print"]):
+                text_lines.append(header)
+                text_lines.append(
+                    tabulate(
+                        table,
+                        headers="keys",
+                        tablefmt="psql",
+                        colalign=("center", "center"),
+                    )
+                )
 
         text = str(__(text, **data, indent=self.indent + 4 * " "))
         text += "\n\n"
