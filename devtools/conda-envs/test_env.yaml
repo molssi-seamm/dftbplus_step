@@ -7,8 +7,9 @@ dependencies:
   - pip
 
   # molsystem requires, and only available via Conda.
-  - openbabel
   - seamm
+  - seamm_util
+  - tabulate
 
   # Testing
   - black
