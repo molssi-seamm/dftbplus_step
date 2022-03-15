@@ -2,13 +2,23 @@
 
 """Setup DFTB+"""
 
+import csv
+
+try:
+    import importlib.metadata as implib
+except Exception:
+    import importlib_metadata as implib
+import json
 import logging
 from pathlib import Path
+import textwrap
+
+from tabulate import tabulate
 
 import dftbplus_step
 import seamm
 import seamm.data
-from seamm_util import Q_, units_class
+from seamm_util import Q_, units_class, element_data
 import seamm_util.printing as printing
 from seamm_util.printing import FormattedText as __
 
@@ -105,16 +115,36 @@ class Energy(DftbBase):
                     "using the D3H5 method."
                 )
 
+        if P["SpinPolarisation"] == "none":
+            text += (
+                " Closed shell systems will be spin-restricted. Open-shell will be "
+                "spin-unrestricted. "
+            )
+        elif P["SpinPolarisation"] == "colinear":
+            text += (
+                " The system will be handled with spin, starting either from spins on "
+                "the structure, if present, or the spin-multiplicity of the system."
+            )
+        elif P["SpinPolarisation"] == "noncolinear":
+            text += (
+                " The system will be handled using noncolinear spins, starting "
+                "from spins on the atoms in the structure."
+            )
+        if P["RelaxTotalSpin"] == "no":
+            text += " Any spins will be fixed at the initial value."
+        else:
+            text += " Any spins will be optimized."
+
         kmethod = P["k-grid method"]
         if kmethod == "grid spacing":
             text += (
-                " If the system is periodic the integration will use a"
-                f" Monkhorst-Pack grid with a spacing of {P['k-spacing']}."
+                " For periodic system a Monkhorst-Pack grid with a spacing of "
+                f"{P['k-spacing']} will be used."
             )
         elif kmethod == "supercell folding":
             text += (
-                " If the system is periodic, the integration will use a"
-                f" Monkhorst-Pack {P['na']} x{P['nb']} x{P['nc']} grid."
+                " For periodic systems a {P['na']} x{P['nb']} x{P['nc']} "
+                "Monkhorst-Pack grid will be used."
             )
 
         return self.header + "\n" + __(text, indent=4 * " ").__str__()
@@ -129,6 +159,10 @@ class Energy(DftbBase):
         P = self.parameters.current_values_to_dict(
             context=seamm.flowchart_variables._data
         )
+
+        # Need the configuration for charges, spins, etc.
+        system, configuration = self.get_system_configuration(None)
+        atoms = configuration.atoms
 
         # Have to fix formatting for printing...
         PP = dict(P)
@@ -175,6 +209,12 @@ class Energy(DftbBase):
                 hamiltonian["SCC"] = "Yes"
                 hamiltonian["SCCTolerance"] = P["SCCTolerance"]
                 hamiltonian["MaxSCCIterations"] = P["MaxSCCIterations"]
+                hamiltonian["ShellResolvedSCC"] = P["ShellResolvedSCC"].capitalize()
+
+                if P["use atom charges"] == "yes" and "charge" in atoms:
+                    hamiltonian["InitialCharges"] = {
+                        "AllAtomCharges": [*atoms["charge"]]
+                    }
 
                 third_order = P["ThirdOrder"]
                 if third_order == "Default for parameters":
@@ -234,17 +274,100 @@ class Energy(DftbBase):
             hamiltonian["SCCTolerance"] = P["SCCTolerance"]
             hamiltonian["MaxSCCIterations"] = P["MaxSCCIterations"]
 
-        system, configuration = self.get_system_configuration(None)
-
         # Handle charge and spin
         hamiltonian["Charge"] = configuration.charge
-
         multiplicity = configuration.spin_multiplicity
-        if multiplicity > 1:
-            # Need to run spinpolarized
-            hamiltonian["SpinPolarisation"] = {
-                "Colinear": {"UnpairedElectrons": multiplicity - 1}
-            }
+
+        if multiplicity == 1 and P["SpinPolarisation"] == "none":
+            hamiltonian["SpinPolarisation"] = {}
+        else:
+            noncolinear = P["SpinPolarisation"] == "noncolinear"
+
+            have_spins = "spin" in atoms
+
+            H = hamiltonian["SpinPolarisation"] = {}
+            if noncolinear:
+                section = H["NonColinear"] = {}
+            else:
+                section = H["Colinear"] = {}
+                if have_spins:
+                    section["InitialSpins"] = {"AllAtomSpins": [*atoms["spin"]]}
+                else:
+                    section["UnpairedElectrons"] = multiplicity - 1
+
+            section["RelaxTotalSpin"] = P["RelaxTotalSpin"].capitalize()
+
+            # Get the spin constants
+            package = self.__module__.split(".")[0]
+            files = [
+                p for p in implib.files(package) if p.name == "spin-constants.json"
+            ]
+            if len(files) != 1:
+                raise RuntimeError(
+                    "Can't find spin-constants.json file. Check the installation!"
+                )
+            data = files[0].read_text()
+            spin_constant_data = json.loads(data)
+
+            # First check if we have shell resolved constants or not
+            spin_constants = hamiltonian["SpinConstants"] = {}
+            symbols = sorted([*set(atoms.symbols)])
+            dataset_name = self.parent._hamiltonian
+            # e.g. "DFTB - mio"
+            key = dataset_name.split(" - ")[1]
+            if key in spin_constant_data:
+                constants = spin_constant_data[key]
+            else:
+                constants = spin_constant_data["GGA"]
+
+            # Bit of a kludgy test. If not shell-resolved there is one constant
+            # per shell, i.e. 1, 2 or 3 for s, p, d. If reolved, there are 1, 4, 9.
+            shell_resolved = False
+            for symbol in symbols:
+                if len(constants[symbol]) > 3:
+                    shell_resolved = True
+                    break
+
+            if shell_resolved:
+                if P["ShellResolvedSpin"] == "yes":
+                    spin_constants["ShellResolvedSpin"] = "Yes"
+                else:
+                    spin_constants["ShellResolvedSpin"] = "No"
+                    shell_resolved = False
+            else:
+                spin_constants["ShellResolvedSpin"] = "No"
+
+            # And add them and the control parameters
+            if shell_resolved:
+                for symbol in symbols:
+                    spin_constants[symbol] = (
+                        "{" + " ".join([str(c) for c in constants[symbol]]) + "}"
+                    )
+            else:
+                for symbol in symbols:
+                    shells = element_data[symbol]["electron configuration"]
+                    shell = shells.split()[-1]
+                    tmp = constants[symbol]
+                    if "s" in shell:
+                        spin_constants[symbol] = str(tmp[0])
+                    elif "p" in shell:
+                        if len(tmp) == 4:
+                            spin_constants[symbol] = str(tmp[3])
+                        elif len(tmp) == 9:
+                            spin_constants[symbol] = str(tmp[4])
+                        else:
+                            raise RuntimeError(
+                                f"Error in spin constants for {symbol}: {tmp}"
+                            )
+                    elif "d" in shell:
+                        if len(tmp) == 9:
+                            spin_constants[symbol] = str(tmp[8])
+                        else:
+                            raise RuntimeError(
+                                f"Error in spin constants for {symbol}: {tmp}"
+                            )
+                    else:
+                        raise RuntimeError(f"Can't handle spin constants for {symbol}")
 
         # Integration grid in reciprocal space
         if configuration.periodicity == 3:
@@ -288,14 +411,28 @@ class Energy(DftbBase):
         """Parse the output and generating the text output and store the
         data in variables for other stages to access
         """
+        options = self.parent.options
+
+        # Read the detailed output file to get the number of iterations
+        directory = Path(self.directory)
+        path = directory / "detailed.out"
+        lines = iter(path.read_text().splitlines())
+        data["scc error"] = None
+        for line in lines:
+            if "SCC error" in line:
+                tmp = next(lines).split()
+                data["scc error"] = float(tmp[3])
+
         # Print the key results
         text = "The total energy is {total_energy:.6f} E_h."
+        if data["scc error"] is not None:
+            text += " The charges converged to {scc error:.6f}."
 
         # Calculate the energy of formation
         if self.parent._reference_energy is not None:
             dE = data["total_energy"] - self.parent._reference_energy
             dE = Q_(dE, "hartree").to("kJ/mol").magnitude
-            text += f" The calculated formation energy is {dE:.2f} kJ/mol."
+            text += f" The calculated formation energy is {dE:.1f} kJ/mol."
             data["energy of formation"] = dE
         else:
             text += " Could not calculate the formation energy because some reference "
@@ -306,7 +443,79 @@ class Energy(DftbBase):
         wd = Path(self.directory)
         self.dos(wd / "band.out")
 
-        printer.normal(__(text, **data, indent=self.indent + 4 * " "))
+        text_lines = []
+        # Get charges and spins, etc.
+        system, configuration = self.get_system_configuration(None)
+        symbols = configuration.atoms.symbols
+        atoms = configuration.atoms
+        if "gross_atomic_charges" in data:
+            # Add to atoms (in coordinate table)
+            if "charge" not in atoms:
+                atoms.add_attribute(
+                    "charge", coltype="float", configuration_dependent=True
+                )
+            atoms["charge"][0:] = data["gross_atomic_charges"]
+
+            # Print the charges and dump to a csv file
+            table = {
+                "Atom": [*range(1, len(symbols) + 1)],
+                "Element": symbols,
+                "Charge": [],
+            }
+            with open(directory / "atom_properties.csv", "w", newline="") as fd:
+                writer = csv.writer(fd)
+                if "gross_atomic_spins" in data:
+                    header = "        Atomic charges and spins"
+                    table["Spin"] = []
+                    writer.writerow(["Atom", "Element", "Charge", "Spin"])
+                    for atom, symbol, q, s in zip(
+                        range(1, len(symbols) + 1),
+                        symbols,
+                        data["gross_atomic_charges"],
+                        data["gross_atomic_spins"][0],
+                    ):
+                        q = f"{q:.3f}"
+                        s = f"{s:.3f}"
+
+                        writer.writerow([atom, symbol, q, s])
+
+                        table["Charge"].append(q)
+                        table["Spin"].append(s)
+                else:
+                    header = "        Atomic charges"
+                    writer.writerow(["Atom", "Element", "Charge"])
+                    for atom, symbol, q in zip(
+                        range(1, len(symbols) + 1),
+                        symbols,
+                        data["gross_atomic_charges"],
+                    ):
+                        q = f"{q:.2f}"
+                        writer.writerow([atom, symbol, q])
+
+                        table["Charge"].append(q)
+            if len(symbols) <= int(options["max_atoms_to_print"]):
+                text_lines.append(header)
+                text_lines.append(
+                    tabulate(
+                        table,
+                        headers="keys",
+                        tablefmt="psql",
+                        colalign=("center", "center"),
+                    )
+                )
+        if "gross_atomic_spins" in data:
+            # Add to atoms (in coordinate table)
+            if "spin" not in atoms:
+                atoms.add_attribute(
+                    "spin", coltype="float", configuration_dependent=True
+                )
+            atoms["spin"][0:] = data["gross_atomic_spins"][0]
+
+        text = str(__(text, **data, indent=self.indent + 4 * " "))
+        text += "\n\n"
+        text += textwrap.indent("\n".join(text_lines), self.indent + 7 * " ")
+
+        printer.normal(text)
 
         # Put any requested results into variables or tables
         self.store_results(
