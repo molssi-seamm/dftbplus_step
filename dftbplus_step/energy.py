@@ -447,8 +447,6 @@ class Energy(DftbBase):
         # Get charges and spins, etc.
         system, configuration = self.get_system_configuration(None)
         symbols = configuration.atoms.symbols
-
-        system, configuration = self.get_system_configuration(None)
         atoms = configuration.atoms
         if "gross_atomic_charges" in data:
             # Add to atoms (in coordinate table)
