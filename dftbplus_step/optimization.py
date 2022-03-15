@@ -222,4 +222,5 @@ class Optimization(dftbplus_step.Energy):
         printer.normal(__(text, **data, indent=self.indent + 4 * " "))
 
         printer.normal("\n")
+
         super().analyze(indent=indent, data=data, out=out)
