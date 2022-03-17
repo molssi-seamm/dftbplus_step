@@ -15,6 +15,7 @@ import pandas
 
 import dftbplus_step
 from .dftbplus import deep_merge, dict_to_hsd, parse_gen_file
+from molsystem.elements import to_symbols
 import seamm
 import seamm_util.printing as printing
 
@@ -280,6 +281,99 @@ class DftbBase(seamm.Node):
             figure.template = "line.html_template"
             figure.dump(wd / "DOS.html")
 
+    def geometry(self):
+        """Create the input for DFTB+ for the geometry.
+
+        Example::
+
+            Geometry = {
+                TypeNames = { "Ga" "As" }
+                TypesAndCoordinates [Angstrom] = {
+                    1 0.000000 0.000000 0.000000
+                    2 1.356773 1.356773 1.356773
+                }
+                Periodic = Yes
+                LatticeVectors [Angstrom] = {
+                    2.713546 2.713546 0.
+                    0. 2.713546 2.713546
+                    2.713546 0. 2.713546
+                }
+            }
+        """
+        _, configuration = self.get_system_configuration(None)
+
+        result = "Geometry = {\n"
+
+        elements = set(configuration.atoms.symbols)
+        elements = sorted([*elements])
+        names = '{"' + '" "'.join(elements) + '"}'
+        result += f"    TypeNames = {names}\n"
+
+        if configuration.periodicity == 0:
+            result += "    TypesAndCoordinates [Angstrom] = {\n"
+            for element, xyz in zip(
+                configuration.atoms.symbols,
+                configuration.atoms.get_coordinates(fractionals=False),
+            ):
+                index = elements.index(element)
+                x, y, z = xyz
+                result += f"        {index+1:>2} {x:10.6f} {y:10.6f} {z:10.6f}\n"
+            result += "    }\n"
+
+            # The reference energy, if available
+            if self.parent._reference_energies is None:
+                self.parent._reference_energy = None
+            else:
+                energy = 0.0
+                for el in configuration.atoms.symbols:
+                    energy += self.parent._reference_energies[el]
+                self.parent._reference_energy = energy
+        elif configuration.periodicity == 3:
+            if "primitive cell" in self.parameters:
+                use_primitive_cell = self.parameters["primitive cell"].get(
+                    context=seamm.flowchart_variables._data
+                )
+            else:
+                use_primitive_cell = True
+
+            if use_primitive_cell:
+                # Write the structure using the primitive cell
+                lattice, fractionals, atomic_numbers = configuration.primitive_cell()
+            else:
+                # Use the full cell
+                lattice = configuration.cell.vectors()
+                fractionals = configuration.atoms.get_coordinates(fractionals=True)
+                atomic_numbers = configuration.atoms.atomic_numbers
+
+            symbols = to_symbols(atomic_numbers)
+
+            result += "   Periodic = Yes\n"
+            result += "   LatticeVectors [Angstrom] = {\n"
+
+            for xyz in lattice:
+                x, y, z = xyz
+                result += f"        {x:15.9f} {y:15.9f} {z:15.9f}\n"
+            result += "    }\n"
+            result += "    TypesAndCoordinates [relative] = {\n"
+            for element, xyz in zip(symbols, fractionals):
+                index = elements.index(element)
+                x, y, z = xyz
+                result += f"        {index+1:>2} {x:15.9f} {y:15.9f} {z:15.9f}\n"
+            result += "    }\n"
+
+            # The reference energy, if available
+            if self.parent._reference_energies is None:
+                self.parent._reference_energy = None
+            else:
+                energy = 0.0
+                for el in symbols:
+                    energy += self.parent._reference_energies[el]
+                self.parent._reference_energy = energy
+
+        result += "}\n"
+
+        return result
+
     def parse_results(self, lines):
         """Digest the data in the results.tag file."""
 
@@ -355,7 +449,7 @@ class DftbBase(seamm.Node):
         deep_merge(input_data, result)
 
         hsd = dict_to_hsd(input_data)
-        hsd += self.parent.geometry()
+        hsd += self.geometry()
 
         # The header part of the output
         for value in self.description:

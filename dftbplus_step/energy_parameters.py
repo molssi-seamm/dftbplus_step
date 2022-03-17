@@ -62,6 +62,15 @@ class EnergyParameters(seamm.Parameters):
     """
 
     parameters = {
+        "primitive cell": {
+            "default": "Yes",
+            "kind": "boolean",
+            "default_units": "",
+            "enumeration": ("Yes", "No"),
+            "format_string": "",
+            "description": "Use primitive cell:",
+            "help_text": "Whether to use the primitive cell for the calculation.",
+        },
         "SCC": {
             "default": "Yes",
             "kind": "string",

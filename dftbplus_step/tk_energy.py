@@ -112,6 +112,9 @@ class TkEnergy(seamm.TkNode):
         widgets2 = []
 
         row = 0
+        self["primitive cell"].grid(row=row, column=0, columnspan=3, sticky=tk.EW)
+        widgets.append(self["primitive cell"])
+        row += 1
         self["SCC"].grid(row=row, column=0, columnspan=3, sticky=tk.EW)
         widgets.append(self["SCC"])
         row += 1
