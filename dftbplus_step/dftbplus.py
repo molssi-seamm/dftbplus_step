@@ -15,7 +15,6 @@ import pprint  # noqa: F401
 import sys
 
 import dftbplus_step
-from molsystem.elements import to_symbols
 import seamm
 import seamm_util
 import seamm_util.printing as printing
@@ -468,82 +467,3 @@ class Dftbplus(seamm.Node):
             node.analyze(data=data)
 
             node = node.next()
-
-    def geometry(self):
-        """Create the input for DFTB+ for the geometry.
-
-        Example::
-
-            Geometry = {
-                TypeNames = { "Ga" "As" }
-                TypesAndCoordinates [Angstrom] = {
-                    1 0.000000 0.000000 0.000000
-                    2 1.356773 1.356773 1.356773
-                }
-                Periodic = Yes
-                LatticeVectors [Angstrom] = {
-                    2.713546 2.713546 0.
-                    0. 2.713546 2.713546
-                    2.713546 0. 2.713546
-                }
-            }
-        """
-        _, configuration = self.get_system_configuration(None)
-
-        result = "Geometry = {\n"
-
-        elements = set(configuration.atoms.symbols)
-        elements = sorted([*elements])
-        names = '{"' + '" "'.join(elements) + '"}'
-        result += f"    TypeNames = {names}\n"
-
-        if configuration.periodicity == 0:
-            result += "    TypesAndCoordinates [Angstrom] = {\n"
-            for element, xyz in zip(
-                configuration.atoms.symbols,
-                configuration.atoms.get_coordinates(fractionals=False),
-            ):
-                index = elements.index(element)
-                x, y, z = xyz
-                result += f"        {index+1:>2} {x:10.6f} {y:10.6f} {z:10.6f}\n"
-            result += "    }\n"
-
-            # The reference energy, if available
-            if self._reference_energies is None:
-                self._reference_energy = None
-            else:
-                energy = 0.0
-                for el in configuration.atoms.symbols:
-                    energy += self._reference_energies[el]
-                self._reference_energy = energy
-        elif configuration.periodicity == 3:
-            # Write the structure using the primitive cell
-            lattice, fractionals, atomic_numbers = configuration.primitive_cell()
-            symbols = to_symbols(atomic_numbers)
-
-            result += "   Periodic = Yes\n"
-            result += "   LatticeVectors [Angstrom] = {\n"
-
-            for xyz in lattice:
-                x, y, z = xyz
-                result += f"        {x:15.9f} {y:15.9f} {z:15.9f}\n"
-            result += "    }\n"
-            result += "    TypesAndCoordinates [relative] = {\n"
-            for element, xyz in zip(symbols, fractionals):
-                index = elements.index(element)
-                x, y, z = xyz
-                result += f"        {index+1:>2} {x:15.9f} {y:15.9f} {z:15.9f}\n"
-            result += "    }\n"
-
-            # The reference energy, if available
-            if self._reference_energies is None:
-                self._reference_energy = None
-            else:
-                energy = 0.0
-                for el in symbols:
-                    energy += self._reference_energies[el]
-                self._reference_energy = energy
-
-        result += "}\n"
-
-        return result
