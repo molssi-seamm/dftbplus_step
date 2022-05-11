@@ -212,9 +212,14 @@ class Energy(DftbBase):
                 hamiltonian["ShellResolvedSCC"] = P["ShellResolvedSCC"].capitalize()
 
                 if P["use atom charges"] == "yes" and "charge" in atoms:
-                    hamiltonian["InitialCharges"] = {
-                        "AllAtomCharges": [*atoms["charge"]]
-                    }
+                    skip = False
+                    for tmp in atoms["charge"]:
+                        if tmp is None:
+                            skip = True
+                    if not skip:
+                        hamiltonian["InitialCharges"] = {
+                            "AllAtomCharges": [*atoms["charge"]]
+                        }
 
                 third_order = P["ThirdOrder"]
                 if third_order == "Default for parameters":
@@ -284,6 +289,10 @@ class Energy(DftbBase):
             noncolinear = P["SpinPolarisation"] == "noncolinear"
 
             have_spins = "spin" in atoms
+            if have_spins:
+                for tmp in atoms["spin"]:
+                    if tmp is None:
+                        have_spins = False
 
             H = hamiltonian["SpinPolarisation"] = {}
             if noncolinear:
