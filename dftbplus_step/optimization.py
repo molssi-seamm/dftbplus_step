@@ -46,7 +46,7 @@ class Optimization(dftbplus_step.Energy):
 
     def description_text(self, P=None):
         """Prepare information about what this node will do"""
-        if not P:
+        if P is None:
             P = self.parameters.values_to_dict()
 
         tmp = super().description_text(P)

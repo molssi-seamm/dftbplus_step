@@ -61,7 +61,7 @@ class Energy(DftbBase):
 
     def description_text(self, P=None):
         """Prepare information about what this node will do"""
-        if not P:
+        if P is None:
             P = self.parameters.values_to_dict()
 
         if P["SCC"] == "No" and not self.is_expr(P["SCC"]):
@@ -143,7 +143,7 @@ class Energy(DftbBase):
             )
         elif kmethod == "supercell folding":
             text += (
-                " For periodic systems a {P['na']} x{P['nb']} x{P['nc']} "
+                f" For periodic systems a {P['na']} x{P['nb']} x{P['nc']} "
                 "Monkhorst-Pack grid will be used."
             )
 
