@@ -61,7 +61,7 @@ class Energy(DftbBase):
 
     def description_text(self, P=None):
         """Prepare information about what this node will do"""
-        if not P:
+        if P is None:
             P = self.parameters.values_to_dict()
 
         if P["SCC"] == "No" and not self.is_expr(P["SCC"]):
@@ -143,7 +143,7 @@ class Energy(DftbBase):
             )
         elif kmethod == "supercell folding":
             text += (
-                " For periodic systems a {P['na']} x{P['nb']} x{P['nc']} "
+                f" For periodic systems a {P['na']} x{P['nb']} x{P['nc']} "
                 "Monkhorst-Pack grid will be used."
             )
 
@@ -212,9 +212,14 @@ class Energy(DftbBase):
                 hamiltonian["ShellResolvedSCC"] = P["ShellResolvedSCC"].capitalize()
 
                 if P["use atom charges"] == "yes" and "charge" in atoms:
-                    hamiltonian["InitialCharges"] = {
-                        "AllAtomCharges": [*atoms["charge"]]
-                    }
+                    skip = False
+                    for tmp in atoms["charge"]:
+                        if tmp is None:
+                            skip = True
+                    if not skip:
+                        hamiltonian["InitialCharges"] = {
+                            "AllAtomCharges": [*atoms["charge"]]
+                        }
 
                 third_order = P["ThirdOrder"]
                 if third_order == "Default for parameters":
@@ -284,6 +289,10 @@ class Energy(DftbBase):
             noncolinear = P["SpinPolarisation"] == "noncolinear"
 
             have_spins = "spin" in atoms
+            if have_spins:
+                for tmp in atoms["spin"]:
+                    if tmp is None:
+                        have_spins = False
 
             H = hamiltonian["SpinPolarisation"] = {}
             if noncolinear:
