@@ -109,6 +109,10 @@ class BandStructure(DftbBase):
 
             dftb["KPointsAndWeights"] = self.kpoints(P["nPoints"])
 
+            # Cannot use initial charges when reading charges from file.
+            if "InitialCharges" in dftb:
+                del dftb["InitialCharges"]
+
         result = {
             "Options": {
                 "ReadChargesAsText": "Yes",
