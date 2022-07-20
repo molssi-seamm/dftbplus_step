@@ -218,7 +218,9 @@ class Energy(DftbBase):
                             skip = True
                     if not skip:
                         hamiltonian["InitialCharges"] = {
-                            "AllAtomCharges": [*atoms["charge"]]
+                            "AllAtomCharges": "{"
+                            + f"{', '.join(str(c) for c in atoms['charge'])}"
+                            + "}"
                         }
 
                 third_order = P["ThirdOrder"]
