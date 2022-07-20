@@ -92,7 +92,7 @@ class DftbBase(seamm.Node):
         """Indicate whether this not runs or just adds input."""
         return True
 
-    def band_structure(self, input_path, sym_points, sym_names):
+    def band_structure(self, input_path, sym_points, sym_names, Efermi=[0.0]):
         """Prepare the graph for the band structure.
 
         Parameters
@@ -125,7 +125,7 @@ class DftbBase(seamm.Node):
                 index_col=0,
                 comment="!",
             )
-        # Create a graph of the DOS
+        # Create a graph of the band structure
         figure = self.create_figure(
             module_path=("seamm",),
             template="band_structure.graph_template",
@@ -154,7 +154,7 @@ class DftbBase(seamm.Node):
                     x=list(data.index),
                     xlabel="",
                     xunits="",
-                    y=list(column),
+                    y=list(column - Efermi[0]),
                     ylabel="Energy",
                     yunits="eV",
                     color="black",
@@ -170,13 +170,15 @@ class DftbBase(seamm.Node):
             figure.template = "band_structure.html_template"
             figure.dump(wd / "band_structure.html")
 
-    def dos(self, input_path):
+    def dos(self, input_path, Efermi=[0.0]):
         """Prepare the graph for the density of states.
 
         Parameters
         ----------
-        path : filename or pathlib.Path
+        input_path : filename or pathlib.Path
             The path to the band output from DFTB+.
+        Efermi : float
+            The Fermi energy in eV
         """
         wd = Path(self.directory)
         logger.info(f"Preparing DOS, {wd}")
@@ -215,7 +217,7 @@ class DftbBase(seamm.Node):
             raise RuntimeError(f"DOS has {n_columns} columns of data.")
 
         dE = data.index[1] - data.index[0]
-        x0 = data.index[0]
+        x0 = data.index[0] - Efermi[0]
 
         # Create a graph of the DOS
         figure = self.create_figure(
