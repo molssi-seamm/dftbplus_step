@@ -451,8 +451,12 @@ class Energy(DftbBase):
             data["energy of formation"] = None
 
         # Prepare the DOS graph(s)
+        if "fermi_level" in data:
+            Efermi = list(Q_(data["fermi_level"], "hartree").to("eV").magnitude)
+        else:
+            Efermi = [0.0]
         wd = Path(self.directory)
-        self.dos(wd / "band.out")
+        self.dos(wd / "band.out", Efermi=Efermi)
 
         text_lines = []
         # Get charges and spins, etc.

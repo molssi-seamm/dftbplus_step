@@ -13,7 +13,7 @@ import seekpath
 import dftbplus_step
 import seamm
 import seamm.data
-from seamm_util import units_class
+from seamm_util import Q_, units_class
 import seamm_util.printing as printing
 from seamm_util.printing import FormattedText as __
 
@@ -98,7 +98,6 @@ class BandStructure(DftbBase):
         directory = Path(self.directory)
         to_path = directory / "charges.dat"
         from_path = directory.parent / str(step_no) / "charges.dat"
-        print(f"copy {from_path} {to_path}")
         shutil.copy2(from_path, to_path)
 
         H = energy_in["Hamiltonian"]
@@ -129,8 +128,13 @@ class BandStructure(DftbBase):
         text = "Prepared the band structure graph."
 
         # Prepare the band structure graph(s)
+        if "fermi_level" in data:
+            Efermi = Q_(data["fermi_level"], "hartree").to("eV").magnitude
+        else:
+            Efermi = 0.0
+
         wd = Path(self.directory)
-        self.band_structure(wd / "band.out", self.points, self.labels)
+        self.band_structure(wd / "band.out", self.points, self.labels, Efermi=Efermi)
 
         printer.normal(__(text, **data, indent=self.indent + 4 * " "))
 
