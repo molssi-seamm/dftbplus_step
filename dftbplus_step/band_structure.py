@@ -152,7 +152,7 @@ class BandStructure(DftbBase):
         cell_data = configuration.primitive_cell()
 
         # Get the lines
-        seekpath_output = seekpath.get_path(cell_data, with_time_reversal=True)
+        seekpath_output = seekpath.get_path(cell_data[0:3], with_time_reversal=True)
 
         # Get the total length of the path.
         total_length = 0.0

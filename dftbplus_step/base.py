@@ -85,6 +85,9 @@ class DftbBase(seamm.Node):
     def __init__(
         self, flowchart=None, title="Choose Parameters", extension=None, logger=logger
     ):
+        self.mapping_from_primitive = None
+        self.mapping_to_primitive = None
+
         super().__init__(flowchart=flowchart, title=title, extension=extension)
 
     @property
@@ -340,13 +343,22 @@ class DftbBase(seamm.Node):
 
             if use_primitive_cell:
                 # Write the structure using the primitive cell
-                lattice, fractionals, atomic_numbers = configuration.primitive_cell()
+                (
+                    lattice,
+                    fractionals,
+                    atomic_numbers,
+                    self.mapping_from_primitive,
+                    self.mapping_to_primitive,
+                ) = configuration.primitive_cell()
             else:
                 # Use the full cell
                 lattice = configuration.cell.vectors()
                 fractionals = configuration.atoms.get_coordinates(fractionals=True)
                 atomic_numbers = configuration.atoms.atomic_numbers
 
+                n_atoms = len(atomic_numbers)
+                self.mapping_from_primitive = [i for i in range(n_atoms)]
+                self.mapping_to_primitive = [i for i in range(n_atoms)]
             symbols = to_symbols(atomic_numbers)
 
             result += "   Periodic = Yes\n"
@@ -446,12 +458,15 @@ class DftbBase(seamm.Node):
         # Access the options
         options = self.parent.options
 
+        # Get the geometry first, because this sets up the primitieve cell if needed
+        geom = self.geometry()
+
         input_data = copy.deepcopy(current_input)
         result = self.get_input()
         deep_merge(input_data, result)
 
         hsd = dict_to_hsd(input_data)
-        hsd += self.geometry()
+        hsd += geom
 
         # The header part of the output
         for value in self.description:

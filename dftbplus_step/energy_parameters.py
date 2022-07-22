@@ -232,10 +232,10 @@ class EnergyParameters(seamm.Parameters):
             "help_text": "The spacing of the grid in reciprocal space.",
         },
         "SpinPolarisation": {
-            "default": "none",
+            "default": "from system",
             "kind": "string",
             "default_units": "",
-            "enumeration": ("none", "collinear", "noncollinear"),
+            "enumeration": ("from system", "none", "collinear", "noncollinear"),
             "format_string": "",
             "description": "Spin polarization:",
             "help_text": "How to handle spin polarization",

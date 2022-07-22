@@ -162,6 +162,7 @@ class Energy(DftbBase):
 
         # Need the configuration for charges, spins, etc.
         system, configuration = self.get_system_configuration(None)
+        periodicity = configuration.periodicity
         atoms = configuration.atoms
 
         # Have to fix formatting for printing...
@@ -217,9 +218,15 @@ class Energy(DftbBase):
                         if tmp is None:
                             skip = True
                     if not skip:
+                        if periodicity == 0:
+                            charges = atoms["charge"]
+                        else:
+                            charges = [
+                                atoms["charge"][i] for i in self.mapping_from_primitive
+                            ]
                         hamiltonian["InitialCharges"] = {
                             "AllAtomCharges": "{"
-                            + f"{', '.join(str(c) for c in atoms['charge'])}"
+                            + f"{', '.join(str(c) for c in charges)}"
                             + "}"
                         }
 
@@ -285,24 +292,46 @@ class Energy(DftbBase):
         hamiltonian["Charge"] = configuration.charge
         multiplicity = configuration.spin_multiplicity
 
-        if multiplicity == 1 and P["SpinPolarisation"] == "none":
+        have_spins = "spin" in atoms
+        if have_spins:
+            for tmp in atoms["spin"]:
+                if tmp is None:
+                    have_spins = False
+                    break
+
+        if P["SpinPolarisation"] == "none":
+            hamiltonian["SpinPolarisation"] = {}
+        elif (
+            periodicity == 0
+            and multiplicity == 1
+            and P["SpinPolarisation"] == "from system"
+        ):
+            hamiltonian["SpinPolarisation"] = {}
+        elif (
+            periodicity != 0
+            and P["SpinPolarisation"] == "from system"
+            and multiplicity == 1
+            and not have_spins
+        ):
             hamiltonian["SpinPolarisation"] = {}
         else:
-            noncolinear = P["SpinPolarisation"] == "noncolinear"
-
-            have_spins = "spin" in atoms
-            if have_spins:
-                for tmp in atoms["spin"]:
-                    if tmp is None:
-                        have_spins = False
+            noncollinear = P["SpinPolarisation"] == "noncollinear"
 
             H = hamiltonian["SpinPolarisation"] = {}
-            if noncolinear:
-                section = H["NonColinear"] = {}
+            if noncollinear:
+                section = H["NonCollinear"] = {}
             else:
-                section = H["Colinear"] = {}
+                section = H["Collinear"] = {}
                 if have_spins:
-                    section["InitialSpins"] = {"AllAtomSpins": [*atoms["spin"]]}
+                    if periodicity == 0:
+                        spins = atoms["spin"]
+                    else:
+                        spins = [atoms["spin"][i] for i in self.mapping_from_primitive]
+                    section["InitialSpins"] = {
+                        "AllAtomSpins": "{"
+                        + f"{', '.join(str(c) for c in spins)}"
+                        + "}"
+                    }
                 else:
                     section["UnpairedElectrons"] = multiplicity - 1
 
@@ -332,7 +361,7 @@ class Energy(DftbBase):
                 constants = spin_constant_data["GGA"]
 
             # Bit of a kludgy test. If not shell-resolved there is one constant
-            # per shell, i.e. 1, 2 or 3 for s, p, d. If reolved, there are 1, 4, 9.
+            # per shell, i.e. 1, 2 or 3 for s, p, d. If resolved, there are 1, 4, 9.
             shell_resolved = False
             for symbol in symbols:
                 if len(constants[symbol]) > 3:
@@ -463,13 +492,19 @@ class Energy(DftbBase):
         system, configuration = self.get_system_configuration(None)
         symbols = configuration.atoms.symbols
         atoms = configuration.atoms
+        periodicity = configuration.periodicity
         if "gross_atomic_charges" in data:
             # Add to atoms (in coordinate table)
             if "charge" not in atoms:
                 atoms.add_attribute(
                     "charge", coltype="float", configuration_dependent=True
                 )
-            atoms["charge"][0:] = data["gross_atomic_charges"]
+            charges = data["gross_atomic_charges"]
+            if periodicity == 0:
+                atoms["charge"][0:] = charges
+            else:
+                tmp = [charges[i] for i in self.mapping_to_primitive]
+                atoms["charge"][0:] = tmp
 
             # Print the charges and dump to a csv file
             table = {
@@ -524,8 +559,12 @@ class Energy(DftbBase):
                 atoms.add_attribute(
                     "spin", coltype="float", configuration_dependent=True
                 )
-            atoms["spin"][0:] = data["gross_atomic_spins"][0]
-
+            spins = data["gross_atomic_spins"][0]
+            if periodicity == 0:
+                atoms["spin"][0:] = spins
+            else:
+                tmp = [spins[i] for i in self.mapping_to_primitive]
+                atoms["spin"][0:] = tmp
         text = str(__(text, **data, indent=self.indent + 4 * " "))
         text += "\n\n"
         text += textwrap.indent("\n".join(text_lines), self.indent + 7 * " ")
