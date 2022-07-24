@@ -4,7 +4,6 @@
 
 import logging
 from pathlib import Path
-import shutil
 import textwrap
 
 import numpy as np
@@ -40,6 +39,7 @@ class BandStructure(DftbBase):
         self.description = ["Band Structure for DFTB+"]
         self.points = None  # Points along graphs of symmetry lines
         self.labels = None  # Labels of the symmetry lines
+        self.energy_step = None  # The step that got the energy and density
 
     @property
     def header(self):
@@ -87,18 +87,10 @@ class BandStructure(DftbBase):
         self.description.append(__(self.description_text(PP), **PP, indent=self.indent))
 
         # Currently use the previous energy step as source of the density
-        energy_in = None
-        step_no = len(self.parent._steps[::-1])
-        for step in self.parent._steps[::-1]:
-            step_no -= 1
-            if isinstance(step, dftbplus_step.Energy):
-                energy_in = step.get_input()
-                break
-
-        directory = Path(self.directory)
-        to_path = directory / "charges.dat"
-        from_path = directory.parent / str(step_no) / "charges.dat"
-        shutil.copy2(from_path, to_path)
+        self.energy_step = self.get_previous_charges()
+        if self.energy_step is None:
+            raise RuntimeError("Could not find charges from previous step!")
+        energy_in = self.energy_step.get_input()
 
         H = energy_in["Hamiltonian"]
         if "DFTB" in H:
@@ -115,6 +107,7 @@ class BandStructure(DftbBase):
         result = {
             "Options": {
                 "ReadChargesAsText": "Yes",
+                "SkipChargeTest": "Yes",
             },
             "Hamiltonian": H,
         }
@@ -128,13 +121,23 @@ class BandStructure(DftbBase):
         text = "Prepared the band structure graph."
 
         # Prepare the band structure graph(s)
-        if "fermi_level" in data:
-            Efermi = Q_(data["fermi_level"], "hartree").to("eV").magnitude
+        if "fermi_level" in self.energy_step.results:
+            Efermi = list(
+                Q_(self.energy_step.results["fermi_level"], "hartree")
+                .to("eV")
+                .magnitude
+            )
         else:
-            Efermi = 0.0
+            raise RuntimeError("Serious problem in the Band Structure: no Fermi level!")
+
+        dos_path = Path(self.energy_step.directory) / "dos_total.dat"
+        if not dos_path.exists():
+            dos_path = None
 
         wd = Path(self.directory)
-        self.band_structure(wd / "band.out", self.points, self.labels, Efermi=Efermi)
+        self.band_structure(
+            wd / "band.out", self.points, self.labels, Efermi=Efermi, dos_path=dos_path
+        )
 
         printer.normal(__(text, **data, indent=self.indent + 4 * " "))
 
