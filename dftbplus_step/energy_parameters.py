@@ -117,11 +117,11 @@ class EnergyParameters(seamm.Parameters):
                 "support this, it will be ignored."
             ),
         },
-        "use atom charges": {
-            "default": "yes",
+        "initial charges": {
+            "default": "default",
             "kind": "string",
             "default_units": "",
-            "enumeration": ("yes", "no"),
+            "enumeration": ("default", "none", "from previous step", "from structure"),
             "format_string": "",
             "description": "Use existing atomic charges:",
             "help_text": "Whether to use existing charges on the atoms.",

@@ -212,21 +212,47 @@ class Energy(DftbBase):
                 hamiltonian["MaxSCCIterations"] = P["MaxSCCIterations"]
                 hamiltonian["ShellResolvedSCC"] = P["ShellResolvedSCC"].capitalize()
 
-                if P["use atom charges"] == "yes" and "charge" in atoms:
-                    skip = False
+                have_charges = "charge" in atoms
+                if have_charges:
                     for tmp in atoms["charge"]:
                         if tmp is None:
-                            skip = True
-                    if not skip:
+                            have_charges = False
+                            break
+                initial_charges = P["initial charges"]
+                if initial_charges == "default":
+                    # Use charge file from previous step or charges on atoms
+                    if self.get_previous_charges():
+                        hamiltonian["ReadInitialCharges"] = "Yes"
+                    elif have_charges:
                         if periodicity == 0:
-                            charges = atoms["charge"]
+                            charges = [*atoms["charge"]]
                         else:
                             charges = [
                                 atoms["charge"][i] for i in self.mapping_from_primitive
                             ]
+                        # Ensure sums exactly to charge
+                        delta = (configuration.charge - sum(charges)) / len(charges)
                         hamiltonian["InitialCharges"] = {
                             "AllAtomCharges": "{"
-                            + f"{', '.join(str(c) for c in charges)}"
+                            + f"{', '.join(str(c + delta) for c in charges)}"
+                            + "}"
+                        }
+                elif initial_charges == "from previous step":
+                    if self.get_previous_charges():
+                        hamiltonian["ReadInitialCharges"] = "Yes"
+                elif initial_charges == "from structure":
+                    if have_charges:
+                        if periodicity == 0:
+                            charges = [*atoms["charge"]]
+                        else:
+                            charges = [
+                                atoms["charge"][i] for i in self.mapping_from_primitive
+                            ]
+                        # Ensure sums exactly to charge
+                        delta = (configuration.charge - sum(charges)) / len(charges)
+                        hamiltonian["InitialCharges"] = {
+                            "AllAtomCharges": "{"
+                            + f"{', '.join(str(c + delta) for c in charges)}"
                             + "}"
                         }
 
@@ -322,18 +348,25 @@ class Energy(DftbBase):
                 section = H["NonCollinear"] = {}
             else:
                 section = H["Collinear"] = {}
-                if have_spins:
-                    if periodicity == 0:
-                        spins = atoms["spin"]
+                reading_charge_file = (
+                    "ReadInitialCharges" in hamiltonian
+                    and hamiltonian["ReadInitialCharges"] == "Yes"
+                )
+                if not reading_charge_file:
+                    if have_spins:
+                        if periodicity == 0:
+                            spins = atoms["spin"]
+                        else:
+                            spins = [
+                                atoms["spin"][i] for i in self.mapping_from_primitive
+                            ]
+                        section["InitialSpins"] = {
+                            "AllAtomSpins": "{"
+                            + f"{', '.join(str(c) for c in spins)}"
+                            + "}"
+                        }
                     else:
-                        spins = [atoms["spin"][i] for i in self.mapping_from_primitive]
-                    section["InitialSpins"] = {
-                        "AllAtomSpins": "{"
-                        + f"{', '.join(str(c) for c in spins)}"
-                        + "}"
-                    }
-                else:
-                    section["UnpairedElectrons"] = multiplicity - 1
+                        section["UnpairedElectrons"] = multiplicity - 1
 
             section["RelaxTotalSpin"] = P["RelaxTotalSpin"].capitalize()
 
@@ -430,11 +463,11 @@ class Energy(DftbBase):
             oc = 0.0 if nc % 2 == 1 else 0.5
             kmesh = (
                 "SupercellFolding {\n"
-                f"    {na} 0 0\n"
-                f"    0 {nb} 0\n"
-                f"    0 0 {nc}\n"
-                f"    {oa} {ob} {oc}\n"
-                "}"
+                f"            {na} 0 0\n"
+                f"            0 {nb} 0\n"
+                f"            0 0 {nc}\n"
+                f"            {oa} {ob} {oc}\n"
+                "        }"
             )
             hamiltonian["KPointsAndWeights"] = kmesh
             self.description.append(
@@ -444,6 +477,20 @@ class Energy(DftbBase):
                     indent=self.indent + 4 * " ",
                 )
             )
+
+        # If reading the charge file, use a text file
+        if (
+            "ReadInitialCharges" in hamiltonian
+            and hamiltonian["ReadInitialCharges"] == "Yes"
+        ):
+            if "Options" not in result:
+                result["Options"] = {
+                    "ReadChargesAsText": "Yes",
+                    "SkipChargeTest": "Yes",
+                }
+            else:
+                result["Options"]["ReadChargesAsText"] = "Yes"
+                result["Options"]["SkipChargeTest"] = "Yes"
 
         return result
 
