@@ -117,11 +117,11 @@ class EnergyParameters(seamm.Parameters):
                 "support this, it will be ignored."
             ),
         },
-        "use atom charges": {
-            "default": "yes",
+        "initial charges": {
+            "default": "default",
             "kind": "string",
             "default_units": "",
-            "enumeration": ("yes", "no"),
+            "enumeration": ("default", "none", "from previous step", "from structure"),
             "format_string": "",
             "description": "Use existing atomic charges:",
             "help_text": "Whether to use existing charges on the atoms.",
@@ -232,10 +232,10 @@ class EnergyParameters(seamm.Parameters):
             "help_text": "The spacing of the grid in reciprocal space.",
         },
         "SpinPolarisation": {
-            "default": "none",
+            "default": "from system",
             "kind": "string",
             "default_units": "",
-            "enumeration": ("none", "collinear", "noncollinear"),
+            "enumeration": ("from system", "none", "collinear", "noncollinear"),
             "format_string": "",
             "description": "Spin polarization:",
             "help_text": "How to handle spin polarization",

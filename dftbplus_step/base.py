@@ -8,6 +8,7 @@ import copy
 import logging
 from pathlib import Path
 import pprint
+import shutil
 import subprocess
 import traceback
 
@@ -85,6 +86,10 @@ class DftbBase(seamm.Node):
     def __init__(
         self, flowchart=None, title="Choose Parameters", extension=None, logger=logger
     ):
+        self.mapping_from_primitive = None
+        self.mapping_to_primitive = None
+        self.results = None  # Results of the calculation from the tag file.
+
         super().__init__(flowchart=flowchart, title=title, extension=extension)
 
     @property
@@ -92,7 +97,9 @@ class DftbBase(seamm.Node):
         """Indicate whether this not runs or just adds input."""
         return True
 
-    def band_structure(self, input_path, sym_points, sym_names, Efermi=[0.0]):
+    def band_structure(
+        self, input_path, sym_points, sym_names, Efermi=[0.0, 0.0], dos_path=None
+    ):
         """Prepare the graph for the band structure.
 
         Parameters
@@ -103,10 +110,14 @@ class DftbBase(seamm.Node):
         wd = Path(self.directory)
         logger.info(f"Preparing the band structure, {wd}")
 
+        spin_polarized = len(Efermi) == 2
         options = self.parent.options
         exe = Path(options["dftbplus_path"]) / "dp_bands"
 
-        command = f"{exe} {input_path} {wd / 'band'}"
+        if spin_polarized:
+            command = f"{exe} -s {input_path} {wd / 'band'}"
+        else:
+            command = f"{exe} {input_path} {wd / 'band'}"
         try:
             subprocess.check_output(
                 command, shell=True, text=True, stderr=subprocess.STDOUT
@@ -116,51 +127,217 @@ class DftbBase(seamm.Node):
             logger.warning(f"Output: {e.output}")
             return None
 
-        # Read the plot data
-        with open(wd / "band_tot.dat", "r") as fd:
-            data = pandas.read_csv(
-                fd,
-                sep=r"\s+",
-                header=None,
-                index_col=0,
-                comment="!",
-            )
         # Create a graph of the band structure
         figure = self.create_figure(
             module_path=("seamm",),
             template="band_structure.graph_template",
             title="Band Structure",
         )
-
         plot = figure.add_plot("BandStructure")
 
+        names = [
+            "\N{GREEK CAPITAL LETTER GAMMA}" if i == "GAMMA" else i for i in sym_names
+        ]
         x_axis = plot.add_axis(
             "x",
             label="",
             tickmode="array",
             tickvals=sym_points,
-            ticktext=sym_names,
+            ticktext=names,
         )
         y_axis = plot.add_axis("y", label="Energy (eV)", anchor=x_axis)
         x_axis.anchor = y_axis
 
-        i = 0
-        for label, column in data.items():
-            if i > 0:
+        if spin_polarized:
+            # Read the spin-up data
+            with open(wd / "band_s1.dat", "r") as fd:
+                data = pandas.read_csv(
+                    fd,
+                    sep=r"\s+",
+                    header=None,
+                    index_col=0,
+                    comment="!",
+                )
+
+            i = 0
+            for label, column in data.items():
+                if i > 0:
+                    plot.add_trace(
+                        x_axis=x_axis,
+                        y_axis=y_axis,
+                        name=f"\N{UPWARDS ARROW} {i}",
+                        x=list(data.index),
+                        xlabel="",
+                        xunits="",
+                        y=list(column - Efermi[0]),
+                        ylabel="Energy",
+                        yunits="eV",
+                        color="red",
+                    )
+                i = i + 1
+            # Read the spin-up data
+            with open(wd / "band_s2.dat", "r") as fd:
+                data = pandas.read_csv(
+                    fd,
+                    sep=r"\s+",
+                    header=None,
+                    index_col=0,
+                    comment="!",
+                )
+
+            i = 0
+            for label, column in data.items():
+                if i > 0:
+                    plot.add_trace(
+                        x_axis=x_axis,
+                        y_axis=y_axis,
+                        name=f"\N{DOWNWARDS ARROW} {i}",
+                        x=list(data.index),
+                        xlabel="",
+                        xunits="",
+                        y=list(column - Efermi[1]),
+                        ylabel="Energy",
+                        yunits="eV",
+                        color="blue",
+                    )
+                i = i + 1
+        else:
+            # Read the plot data
+            with open(wd / "band_tot.dat", "r") as fd:
+                data = pandas.read_csv(
+                    fd,
+                    sep=r"\s+",
+                    header=None,
+                    index_col=0,
+                    comment="!",
+                )
+
+            i = 0
+            for label, column in data.items():
+                if i > 0:
+                    plot.add_trace(
+                        x_axis=x_axis,
+                        y_axis=y_axis,
+                        name=f"band {i}",
+                        x=list(data.index),
+                        xlabel="",
+                        xunits="",
+                        y=list(column - Efermi[0]),
+                        ylabel="Energy",
+                        yunits="eV",
+                        color="black",
+                    )
+                i = i + 1
+
+        # Add the DOS plots if given
+        if dos_path is None:
+            figure.grid_plots("BandStructure")
+        else:
+            # Read the plot data
+            with open(dos_path, "r") as fd:
+                data = pandas.read_csv(
+                    fd,
+                    sep=r"\s+",
+                    header=None,
+                    comment="!",
+                    index_col=0,
+                )
+
+            n_columns = data.shape[1]
+            if n_columns == 1:
+                spin_polarized = False
+                data.rename(columns={0: "E", 1: "DOS"}, inplace=True)
+            elif n_columns == 3:
+                spin_polarized = True
+                data.rename(
+                    columns={0: "E", 1: "DOS", 2: "Up", 3: "Down"}, inplace=True
+                )
+            else:
+                raise RuntimeError(f"DOS has {n_columns} columns of data.")
+
+            if spin_polarized:
+                plot = figure.add_plot("DOS-UP")
+
+                x_axis = plot.add_axis(
+                    "x",
+                    label="DOS",
+                    anchor=y_axis,
+                    ticklabelposition="inside",
+                    autorange="reversed",
+                )
+
+                dE = data.index[1] - data.index[0]
+                y0 = data.index[0] - Efermi[0]
+
                 plot.add_trace(
                     x_axis=x_axis,
                     y_axis=y_axis,
-                    name=f"band {i}",
-                    x=list(data.index),
-                    xlabel="",
-                    xunits="",
-                    y=list(column - Efermi[0]),
-                    ylabel="Energy",
+                    name="\N{UPWARDS ARROW} DOS",
+                    y0=y0,
+                    dy=dE,
+                    ylabel="t",
                     yunits="eV",
+                    x=list(data["Up"]),
+                    xlabel="Spin up",
+                    xunits="",
+                    color="red",
+                )
+                plot = figure.add_plot("DOS-DOWN")
+
+                x_axis = plot.add_axis(
+                    "x",
+                    label="DOS",
+                    anchor=y_axis,
+                    ticklabelposition="inside",
+                )
+
+                dE = data.index[1] - data.index[0]
+                y0 = data.index[0] - Efermi[1]
+
+                plot.add_trace(
+                    x_axis=x_axis,
+                    y_axis=y_axis,
+                    name="\N{DOWNWARDS ARROW} DOS",
+                    y0=y0,
+                    dy=dE,
+                    ylabel="t",
+                    yunits="eV",
+                    x=list(data["Down"]),
+                    xlabel="Spin down",
+                    xunits="",
+                    color="blue",
+                )
+
+                figure.grid_plots("DOS-UP BandStructure - - DOS-DOWN", padx=0)
+
+            else:
+                plot = figure.add_plot("DOS")
+
+                x_axis = plot.add_axis(
+                    "x",
+                    label="DOS",
+                    anchor=y_axis,
+                    ticklabelposition="inside",
+                )
+
+                dE = data.index[1] - data.index[0]
+                y0 = data.index[0] - Efermi[0]
+
+                plot.add_trace(
+                    x_axis=x_axis,
+                    y_axis=y_axis,
+                    name="DOS",
+                    y0=y0,
+                    dy=dE,
+                    ylabel="t",
+                    yunits="eV",
+                    x=list(data["DOS"]),
+                    xlabel="DOS",
+                    xunits="",
                     color="black",
                 )
-            i = i + 1
-        figure.grid_plots("BandStructure")
+
+                figure.grid_plots("BandStructure - - DOS", padx=0)
 
         # Write it out.
         figure.dump(wd / "band_structure.graph")
@@ -340,13 +517,22 @@ class DftbBase(seamm.Node):
 
             if use_primitive_cell:
                 # Write the structure using the primitive cell
-                lattice, fractionals, atomic_numbers = configuration.primitive_cell()
+                (
+                    lattice,
+                    fractionals,
+                    atomic_numbers,
+                    self.mapping_from_primitive,
+                    self.mapping_to_primitive,
+                ) = configuration.primitive_cell()
             else:
                 # Use the full cell
                 lattice = configuration.cell.vectors()
                 fractionals = configuration.atoms.get_coordinates(fractionals=True)
                 atomic_numbers = configuration.atoms.atomic_numbers
 
+                n_atoms = len(atomic_numbers)
+                self.mapping_from_primitive = [i for i in range(n_atoms)]
+                self.mapping_to_primitive = [i for i in range(n_atoms)]
             symbols = to_symbols(atomic_numbers)
 
             result += "   Periodic = Yes\n"
@@ -375,6 +561,21 @@ class DftbBase(seamm.Node):
         result += "}\n"
 
         return result
+
+    def get_previous_charges(self):
+        """Copy charges from the previous energy step."""
+        directory = Path(self.directory)
+        step_no = len(self.parent._steps[::-1])
+        for step in self.parent._steps[::-1]:
+            step_no -= 1
+            if isinstance(step, dftbplus_step.Energy):
+                from_path = Path(step.directory) / "charges.dat"
+                if from_path.exists():
+                    to_path = directory / "charges.dat"
+                    if not to_path.exists() or not to_path.samefile(from_path):
+                        shutil.copy2(from_path, to_path)
+                    return step
+        return None
 
     def parse_results(self, lines):
         """Digest the data in the results.tag file."""
@@ -446,12 +647,15 @@ class DftbBase(seamm.Node):
         # Access the options
         options = self.parent.options
 
+        # Get the geometry first, because this sets up the primitieve cell if needed
+        geom = self.geometry()
+
         input_data = copy.deepcopy(current_input)
         result = self.get_input()
         deep_merge(input_data, result)
 
         hsd = dict_to_hsd(input_data)
-        hsd += self.geometry()
+        hsd += geom
 
         # The header part of the output
         for value in self.description:
@@ -528,16 +732,18 @@ class DftbBase(seamm.Node):
 
         # Parse the results.tag file
         if "results.tag" in result["files"]:
-            results = self.parse_results(result["results.tag"]["data"])
+            self.results = self.parse_results(result["results.tag"]["data"])
         else:
-            results = {}
+            self.results = {}
 
         # And a final structure
         if "geom.out.gen" in result["files"]:
-            results["final structure"] = parse_gen_file(result["geom.out.gen"]["data"])
+            self.results["final structure"] = parse_gen_file(
+                result["geom.out.gen"]["data"]
+            )
 
         # Analyze the results
-        self.analyze(data=results)
+        self.analyze(data=self.results)
         printer.important(" ")
 
         # Add other citations here or in the appropriate place in the code.

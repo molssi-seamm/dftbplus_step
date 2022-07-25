@@ -157,6 +157,8 @@ class Optimization(dftbplus_step.Energy):
                     lattice_in,
                     fractionals_in,
                     atomic_numbers,
+                    self.mapping_from_primitive,
+                    self.mapping_to_primitive,
                 ) = starting_configuration.primitive_cell()
 
                 tmp = configuration.update(
