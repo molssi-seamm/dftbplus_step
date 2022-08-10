@@ -400,7 +400,7 @@ class DftbBase(seamm.Node):
         figure = self.create_figure(
             module_path=("seamm",),
             template="line.graph_template",
-            title="Total DOS",
+            title="Density of States (DOS)",
         )
 
         plot = figure.add_plot("DOS")
@@ -450,6 +450,220 @@ class DftbBase(seamm.Node):
                 yunits="",
                 color="black",
             )
+
+        # Partial DOS
+        files = sorted(wd.glob("pdos*"))
+        last_element = ""
+        colors = (
+            "purple",
+            "green",
+            "cyan",
+            "gold",
+            "deeppink",
+            "turquoise",
+            "magenta",
+        )
+        total = None
+        total_up = None
+        total_dn = None
+        n_color = -1
+        color = None
+        for path in files:
+            out = path.with_suffix(".dat")
+            element = path.stem.split("_")[1].split(".")[0]
+            if element != last_element:
+                if total is not None:
+                    plot.add_trace(
+                        x_axis=x_axis,
+                        y_axis=y_axis,
+                        name=f"{last_element}_tot",
+                        x0=x0,
+                        dx=dE,
+                        xlabel="t",
+                        xunits="eV",
+                        y=list(total),
+                        ylabel=f"{last_element}_tot",
+                        yunits="",
+                        color=color,
+                    )
+                    total = None
+                if total_up is not None:
+                    plot.add_trace(
+                        x_axis=x_axis,
+                        y_axis=y_axis,
+                        name=f"{last_element}_tot\N{UPWARDS ARROW}",
+                        x0=x0,
+                        dx=dE,
+                        xlabel="t",
+                        xunits="eV",
+                        y=list(total_up),
+                        ylabel=f"{last_element}_tot\N{UPWARDS ARROW}",
+                        yunits="",
+                        color=color,
+                    )
+                    total_up = None
+                if total_dn is not None:
+                    plot.add_trace(
+                        x_axis=x_axis,
+                        y_axis=y_axis,
+                        name=f"{last_element}_tot\N{DOWNWARDS ARROW}",
+                        x0=x0,
+                        dx=dE,
+                        xlabel="t",
+                        xunits="eV",
+                        y=list(total_dn),
+                        ylabel=f"{last_element}_tot\N{DOWNWARDS ARROW}",
+                        yunits="",
+                        color=color,
+                    )
+                    total_dn = None
+                last_element = element
+                n_color += 1
+                if n_color >= len(colors):
+                    n_color = 0
+                color = colors[n_color]
+
+            shell_no = int(path.suffixes[0][1:])
+            shell = ("x", "s", "p", "d", "f")[shell_no]
+            dash = ("longdash", "dot", "dash", "dashdot", "longdashdot")[shell_no]
+
+            command = f"{exe} -w {path} {out}"
+            try:
+                subprocess.check_output(
+                    command, shell=True, text=True, stderr=subprocess.STDOUT
+                )
+            except subprocess.CalledProcessError as e:
+                logger.warning(f"Calling dp_dos, returncode = {e.returncode}")
+                logger.warning(f"Output: {e.output}")
+                return None
+
+            # Read the plot data
+            with open(out, "r") as fd:
+                data = pandas.read_csv(
+                    fd,
+                    sep=r"\s+",
+                    header=None,
+                    comment="!",
+                    index_col=0,
+                )
+
+            n_columns = data.shape[1]
+            if n_columns == 1:
+                spin_polarized = False
+                data.rename(columns={0: "E", 1: "DOS"}, inplace=True)
+            elif n_columns == 3:
+                spin_polarized = True
+                data.rename(
+                    columns={0: "E", 1: "DOS", 2: "Up", 3: "Down"}, inplace=True
+                )
+            else:
+                raise RuntimeError(f"DOS has {n_columns} columns of data.")
+
+            dE = data.index[1] - data.index[0]
+            x0 = data.index[0] - Efermi[0]
+
+            # Add the trace...
+            if spin_polarized:
+                plot.add_trace(
+                    x_axis=x_axis,
+                    y_axis=y_axis,
+                    name=f"{element}_{shell}\N{UPWARDS ARROW}",
+                    x0=x0,
+                    dx=dE,
+                    xlabel="t",
+                    xunits="eV",
+                    y=list(data["Up"]),
+                    ylabel=f"{element}_{shell}\N{UPWARDS ARROW}",
+                    yunits="",
+                    color=color,
+                    dash=dash,
+                )
+                if total_up is None:
+                    total_up = data["Up"]
+                else:
+                    total_up += data["Up"]
+                plot.add_trace(
+                    x_axis=x_axis,
+                    y_axis=y_axis,
+                    name=f"{element}_{shell}\N{DOWNWARDS ARROW}",
+                    x0=x0,
+                    dx=dE,
+                    xlabel="t",
+                    xunits="eV",
+                    y=list(data["Down"]),
+                    ylabel=f"{element}_{shell}\N{DOWNWARDS ARROW}",
+                    yunits="",
+                    color=color,
+                    dash=dash,
+                )
+                if total_dn is None:
+                    total_dn = data["Down"]
+                else:
+                    total_dn += data["Down"]
+            else:
+                plot.add_trace(
+                    x_axis=x_axis,
+                    y_axis=y_axis,
+                    name=f"{element}_{shell}",
+                    x0=x0,
+                    dx=dE,
+                    xlabel="t",
+                    xunits="eV",
+                    y=list(data["DOS"]),
+                    ylabel=f"{element}_{shell}",
+                    yunits="",
+                    color=color,
+                    dash=dash,
+                )
+                if total is None:
+                    total = data["DOS"]
+                else:
+                    total += data["DOS"]
+
+        # The last total traces.
+        if total is not None:
+            plot.add_trace(
+                x_axis=x_axis,
+                y_axis=y_axis,
+                name=f"{last_element}_tot",
+                x0=x0,
+                dx=dE,
+                xlabel="t",
+                xunits="eV",
+                y=list(total),
+                ylabel=f"{last_element}_tot",
+                yunits="",
+                color=color,
+            )
+        if total_up is not None:
+            plot.add_trace(
+                x_axis=x_axis,
+                y_axis=y_axis,
+                name=f"{last_element}_tot\N{UPWARDS ARROW}",
+                x0=x0,
+                dx=dE,
+                xlabel="t",
+                xunits="eV",
+                y=list(total_up),
+                ylabel=f"{last_element}_tot\N{UPWARDS ARROW}",
+                yunits="",
+                color=color,
+            )
+        if total_dn is not None:
+            plot.add_trace(
+                x_axis=x_axis,
+                y_axis=y_axis,
+                name=f"{last_element}_tot\N{DOWNWARDS ARROW}",
+                x0=x0,
+                dx=dE,
+                xlabel="t",
+                xunits="eV",
+                y=list(total_dn),
+                ylabel=f"{last_element}_tot\N{DOWNWARDS ARROW}",
+                yunits="",
+                color=color,
+            )
+
         figure.grid_plots("DOS")
 
         # Write it out.
@@ -486,7 +700,7 @@ class DftbBase(seamm.Node):
         elements = set(configuration.atoms.symbols)
         elements = sorted([*elements])
         names = '{"' + '" "'.join(elements) + '"}'
-        result += f"    TypeNames = {names}\n"
+        result += f"   TypeNames = {names}\n"
 
         if configuration.periodicity == 0:
             result += "    TypesAndCoordinates [Angstrom] = {\n"
@@ -681,6 +895,7 @@ class DftbBase(seamm.Node):
             "dftb_pin.hsd",
             "geom.out.*",
             "output",
+            "pdos*",
             "results.tag",
         ]  # yapf: disable
 

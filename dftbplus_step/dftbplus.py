@@ -91,6 +91,8 @@ def dict_to_hsd(d, indent=0):
     hsd = ""
     for key, value in d.items():
         if isinstance(value, collections.Mapping):
+            if "<" in key:
+                key = key.split("<")[0]
             hsd += indent * " " + key + " {\n"
             hsd += dict_to_hsd(value, indent + 4)
             hsd += indent * " " + "}\n"

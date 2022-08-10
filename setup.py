@@ -90,12 +90,14 @@ setup(
         'org.molssi.seamm.dftbplus': [
             'BandStructure = dftbplus_step:BandStructureStep',
             'ChooseParameters = dftbplus_step:ChooseParametersStep',
+            'DOS = dftbplus_step:DOSStep',
             'Energy = dftbplus_step:EnergyStep',
             'Optimization = dftbplus_step:OptimizationStep',
         ],
         'org.molssi.seamm.dftbplus.tk': [
             'BandStructure = dftbplus_step:BandStructureStep',
             'ChooseParameters = dftbplus_step:ChooseParametersStep',
+            'DOS = dftbplus_step:DOSStep',
             'Energy = dftbplus_step:EnergyStep',
             'Optimization = dftbplus_step:OptimizationStep',
         ],
