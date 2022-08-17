@@ -4,9 +4,12 @@ User Documentation
 Contents:
 
 .. toctree::
+   :glob:
    :maxdepth: 2
+   :titlesonly:
 
-   overview
+   *
+   recipes/index.rst
 
 Indices and tables
 ------------------

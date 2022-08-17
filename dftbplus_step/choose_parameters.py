@@ -92,6 +92,13 @@ class ChooseParameters(seamm.Node):
 
         # The parameter data
         parameter_set = P["dataset"]
+        if " - " not in parameter_set:
+            # From a variable ... find it!
+            for model in metadata.keys():
+                tmp = f"{model} - {parameter_set}"
+                if tmp in metadata[model]["datasets"]:
+                    parameter_set = tmp
+                    break
         model, parameter_set_name = parameter_set.split(" - ", 1)
         datasets = metadata[model]["datasets"]
         dataset = datasets[parameter_set]
@@ -106,13 +113,17 @@ class ChooseParameters(seamm.Node):
             potentials = metadata[model]["potentials"]
             pairs = dataset["potential pairs"]
 
-            self.parent._hamiltonian = P["dataset"]
+            self.parent._hamiltonian = parameter_set
 
-            if P["subset"] == "none":
+            if P["subset"] == "none" or P["subset"] == "":
                 subset = None
             else:
-                self.parent._hamiltonian += " + " + P["subset"].split(" - ")[1]
-                subset = datasets[P["subset"]]
+                subset = P["subset"]
+                if " - " not in subset:
+                    # From a variable
+                    subset = f"{model} - {subset}"
+                self.parent._hamiltonian += " + " + subset.split(" - ")[1]
+                subset = datasets[subset]
                 subpairs = subset["potential pairs"]
 
             # Broadcast to the parent so that other substeps can use

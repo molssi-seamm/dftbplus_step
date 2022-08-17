@@ -46,6 +46,11 @@ from dftbplus_step.band_structure_parameters import (  # noqa: F401
 from dftbplus_step.band_structure_step import BandStructureStep  # noqa: F401
 from dftbplus_step.tk_band_structure import TkBandStructure  # noqa: F401
 
+from dftbplus_step.dos import DOS  # noqa: F401
+from dftbplus_step.dos_parameters import DOSParameters  # noqa: F401
+from dftbplus_step.dos_step import DOSStep  # noqa: F401
+from dftbplus_step.tk_dos import TkDOS  # noqa: F401
+
 # Handle versioneer
 from ._version import get_versions
 

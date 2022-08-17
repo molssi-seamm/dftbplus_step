@@ -144,136 +144,153 @@ class TkChooseParameters(seamm.TkNode):
 
         elements = set(pt.get())
         dataset = ds.get()
-        # Catch older flowcharts with the old names.
-        if "-" not in dataset:
-            dataset = "DFTB - " + dataset
         subset = ss.get()
 
-        # Find the datasets that contain all the requested elements
-        possible_datasets = {}
-        possible_elements = set()
+        if self.is_expr(dataset):
+            variable_dataset = True
+        else:
+            variable_dataset = False
+        if self.is_expr(subset):
+            variable_subset = True
+        else:
+            variable_subset = False
 
-        for tmp_model, metadata in self._metadata.items():
-            # See if the model is restricted
-            if model != "any" and tmp_model not in model:
-                continue
+        if not variable_dataset:
+            # Catch older flowcharts with the old names.
+            if "-" not in dataset:
+                dataset = "DFTB - " + dataset
 
-            datasets = self._metadata[tmp_model]["datasets"]
-            if tmp_model == "DFTB":
-                for dset, data in datasets.items():
-                    if data["parent"] is None:
+            # Find the datasets that contain all the requested elements
+            possible_datasets = {}
+            possible_elements = set()
+
+            for tmp_model, metadata in self._metadata.items():
+                # See if the model is restricted
+                if model != "any" and tmp_model not in model:
+                    continue
+
+                datasets = self._metadata[tmp_model]["datasets"]
+                if tmp_model == "DFTB":
+                    for dset, data in datasets.items():
+                        if data["parent"] is None:
+                            for element_set in data["element sets"]:
+                                coverage = set(element_set)
+                                if elements <= coverage:
+                                    possible_datasets[dset] = ["none"]
+                                    possible_elements.update(coverage)
+                        # Check with specialized datasets...
+                        for sset in data["subsets"]:
+                            subdata = datasets[sset]
+                            for element_set in subdata["element sets"]:
+                                coverage = set(element_set)
+                                if elements <= coverage:
+                                    if dset not in possible_datasets:
+                                        possible_datasets[dset] = []
+                                    if sset not in possible_datasets[dset]:
+                                        possible_datasets[dset].append(sset)
+                                    possible_elements.update(coverage)
+                elif tmp_model == "xTB":
+                    for dset, data in datasets.items():
+                        coverage = set(
+                            atno_to_symbol[atno]
+                            for atno in expand_range_list(data["elements"])
+                        )
+                        if elements <= coverage:
+                            possible_datasets[dset] = ["none"]
+                            possible_elements.update(coverage)
+
+            # Show which elements are available
+            available = set()
+            for model, metadata in self._metadata.items():
+                for dset, data in metadata["datasets"].items():
+                    if "element sets" in data:
                         for element_set in data["element sets"]:
-                            coverage = set(element_set)
-                            if elements <= coverage:
-                                possible_datasets[dset] = ["none"]
-                                possible_elements.update(coverage)
-                    # Check with specialized datasets...
-                    for sset in data["subsets"]:
-                        subdata = datasets[sset]
-                        for element_set in subdata["element sets"]:
-                            coverage = set(element_set)
-                            if elements <= coverage:
-                                if dset not in possible_datasets:
-                                    possible_datasets[dset] = []
-                                if sset not in possible_datasets[dset]:
-                                    possible_datasets[dset].append(sset)
-                                possible_elements.update(coverage)
-            elif tmp_model == "xTB":
-                for dset, data in datasets.items():
-                    coverage = set(
-                        atno_to_symbol[atno]
-                        for atno in expand_range_list(data["elements"])
-                    )
-                    if elements <= coverage:
-                        possible_datasets[dset] = ["none"]
-                        possible_elements.update(coverage)
+                            for element in element_set:
+                                if element not in available:
+                                    available.add(element)
+                    elif "elements" in data:
+                        for atno in expand_range_list(data["elements"]):
+                            available.add(atno_to_symbol[atno])
 
-        # Show which elements are available
-        available = set()
-        for model, metadata in self._metadata.items():
-            for dset, data in metadata["datasets"].items():
-                if "element sets" in data:
-                    for element_set in data["element sets"]:
-                        for element in element_set:
-                            if element not in available:
-                                available.add(element)
-                elif "elements" in data:
-                    for atno in expand_range_list(data["elements"]):
-                        available.add(atno_to_symbol[atno])
+            pt = self["elements"]
+            elements = set(pt.elements)
+            not_available = elements - available
+            pt.disable(not_available)
 
-        pt = self["elements"]
-        elements = set(pt.elements)
-        not_available = elements - available
-        pt.disable(not_available)
+            # Enable and disable the elements to reflect possible choices
+            all_elements = set(pt.elements)
+            pt.disable(all_elements - possible_elements)
+            pt.enable(possible_elements)
 
-        # Enable and disable the elements to reflect possible choices
-        all_elements = set(pt.elements)
-        pt.disable(all_elements - possible_elements)
-        pt.enable(possible_elements)
-
-        # Sort out the dataset widget
-        tmp = [*possible_datasets.keys()]
-        ds.combobox.config(values=tmp)
-        if len(tmp) == 0:
-            # No parameter set covers all the elements!
-            dataset = ""
-            tk.messagebox.showwarning(
-                title="No Potentials Available for Elements",
-                message=(
-                    "There is no dataset available that covers the elements\n\t"
-                    + ", ".join(elements)
-                ),
-            )
-        else:
-            if dataset not in tmp:
-                dataset = tmp[0]
-        ds.set(dataset)
-
-        # and subset widget
-        if dataset == "":
-            ss.combobox.config(values="")
-            subset = "none"
-        else:
-            tmp = possible_datasets[dataset]
-            ss.combobox.config(values=tmp)
-            if subset not in tmp:
-                subset = tmp[0]
-        ss.set(subset)
-
-        # Note current elements in the dataset/subset with green labels
-        pt.set_text_color("all", "black")
-        if dataset != "":
-            tmp_model = dataset.split(" - ", 1)[0]
-            datasets = self._metadata[tmp_model]["datasets"]
-            data = datasets[dataset]
-            current = set()
-            if subset == "none":
-                if "element sets" in data:
-                    for element_set in data["element sets"]:
-                        current.update(element_set)
-                elif "elements" in data:
-                    current.update(
-                        [atno_to_symbol[a] for a in expand_range_list(data["elements"])]
-                    )
+            # Sort out the dataset widget
+            tmp = [*possible_datasets.keys()]
+            ds.combobox.config(values=tmp)
+            if len(tmp) == 0:
+                # No parameter set covers all the elements!
+                dataset = ""
+                tk.messagebox.showwarning(
+                    title="No Potentials Available for Elements",
+                    message=(
+                        "There is no dataset available that covers the elements\n\t"
+                        + ", ".join(elements)
+                    ),
+                )
             else:
-                subdata = datasets[subset]
-                for element_set in subdata["element sets"]:
-                    current.update(element_set)
-            pt.set_text_color(current, "green")
+                if dataset not in tmp:
+                    dataset = tmp[0]
+            ds.set(dataset)
+
+            # and subset widget
+            if dataset == "":
+                ss.combobox.config(values="")
+                subset = "none"
+            else:
+                tmp = possible_datasets[dataset]
+                ss.combobox.config(values=tmp)
+                if subset not in tmp:
+                    subset = tmp[0]
+            ss.set(subset)
+
+            # Note current elements in the dataset/subset with green labels
+            pt.set_text_color("all", "black")
+            if dataset != "":
+                tmp_model = dataset.split(" - ", 1)[0]
+                datasets = self._metadata[tmp_model]["datasets"]
+                data = datasets[dataset]
+                current = set()
+                if subset == "none":
+                    if "element sets" in data:
+                        for element_set in data["element sets"]:
+                            current.update(element_set)
+                    elif "elements" in data:
+                        current.update(
+                            [
+                                atno_to_symbol[a]
+                                for a in expand_range_list(data["elements"])
+                            ]
+                        )
+                else:
+                    subdata = datasets[subset]
+                    for element_set in subdata["element sets"]:
+                        current.update(element_set)
+                pt.set_text_color(current, "green")
 
         # and grid the widgets in place
         widgets = []
         row = 0
-        self["elements"].grid(row=row, column=0, sticky=tk.EW)
-        row += 1
-        self["model"].grid(row=row, column=0, sticky=tk.EW)
-        widgets.append(self["model"])
-        row += 1
+        if not variable_dataset and not variable_subset:
+            self["elements"].grid(row=row, column=0, sticky=tk.EW)
+            row += 1
+            self["model"].grid(row=row, column=0, sticky=tk.EW)
+            widgets.append(self["model"])
+            row += 1
         self["dataset"].grid(row=row, column=0, sticky=tk.EW)
         widgets.append(self["dataset"])
         row += 1
         # only grid the subset if there are choices
-        if dataset != "" and possible_datasets[dataset] != ["none"]:
+        if variable_dataset or (
+            dataset != "" and possible_datasets[dataset] != ["none"]
+        ):
             self["subset"].grid(row=row, column=0, sticky=tk.EW)
             widgets.append(self["subset"])
             row += 1

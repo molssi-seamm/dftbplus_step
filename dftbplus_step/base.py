@@ -14,6 +14,7 @@ import traceback
 
 import pandas
 
+import cms_plots
 import dftbplus_step
 from .dftbplus import deep_merge, dict_to_hsd, parse_gen_file
 from molsystem.elements import to_symbols
@@ -98,9 +99,37 @@ class DftbBase(seamm.Node):
         return True
 
     def band_structure(
-        self, input_path, sym_points, sym_names, Efermi=[0.0, 0.0], dos_path=None
+        self, input_path, sym_points, sym_names, Efermi=[0.0, 0.0], DOS=None
     ):
         """Prepare the graph for the band structure.
+
+        Parameters
+        ----------
+        path : filename or pathlib.Path
+            The path to the band output from DFTB+.
+        """
+        Band_Structure = self.create_band_structure_data(  # noqa: F841
+            input_path, sym_points, sym_names, Efermi=Efermi
+        )
+
+        figure = cms_plots.band_structure(
+            Band_Structure, DOS=DOS, template="band_structure.graph_template"
+        )
+
+        # Write it out.
+        wd = Path(self.directory)
+        figure.dump(wd / "band_structure.graph")
+
+        options = self.parent.options
+        write_html = "html" in options and options["html"]
+        if write_html:
+            figure.template = "band_structure.html_template"
+            figure.dump(wd / "band_structure.html")
+
+    def create_band_structure_data(
+        self, input_path, sym_points, sym_names, Efermi=[0.0, 0.0]
+    ):
+        """Massage the band structure data into a standard form
 
         Parameters
         ----------
@@ -127,31 +156,10 @@ class DftbBase(seamm.Node):
             logger.warning(f"Output: {e.output}")
             return None
 
-        # Create a graph of the band structure
-        figure = self.create_figure(
-            module_path=("seamm",),
-            template="band_structure.graph_template",
-            title="Band Structure",
-        )
-        plot = figure.add_plot("BandStructure")
-
-        names = [
-            "\N{GREEK CAPITAL LETTER GAMMA}" if i == "GAMMA" else i for i in sym_names
-        ]
-        x_axis = plot.add_axis(
-            "x",
-            label="",
-            tickmode="array",
-            tickvals=sym_points,
-            ticktext=names,
-        )
-        y_axis = plot.add_axis("y", label="Energy (eV)", anchor=x_axis)
-        x_axis.anchor = y_axis
-
         if spin_polarized:
             # Read the spin-up data
             with open(wd / "band_s1.dat", "r") as fd:
-                data = pandas.read_csv(
+                BandStructure = pandas.read_csv(
                     fd,
                     sep=r"\s+",
                     header=None,
@@ -159,22 +167,14 @@ class DftbBase(seamm.Node):
                     comment="!",
                 )
 
+            mapper = {}
             i = 0
-            for label, column in data.items():
-                if i > 0:
-                    plot.add_trace(
-                        x_axis=x_axis,
-                        y_axis=y_axis,
-                        name=f"\N{UPWARDS ARROW} {i}",
-                        x=list(data.index),
-                        xlabel="",
-                        xunits="",
-                        y=list(column - Efermi[0]),
-                        ylabel="Energy",
-                        yunits="eV",
-                        color="red",
-                    )
-                i = i + 1
+            for column in BandStructure.columns:
+                i += 1
+                mapper[column] = f"↑ {i}"
+                BandStructure[column] -= Efermi[0]
+            BandStructure.rename(columns=mapper, inplace=True)
+
             # Read the spin-up data
             with open(wd / "band_s2.dat", "r") as fd:
                 data = pandas.read_csv(
@@ -186,25 +186,14 @@ class DftbBase(seamm.Node):
                 )
 
             i = 0
-            for label, column in data.items():
-                if i > 0:
-                    plot.add_trace(
-                        x_axis=x_axis,
-                        y_axis=y_axis,
-                        name=f"\N{DOWNWARDS ARROW} {i}",
-                        x=list(data.index),
-                        xlabel="",
-                        xunits="",
-                        y=list(column - Efermi[1]),
-                        ylabel="Energy",
-                        yunits="eV",
-                        color="blue",
-                    )
-                i = i + 1
+            for column in data.columns:
+                i += 1
+                label = f"↓ {i}"
+                BandStructure[label] = data[column] - Efermi[1]
         else:
             # Read the plot data
             with open(wd / "band_tot.dat", "r") as fd:
-                data = pandas.read_csv(
+                BandStructure = pandas.read_csv(
                     fd,
                     sep=r"\s+",
                     header=None,
@@ -212,140 +201,211 @@ class DftbBase(seamm.Node):
                     comment="!",
                 )
 
+            mapper = {}
             i = 0
-            for label, column in data.items():
-                if i > 0:
-                    plot.add_trace(
-                        x_axis=x_axis,
-                        y_axis=y_axis,
-                        name=f"band {i}",
-                        x=list(data.index),
-                        xlabel="",
-                        xunits="",
-                        y=list(column - Efermi[0]),
-                        ylabel="Energy",
-                        yunits="eV",
-                        color="black",
-                    )
-                i = i + 1
+            for column in BandStructure.columns:
+                i += 1
+                mapper[column] = f"{i}"
+                BandStructure[column] -= Efermi[0]
+            BandStructure.rename(columns=mapper, inplace=True)
 
-        # Add the DOS plots if given
-        if dos_path is None:
-            figure.grid_plots("BandStructure")
+        # Insert a column of labels
+        nrows = BandStructure.index.size
+        labels = [""] * nrows
+        for pt, label in zip(sym_points, sym_names):
+            labels[pt - 1] = label
+        BandStructure.insert(0, "labels", labels)
+
+        # And labels for each point in the path
+        BandStructure.insert(1, "points", self.path)
+
+        BandStructure.to_csv(Path(self.directory) / "BandStructure.csv")
+
+        return BandStructure
+
+    def create_dos_data(self, input_path, Efermi=[0.0]):
+        """Create the DOS data
+
+        Parameters
+        ----------
+        input_path : filename or pathlib.Path
+            The path to the band output from DFTB+.
+        Efermi : float
+            The Fermi energy in eV
+        """
+        spin_polarized = len(Efermi) == 2
+
+        if spin_polarized and Efermi[0] != Efermi[1]:
+            raise NotImplementedError(
+                f"Cannot handle different Fermi energies yet: {Efermi}"
+            )
+
+        logger.info("Preparing DOS")
+
+        options = self.parent.options
+
+        # Total DOS
+        wd = Path(self.directory)
+        exe = Path(options["dftbplus_path"]) / "dp_dos"
+        command = f"{exe} {input_path} {wd / 'dos_total.dat'}"
+        try:
+            subprocess.check_output(
+                command, shell=True, text=True, stderr=subprocess.STDOUT
+            )
+        except subprocess.CalledProcessError as e:
+            logger.warning(f"Calling dp_dos, returncode = {e.returncode}")
+            logger.warning(f"Output: {e.output}")
+            return None
+
+        # Read the total DOS data
+        with open(wd / "dos_total.dat", "r") as fd:
+            DOS = pandas.read_csv(
+                fd,
+                sep=r"\s+",
+                header=None,
+                comment="!",
+                index_col=0,
+            )
+
+        n_columns = DOS.shape[1]
+        if n_columns == 1:
+            if spin_polarized:
+                raise RuntimeError(
+                    "Calculation is spin-polarized but total DOS is not."
+                )
+            DOS.rename(columns={0: "E", 1: "Total"}, inplace=True)
+        elif n_columns == 3:
+            if not spin_polarized:
+                raise RuntimeError(
+                    "Calculation is not spin-polarized but total DOS is."
+                )
+            DOS.rename(
+                columns={0: "E", 1: "Total", 2: "Total ↑", 3: "Total ↓"},
+                inplace=True,
+            )
         else:
-            # Read the plot data
-            with open(dos_path, "r") as fd:
-                data = pandas.read_csv(
-                    fd,
-                    sep=r"\s+",
-                    header=None,
-                    comment="!",
-                    index_col=0,
-                )
+            raise RuntimeError(f"The total DOS has {n_columns} columns of data.")
 
-            n_columns = data.shape[1]
-            if n_columns == 1:
-                spin_polarized = False
-                data.rename(columns={0: "E", 1: "DOS"}, inplace=True)
-            elif n_columns == 3:
-                spin_polarized = True
-                data.rename(
-                    columns={0: "E", 1: "DOS", 2: "Up", 3: "Down"}, inplace=True
-                )
+        # Partial DOS convention is "pdos_{element}.{shell no}.out"
+        # Figure out the elements and files for each.
+        files = {}
+        for path in sorted(wd.glob("pdos*.out")):
+            element = path.stem.split("_")[1].split(".")[0]
+            if element not in files:
+                files[element] = [path]
             else:
-                raise RuntimeError(f"DOS has {n_columns} columns of data.")
+                files[element].append(path)
+
+        # Process each element, accumulating the total
+        for element, paths in files.items():
+            if spin_polarized:
+                total_up = None
+                total_down = None
+            else:
+                total = None
+            for path in paths:
+                out = path.with_suffix(".dat")
+                shell_no = int(path.suffixes[0][1:])
+                shell = ("s", "p", "d", "f")[shell_no - 1]
+                label = element + "_" + shell
+
+                command = f"{exe} -w {path} {out}"
+                try:
+                    subprocess.check_output(
+                        command, shell=True, text=True, stderr=subprocess.STDOUT
+                    )
+                except subprocess.CalledProcessError as e:
+                    logger.warning(f"Calling dp_dos, returncode = {e.returncode}")
+                    logger.warning(f"Output: {e.output}")
+                    continue
+
+                # Read the plot data
+                with open(out, "r") as fd:
+                    data = pandas.read_csv(
+                        fd,
+                        sep=r"\s+",
+                        header=None,
+                        comment="!",
+                        index_col=0,
+                    )
+
+                n_columns = data.shape[1]
+                if n_columns == 1:
+                    if spin_polarized:
+                        raise RuntimeError(
+                            f"Calculation is spin-polarized but {path} is not."
+                        )
+                    data.rename(columns={0: "E", 1: label}, inplace=True)
+
+                    # Check the bounds. Sometimes rounding causes different grid sizes.
+                    tmp = data.index.isin(DOS.index)
+                    if not tmp.all():
+                        data = data.loc[tmp]
+                    tmp = DOS.index.isin(data.index)
+                    if not tmp.all():
+                        DOS = DOS.loc[tmp]
+                        if total is not None:
+                            total = total.loc[tmp]
+
+                    if total is None:
+                        total = data[label]
+                    else:
+                        total += data[label]
+
+                    if not DOS.index.equals(data.index):
+                        raise RuntimeError(
+                            f"The energy values for partial DOS {label} are  different!"
+                            f" ({out})"
+                        )
+
+                    DOS[label] = data[label].array
+                elif n_columns == 3:
+                    if not spin_polarized:
+                        raise RuntimeError(
+                            f"Calculation is not spin-polarized but {path} is."
+                        )
+                    data.rename(
+                        columns={0: "E", 1: "Total", 2: "Up", 3: "Down"}, inplace=True
+                    )
+                    # Check the bounds.
+                    tmp = data.index.isin(DOS.index)
+                    if not tmp.all():
+                        data = data.loc[tmp]
+                    tmp = DOS.index.isin(data.index)
+                    if not tmp.all():
+                        DOS = DOS.loc[tmp]
+                        if total_up is not None:
+                            total_up = total_up.loc[tmp]
+                            total_down = total_down.loc[tmp]
+                    if total_up is None:
+                        total_up = data["Up"]
+                        total_down = data["Down"]
+                    else:
+                        total_up += data["Up"]
+                        total_down += data["Down"]
+
+                    if not DOS.index.equals(data.index):
+                        raise RuntimeError(
+                            f"The energy values for partial DOS {label} are  different!"
+                            f" ({out})"
+                        )
+                    DOS[label + " ↑"] = data["Up"].array
+                    DOS[label + " ↓"] = data["Down"].array
+                else:
+                    raise RuntimeError(f"The {path} has {n_columns} columns of data.")
 
             if spin_polarized:
-                plot = figure.add_plot("DOS-UP")
-
-                x_axis = plot.add_axis(
-                    "x",
-                    label="DOS",
-                    anchor=y_axis,
-                    ticklabelposition="inside",
-                    autorange="reversed",
-                )
-
-                dE = data.index[1] - data.index[0]
-                y0 = data.index[0] - Efermi[0]
-
-                plot.add_trace(
-                    x_axis=x_axis,
-                    y_axis=y_axis,
-                    name="\N{UPWARDS ARROW} DOS",
-                    y0=y0,
-                    dy=dE,
-                    ylabel="t",
-                    yunits="eV",
-                    x=list(data["Up"]),
-                    xlabel="Spin up",
-                    xunits="",
-                    color="red",
-                )
-                plot = figure.add_plot("DOS-DOWN")
-
-                x_axis = plot.add_axis(
-                    "x",
-                    label="DOS",
-                    anchor=y_axis,
-                    ticklabelposition="inside",
-                )
-
-                dE = data.index[1] - data.index[0]
-                y0 = data.index[0] - Efermi[1]
-
-                plot.add_trace(
-                    x_axis=x_axis,
-                    y_axis=y_axis,
-                    name="\N{DOWNWARDS ARROW} DOS",
-                    y0=y0,
-                    dy=dE,
-                    ylabel="t",
-                    yunits="eV",
-                    x=list(data["Down"]),
-                    xlabel="Spin down",
-                    xunits="",
-                    color="blue",
-                )
-
-                figure.grid_plots("DOS-UP BandStructure - - DOS-DOWN", padx=0)
-
+                DOS[element + " ↑"] = total_up.array
+                DOS[element + " ↓"] = total_down.array
             else:
-                plot = figure.add_plot("DOS")
+                DOS[element] = total.array
 
-                x_axis = plot.add_axis(
-                    "x",
-                    label="DOS",
-                    anchor=y_axis,
-                    ticklabelposition="inside",
-                )
+        # Shift the Fermi level to 0
+        DOS.index -= Efermi[0]
 
-                dE = data.index[1] - data.index[0]
-                y0 = data.index[0] - Efermi[0]
+        DOS.to_csv(Path(self.directory) / "DOS.csv")
 
-                plot.add_trace(
-                    x_axis=x_axis,
-                    y_axis=y_axis,
-                    name="DOS",
-                    y0=y0,
-                    dy=dE,
-                    ylabel="t",
-                    yunits="eV",
-                    x=list(data["DOS"]),
-                    xlabel="DOS",
-                    xunits="",
-                    color="black",
-                )
-
-                figure.grid_plots("BandStructure - - DOS", padx=0)
-
-        # Write it out.
-        figure.dump(wd / "band_structure.graph")
-
-        write_html = "html" in options and options["html"]
-        if write_html:
-            figure.template = "band_structure.html_template"
-            figure.dump(wd / "band_structure.html")
+        return DOS
 
     def dos(self, input_path, Efermi=[0.0]):
         """Prepare the graph for the density of states.
@@ -357,108 +417,18 @@ class DftbBase(seamm.Node):
         Efermi : float
             The Fermi energy in eV
         """
-        wd = Path(self.directory)
-        logger.info(f"Preparing DOS, {wd}")
+        DOS = self.create_dos_data(input_path, Efermi=Efermi)
 
-        options = self.parent.options
-        exe = Path(options["dftbplus_path"]) / "dp_dos"
-
-        command = f"{exe} {input_path} {wd / 'dos_total.dat'}"
-        try:
-            subprocess.check_output(
-                command, shell=True, text=True, stderr=subprocess.STDOUT
-            )
-        except subprocess.CalledProcessError as e:
-            logger.warning(f"Calling dp_dos, returncode = {e.returncode}")
-            logger.warning(f"Output: {e.output}")
-            return None
-
-        # Read the plot data
-        with open(wd / "dos_total.dat", "r") as fd:
-            data = pandas.read_csv(
-                fd,
-                sep=r"\s+",
-                header=None,
-                comment="!",
-                index_col=0,
-            )
-
-        n_columns = data.shape[1]
-        if n_columns == 1:
-            spin_polarized = False
-            data.rename(columns={0: "E", 1: "DOS"}, inplace=True)
-        elif n_columns == 3:
-            spin_polarized = True
-            data.rename(columns={0: "E", 1: "DOS", 2: "Up", 3: "Down"}, inplace=True)
-        else:
-            raise RuntimeError(f"DOS has {n_columns} columns of data.")
-
-        dE = data.index[1] - data.index[0]
-        x0 = data.index[0] - Efermi[0]
-
-        # Create a graph of the DOS
-        figure = self.create_figure(
-            module_path=("seamm",),
-            template="line.graph_template",
-            title="Total DOS",
-        )
-
-        plot = figure.add_plot("DOS")
-
-        x_axis = plot.add_axis("x", label="Energy (eV)")
-        y_axis = plot.add_axis("y", label="DOS", anchor=x_axis)
-        x_axis.anchor = y_axis
-
-        if spin_polarized:
-            plot.add_trace(
-                x_axis=x_axis,
-                y_axis=y_axis,
-                name="SpinUp",
-                x0=x0,
-                dx=dE,
-                xlabel="t",
-                xunits="eV",
-                y=list(data["Up"]),
-                ylabel="Spin up",
-                yunits="",
-                color="red",
-            )
-            plot.add_trace(
-                x_axis=x_axis,
-                y_axis=y_axis,
-                name="SpinDown",
-                x0=x0,
-                dx=dE,
-                xlabel="t",
-                xunits="eV",
-                y=list(data["Down"]),
-                ylabel="Spin down",
-                yunits="",
-                color="blue",
-            )
-        else:
-            plot.add_trace(
-                x_axis=x_axis,
-                y_axis=y_axis,
-                name="DOS",
-                x0=x0,
-                dx=dE,
-                xlabel="t",
-                xunits="eV",
-                y=list(data["DOS"]),
-                ylabel="DOS",
-                yunits="",
-                color="black",
-            )
-        figure.grid_plots("DOS")
+        figure = cms_plots.dos(DOS, template="line.graph_template")
 
         # Write it out.
-        figure.dump(wd / "DOS.graph")
+        figure.dump(Path(self.directory) / "DOS.graph")
 
+        options = self.parent.options
         write_html = "html" in options and options["html"]
         if write_html:
             figure.template = "line.html_template"
-            figure.dump(wd / "DOS.html")
+            figure.dump(Path(self.directory) / "DOS.html")
 
     def geometry(self):
         """Create the input for DFTB+ for the geometry.
@@ -486,7 +456,7 @@ class DftbBase(seamm.Node):
         elements = set(configuration.atoms.symbols)
         elements = sorted([*elements])
         names = '{"' + '" "'.join(elements) + '"}'
-        result += f"    TypeNames = {names}\n"
+        result += f"   TypeNames = {names}\n"
 
         if configuration.periodicity == 0:
             result += "    TypesAndCoordinates [Angstrom] = {\n"
@@ -562,20 +532,46 @@ class DftbBase(seamm.Node):
 
         return result
 
-    def get_previous_charges(self):
+    def find_previous_step(self, cls, missing_ok=False):
+        """Find the previous step of class 'cls'
+
+        Parameters
+        ----------
+        cls : class
+            The class of the desired step.
+        missing_ok : bool = False
+            Don't raise an error, but return None if no step found
+
+        Returns
+        -------
+        seamm.Node
+            The node if found, None if not.
+        """
+        result = None
+        for step in self.parent._steps[::-1]:
+            if isinstance(step, cls):
+                result = step
+                break
+        return result
+
+    def get_previous_charges(self, missing_ok=False):
         """Copy charges from the previous energy step."""
         directory = Path(self.directory)
-        step_no = len(self.parent._steps[::-1])
-        for step in self.parent._steps[::-1]:
-            step_no -= 1
-            if isinstance(step, dftbplus_step.Energy):
-                from_path = Path(step.directory) / "charges.dat"
-                if from_path.exists():
-                    to_path = directory / "charges.dat"
-                    if not to_path.exists() or not to_path.samefile(from_path):
-                        shutil.copy2(from_path, to_path)
-                    return step
-        return None
+        step = self.find_previous_step(dftbplus_step.Energy, missing_ok=missing_ok)
+        if step is None:
+            if missing_ok:
+                return None
+            raise RuntimeError("Previous energy/optimization step not found.")
+        from_path = Path(step.directory) / "charges.dat"
+        if from_path.exists():
+            to_path = directory / "charges.dat"
+            if not to_path.exists() or not to_path.samefile(from_path):
+                shutil.copy2(from_path, to_path)
+        else:
+            if missing_ok:
+                return None
+            raise FileNotFoundError("No 'charges.dat' in previous energy step.")
+        return step
 
     def parse_results(self, lines):
         """Digest the data in the results.tag file."""
@@ -681,6 +677,7 @@ class DftbBase(seamm.Node):
             "dftb_pin.hsd",
             "geom.out.*",
             "output",
+            "pdos*",
             "results.tag",
         ]  # yapf: disable
 

@@ -20,6 +20,7 @@ dependencies:
 
     # Pip-only installs
   - pip:
+    - cms_plots
     # Documentation
     - rinohtype
     - pygments

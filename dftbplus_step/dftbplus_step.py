@@ -12,7 +12,7 @@ class DftbplusStep(object):
 
     Attributes
     ----------
-    my_description : {description, group, name}
+    my_description : {}
         A human-readable description of this step. It can be
         several lines long, and needs to be clear to non-expert users.
         It contains the following keys: description, group, name.
