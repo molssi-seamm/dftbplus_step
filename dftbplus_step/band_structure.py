@@ -7,6 +7,7 @@ from pathlib import Path
 import textwrap
 
 import numpy as np
+import pandas
 import seekpath
 
 import dftbplus_step
@@ -24,6 +25,14 @@ job = printing.getPrinter()
 printer = printing.getPrinter("DFTB+")
 
 
+def fix_label(label):
+    "Convert a label such as GAMMA to the greek letter."
+    if label == "GAMMA":
+        return "\N{GREEK CAPITAL LETTER GAMMA}"
+    else:
+        return label
+
+
 class BandStructure(DftbBase):
     def __init__(
         self, flowchart=None, title="Band Structure", extension=None, logger=logger
@@ -37,8 +46,9 @@ class BandStructure(DftbBase):
         self.parameters = dftbplus_step.BandStructureParameters()
 
         self.description = ["Band Structure for DFTB+"]
-        self.points = None  # Points along graphs of symmetry lines
-        self.labels = None  # Labels of the symmetry lines
+        self.sym_points = None  # Points along graphs of symmetry lines
+        self.sym_labels = None  # Labels of the symmetry lines
+        self.path = None  # Coordinates along the path
         self.energy_step = None  # The step that got the energy and density
 
     @property
@@ -87,8 +97,9 @@ class BandStructure(DftbBase):
         self.description.append(__(self.description_text(PP), **PP, indent=self.indent))
 
         # Currently use the previous energy step as source of the density
-        self.energy_step = self.get_previous_charges()
-        if self.energy_step is None:
+        try:
+            self.energy_step = self.get_previous_charges()
+        except Exception:
             raise RuntimeError("Could not find charges from previous step!")
         energy_in = self.energy_step.get_input()
 
@@ -130,13 +141,29 @@ class BandStructure(DftbBase):
         else:
             raise RuntimeError("Serious problem in the Band Structure: no Fermi level!")
 
-        dos_path = Path(self.energy_step.directory) / "dos_total.dat"
-        if not dos_path.exists():
-            dos_path = None
+        # Need the DOS information either from a preceding DOS step or the energy step
+        step = self.find_previous_step(dftbplus_step.DOS)
+        if step is None:
+            step = self.energy_step
+        else:
+            # Is it after the energy step?
+            dos_id = int(step._id[-1])
+            energy_id = int(self.energy_step._id[-1])
+            if dos_id < energy_id:
+                step = self.energy_step
+        dos_path = Path(step.directory) / "DOS.csv"
+        if dos_path.exists():
+            DOS = pandas.read_csv(dos_path, index_col=0)
+        else:
+            DOS = None
 
         wd = Path(self.directory)
         self.band_structure(
-            wd / "band.out", self.points, self.labels, Efermi=Efermi, dos_path=dos_path
+            wd / "band.out",
+            self.sym_points,
+            self.sym_labels,
+            Efermi=Efermi,
+            DOS=DOS,
         )
 
         printer.normal(__(text, **data, indent=self.indent + 4 * " "))
@@ -183,8 +210,9 @@ class BandStructure(DftbBase):
         result = []
         last_label = ""
         total = 0
-        self.points = points = []
-        self.labels = labels = []
+        self.sym_points = points = []
+        self.sym_labels = labels = []
+        self.path = path = []
         for start_label, stop_label in seekpath_output["path"]:
             start_coord = np.array(seekpath_output["point_coords"][start_label])
             stop_coord = np.array(seekpath_output["point_coords"][stop_label])
@@ -200,18 +228,25 @@ class BandStructure(DftbBase):
             # See if we needed an added point at the start
             if start_label != last_label:
                 x, y, z = start_coord.tolist()
-                result.append(f"   1 {x:.4f} {y:.4f} {z:.4f}   # {start_label}")
+                result.append(f"   1 {x:7.4f} {y:7.4f} {z:7.4f}   # {start_label}")
                 total += 1
                 points.append(total)
-                labels.append(start_label)
+                labels.append(fix_label(start_label))
+                path.append(f"{x:6.3f} {y:6.3f} {z:6.3f}")
             last_label = stop_label
 
             num_points = max(2, int(round(n * segment_length / total_length)))
             x, y, z = stop_coord.tolist()
-            result.append(f"{num_points:4} {x:.4f} {y:.4f} {z:.4f}   # {stop_label}")
+            result.append(f"{num_points:4} {x:7.4f} {y:7.4f} {z:7.4f}   # {stop_label}")
+            delta = (stop_coord - start_coord) / num_points
+            for i in range(num_points):
+                start_coord += delta
+                x, y, z = start_coord.tolist()
+                path.append(f"{x:6.3f} {y:6.3f} {z:6.3f}")
+
             total += num_points
             points.append(total)
-            labels.append(stop_label)
+            labels.append(fix_label(stop_label))
 
         result.append("}")
         result = textwrap.indent("\n".join(result), 8 * " ")
