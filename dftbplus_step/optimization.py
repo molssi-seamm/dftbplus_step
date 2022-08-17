@@ -170,8 +170,16 @@ class Optimization(dftbplus_step.Energy):
                     symprec=0.01,
                 )
 
+                # Symmetry may have changed
                 if tmp != "":
                     text += f"\n\nWarning: {tmp}\n\n"
+                    (
+                        lattice,
+                        fractionals,
+                        atomic_numbers,
+                        self.mapping_from_primitive,
+                        self.mapping_to_primitive,
+                    ) = configuration.primitive_cell()
             else:
                 configuration.atoms.set_coordinates(
                     sdata["coordinates"],
@@ -216,10 +224,6 @@ class Optimization(dftbplus_step.Energy):
             text += " and the error in the charges of {scc error:.6}."
         else:
             text += "."
-
-        # Prepare the DOS graph(s)
-        wd = Path(self.directory)
-        self.dos(wd / "band.out")
 
         printer.normal(__(text, **data, indent=self.indent + 4 * " "))
 
