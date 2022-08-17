@@ -221,7 +221,7 @@ class Energy(DftbBase):
                 initial_charges = P["initial charges"]
                 if initial_charges == "default":
                     # Use charge file from previous step or charges on atoms
-                    if self.get_previous_charges():
+                    if self.get_previous_charges(missing_ok=True) is not None:
                         hamiltonian["ReadInitialCharges"] = "Yes"
                     elif have_charges:
                         if periodicity == 0:
@@ -537,6 +537,7 @@ class Energy(DftbBase):
         text_lines = []
         # Get charges and spins, etc.
         system, configuration = self.get_system_configuration(None)
+
         symbols = configuration.atoms.symbols
         atoms = configuration.atoms
         periodicity = configuration.periodicity
@@ -555,8 +556,8 @@ class Energy(DftbBase):
 
             # Print the charges and dump to a csv file
             table = {
-                "Atom": [*range(1, len(symbols) + 1)],
-                "Element": symbols,
+                "Atom": [],
+                "Element": [],
                 "Charge": [],
             }
             with open(directory / "atom_properties.csv", "w", newline="") as fd:
@@ -576,6 +577,8 @@ class Energy(DftbBase):
 
                         writer.writerow([atom, symbol, q, s])
 
+                        table["Atom"].append(atom)
+                        table["Element"].append(symbol)
                         table["Charge"].append(q)
                         table["Spin"].append(s)
                 else:
@@ -589,6 +592,8 @@ class Energy(DftbBase):
                         q = f"{q:.2f}"
                         writer.writerow([atom, symbol, q])
 
+                        table["Atom"].append(atom)
+                        table["Element"].append(symbol)
                         table["Charge"].append(q)
             if len(symbols) <= int(options["max_atoms_to_print"]):
                 text_lines.append(header)
