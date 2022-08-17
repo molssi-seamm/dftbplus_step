@@ -1766,7 +1766,8 @@
 			"maximum angular momentum": "d"
 		    },
 		    "Ti": {
-			"maximum angular momentum": "d"
+			"maximum angular momentum": "d",
+			"reference energy": "-0.944040"
 		    }
 		},
 		"element sets": [
@@ -2510,7 +2511,8 @@
 	    "DFTB - tiorg": {
 		"element data": {
 		    "Ti": {
-			"maximum angular momentum": "d"
+			"maximum angular momentum": "d",
+			"reference energy": "-0.935111"
 		    }
 		},
 		"element sets": [
