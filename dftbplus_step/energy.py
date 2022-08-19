@@ -500,6 +500,13 @@ class Energy(DftbBase):
         """
         options = self.parent.options
 
+        # Get the configuration and basic information
+        system, configuration = self.get_system_configuration(None)
+
+        symbols = configuration.atoms.symbols
+        atoms = configuration.atoms
+        periodicity = configuration.periodicity
+
         # Read the detailed output file to get the number of iterations
         directory = Path(self.directory)
         path = directory / "detailed.out"
@@ -511,16 +518,52 @@ class Energy(DftbBase):
                 data["scc error"] = float(tmp[3])
 
         # Print the key results
-        text = "The total energy is {total_energy:.6f} E_h."
+        if periodicity == 3:
+            # May have primitive cell....
+            Zcell = len(symbols) / len(self.mapping_from_primitive)
+            data["#_primitive_cells"] = Zcell
+            if Zcell != 1:
+                text = (
+                    "The total energy of the primitive cell is {total_energy:.6f} E_h."
+                    f" There are {Zcell:.0f} primitive cells in the conventional cell."
+                )
+            else:
+                text = "The total energy of the unit cell is {total_energy:.6f} E_h."
+        else:
+            Zcell = 1
+            data["#_primitive_cells"] = None
+            text = "The total energy is {total_energy:.6f} E_h."
         if data["scc error"] is not None:
             text += " The charges converged to {scc error:.6f}."
+
+        # Handle the chemical and empirical formulas
+        formula, empirical, Z = configuration.formula
+        data["formula"] = formula
+        data["empirical_formula"] = empirical
+        data["Z"] = Z
+        data["energy_per_formula_unit"] = data["total_energy"] * Zcell / Z
 
         # Calculate the energy of formation
         if self.parent._reference_energy is not None:
             dE = data["total_energy"] - self.parent._reference_energy
             dE = Q_(dE, "hartree").to("kJ/mol").magnitude
-            text += f" The calculated formation energy is {dE:.1f} kJ/mol."
-            data["energy of formation"] = dE
+            if periodicity == 3:
+                dE = dE * Zcell
+                text += (
+                    f" The calculated formation energy of the cell ({formula}) is "
+                    f"{dE:.1f} kJ/mol."
+                )
+                data["energy of formation"] = dE
+            else:
+                text += (
+                    f" The calculated formation energy is {dE:.1f} kJ/mol for formula "
+                    f"{formula}."
+                )
+                data["energy of formation"] = dE
+            if Z != 1:
+                text += (
+                    f" For the empirical formula {empirical} it is {dE / Z:.1f} kJ/mol."
+                )
         else:
             text += " Could not calculate the formation energy because some reference "
             text += "energies are missing."
@@ -536,11 +579,6 @@ class Energy(DftbBase):
 
         text_lines = []
         # Get charges and spins, etc.
-        system, configuration = self.get_system_configuration(None)
-
-        symbols = configuration.atoms.symbols
-        atoms = configuration.atoms
-        periodicity = configuration.periodicity
         if "gross_atomic_charges" in data:
             # Add to atoms (in coordinate table)
             if "charge" not in atoms:
