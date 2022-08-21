@@ -43,6 +43,7 @@ import dftbplus_step  # noqa: E402
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.githubpages',
+    'sphinx.ext.mathjax',
     'sphinx.ext.napoleon',
     'sphinx.ext.viewcode',
     'sphinxnotes.strike'

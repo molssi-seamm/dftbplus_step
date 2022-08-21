@@ -1,3 +1,4 @@
+-------------
 DFTB+ Recipes
 -------------
 
@@ -8,7 +9,7 @@ the recipes will be extended to make more general recipes.
 
 .. toctree::
    :glob:
-   :maxdepth: 1
+   :maxdepth: 0
    :titlesonly:
 
    *
