@@ -95,10 +95,10 @@ OK. You should of course test!
 
 Now you are ready to run, but you need a structure for anatase. A quick search of the
 Internet will turn up some or you can download :download:`this one
-<downloads/anatase.cif>` which came from the `American Minerologist Crystal Structure
-Database <http://rruff.geo.arizona.edu/AMS/amcsd.php>`_ (`anatase
-<http://rruff.geo.arizona.edu/AMS/minerals/Anatase>`_). Save the structure on you disk,
-then submit the job (**file/run** or **ctrl-R**):
+<http://rruff.geo.arizona.edu/AMS/download.php?id=11458.cif&down=cif>` which came from
+the `American Minerologist Crystal Structure Database
+<http://rruff.geo.arizona.edu/AMS/amcsd.php>`_. Save the structure on you disk, then
+submit the job (**file/run** or **ctrl-R**):
 
 .. figure:: images/recipe_2_submit.png
    :align: center
@@ -129,8 +129,7 @@ side of the window:
 
 .. note::
    If you are just reading through this tutorial and not running it, you can see the job
-   at our `public dashboard <http://137.184.43.219:5000/#/jobs/10>`_ and the band
-   structure graph `here <downloads/recipe_2_band_structure.html>`_.
+   at our `public dashboard <http://137.184.43.219:5000/#/jobs/10>`_.
 
 That was simple! Unlike the picture above, the actual band structure / DOS plot is
 interactive. You can zoom by dragging a rectangle across either the band structure of
