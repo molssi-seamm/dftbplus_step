@@ -129,7 +129,8 @@ side of the window:
 
 .. note::
    If you are just reading through this tutorial and not running it, you can see the job
-   at our `public dashboard <http://137.184.43.219:5000/#/jobs/10>`_.
+   at our `public dashboard <http://137.184.43.219:5000/#/jobs/10>`_ and `just the graph
+   <../../_static/recipe_2_band_structure.html>`_.
 
 That was simple! Unlike the picture above, the actual band structure / DOS plot is
 interactive. You can zoom by dragging a rectangle across either the band structure of
