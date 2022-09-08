@@ -679,6 +679,8 @@ class DftbBase(seamm.Node):
             "output",
             "pdos*",
             "results.tag",
+            "*.xml",
+            "eigenvec.bin",
         ]  # yapf: disable
 
         # Run the calculation
@@ -717,7 +719,7 @@ class DftbBase(seamm.Node):
             else:
                 path = directory / filename
                 if result[filename]["data"] is not None:
-                    if filename in ("charges.bin",):
+                    if isinstance(result[filename]["data"], bytes):
                         with path.open(mode="wb") as fd:
                             fd.write(result[filename]["data"])
                     else:

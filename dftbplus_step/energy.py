@@ -3,6 +3,7 @@
 """Setup DFTB+"""
 
 import csv
+import gzip
 
 try:
     import importlib.metadata as implib
@@ -11,8 +12,11 @@ except Exception:
 import json
 import logging
 from pathlib import Path
+import shutil
+import subprocess
 import textwrap
 
+import hsd
 from tabulate import tabulate
 
 import dftbplus_step
@@ -492,6 +496,31 @@ class Energy(DftbBase):
                 result["Options"]["ReadChargesAsText"] = "Yes"
                 result["Options"]["SkipChargeTest"] = "Yes"
 
+        # And are we plotting the density or orbitals?
+        plotting = False
+        for key in (
+            "total density",
+            "total spin density",
+            "difference density",
+            "orbitals",
+        ):
+            if P[key]:
+                plotting = True
+                break
+
+        if plotting:
+            if "Options" not in result:
+                result["Options"] = {
+                    "WriteDetailedXml": "Yes",
+                }
+            else:
+                result["Options"]["WriteDetailedXml"] = "Yes"
+            if "Analysis" not in result:
+                result["Analysis"] = {
+                    "WriteEigenvectors": "Yes",
+                }
+            else:
+                result["Analysis"]["WriteEigenvectors"] = "Yes"
         return result
 
     def analyze(self, indent="", data={}, out=[]):
@@ -655,6 +684,10 @@ class Energy(DftbBase):
             else:
                 tmp = [spins[i] for i in self.mapping_to_primitive]
                 atoms["spin"][0:] = tmp
+
+        # And requested plots of density, orbitals, etc.
+        text += self.make_plots(data)
+
         text = str(__(text, **data, indent=self.indent + 4 * " "))
         text += "\n\n"
         text += textwrap.indent("\n".join(text_lines), self.indent + 7 * " ")
@@ -668,3 +701,258 @@ class Energy(DftbBase):
             results=self.parameters["results"].value,
             create_tables=self.parameters["create tables"].get(),
         )
+
+    def make_plots(self, data):
+        """Create the density and orbital plots if requested.
+
+        Parameters
+        ----------
+        data : dict()
+             Dictionary of results from the calculation (results.tag file)
+        """
+        text = "\n\n"
+
+        P = self.parameters.current_values_to_dict(
+            context=seamm.flowchart_variables._data
+        )
+
+        # Get the configuration and basic information
+        system, configuration = self.get_system_configuration(None)
+
+        periodicity = configuration.periodicity
+
+        # Read the detailed output file to get the number of iterations
+        directory = Path(self.directory)
+
+        # Make the input
+        input_data = {
+            "Options": {
+                "TotalChargeDensity": P["total density"],
+                "TotalChargeDifference": P["difference density"],
+                "ChargeDensity": "No",
+                "RealComponent": "Yes",
+                "PlottedSpins": "1:-1",
+                "PlottedLevels": "",
+                "NrOfPoints": [P["nx"], P["ny"], P["nz"]],
+                "NrOfCachedGrids": "-1",
+                "Verbose": "Yes",
+            },
+            "DetailedXml": "detailed.xml",
+            "EigenvecBin": "eigenvec.bin",
+            "Basis": {
+                "Resolution": "0.01",
+            },
+        }
+        options = input_data["Options"]
+        if periodicity == 0:
+            options["PlottedRegion"] = {
+                "OptimalCuboid": {},
+            }
+        else:
+            options["PlottedRegion"] = {
+                "UnitCell": {},
+            }
+            options["FillBoxWithAtoms"] = True
+
+        # Add the wavefunction info for the elements
+        symbols = configuration.atoms.symbols
+
+        # The information about the dataset
+        dataset = self.parent._dataset
+        element_data = dataset["element data"]
+
+        basis = input_data["Basis"]
+        missing = []
+        for element in symbols:
+            if "wfc" in element_data[element]:
+                basis[element] = element_data[element]["wfc"]
+            else:
+                missing.append(element)
+
+        if len(missing) > 0:
+            txt = "', '".join(missing)
+            return (
+                "Cannot plot the density and orbitals because the basis set "
+                "information for elements '{txt}' is not available."
+            )
+
+        # And the info about the orbitals. Find the level of the HOMO.
+        # band.out looks like this:
+        #  KPT            1  SPIN            1  KWEIGHT    1.0000000000000000
+        #      1   -24.450  1.00000
+        #      2   -11.172  1.00000
+        #      3    -9.085  1.00000
+        #      4    -9.085  1.00000
+        #      5     9.934  0.00000
+        #
+        #  KPT            1  SPIN            2  KWEIGHT    1.0000000000000000
+        #      1   -22.899  1.00000
+        #      2    -9.992  1.00000
+        #      3    -7.484  0.50000
+        #      4    -7.484  0.50000
+        #      5    10.324  0.00000
+        homos = {}
+        band_path = directory / "band.out"
+        lines = band_path.read_text().splitlines()
+        first = True
+        homo = 0
+        for line in lines:
+            line = line.strip()
+            if first:
+                first = False
+                tmp = line.split()
+                kpoint = int(tmp[1])
+                spin = int(tmp[3])
+                if kpoint not in homos:
+                    homos[kpoint] = {}
+            elif line == "":
+                first = True
+                continue
+            else:
+                tmp = line.split()
+                if float(tmp[2]) > 0.1:
+                    homos[kpoint][spin] = int(tmp[0])
+                    homo = int(tmp[0]) if int(tmp[0]) > homo else homo
+        n_orbitals = int(tmp[0])
+        n_spins = len(homos[1])
+
+        # and work out the orbitals
+        txt = P["selected orbitals"]
+        if txt == "all":
+            options["PlottedLevels"] = "1:-1"
+        else:
+            orbitals = []
+            for chunk in txt.split(","):
+                chunk = chunk.strip()
+                if ":" in chunk or ".." in chunk:
+                    if ":" in chunk:
+                        first, last = chunk.split(":")
+                    elif ".." in chunk:
+                        first, last = chunk.split("..")
+                    first = first.strip().upper()
+                    last = last.strip().upper()
+
+                    if first == "HOMO":
+                        first = homo
+                    elif first == "LUMO":
+                        first = homo + 1
+                    else:
+                        first = int(first.removeprefix("HOMO").removeprefix("LUMO"))
+                        if first < 0:
+                            first = homo - first
+                        else:
+                            first = homo + 1 + first
+
+                    if last == "HOMO":
+                        last = homo
+                    elif last == "LUMO":
+                        last = homo + 1
+                    else:
+                        last = int(last.removeprefix("HOMO").removeprefix("LUMO"))
+                        if last < 0:
+                            last = homo - last
+                        else:
+                            last = homo + 1 + last
+
+                    orbitals.extend(range(first, last + 1))
+                else:
+                    first = chunk.strip().upper()
+
+                    if first == "HOMO":
+                        first = homo
+                    elif first == "LUMO":
+                        first = homo + 1
+                    else:
+                        first = int(first.removeprefix("HOMO").removeprefix("LUMO"))
+                        if first < 0:
+                            first = homo + first
+                        else:
+                            first = homo + 1 + first
+                    orbitals.append(first)
+
+                # Remove orbitals out of limits
+                tmp = orbitals
+                orbitals = []
+                for x in tmp:
+                    if x > 0 and x <= n_orbitals:
+                        orbitals.append(x)
+
+                options["PlottedLevels"] = orbitals
+
+        # Write the input file.
+        path = directory / "waveplot_in.hsd"
+        hsd.dump(input_data, str(path))
+
+        # And run WAVEPLOT
+        cmd = str(Path(self.parent.options["dftbplus_path"]) / "waveplot")
+        try:
+            output = subprocess.check_output(
+                cmd, shell=True, text=True, stderr=subprocess.STDOUT, cwd=directory
+            )
+        except subprocess.CalledProcessError as e:
+            logger.warning(f"Calling waveplot, returncode = {e.returncode}")
+            logger.warning(f"Output: {e.output}")
+            return None
+
+        path = directory / "waveplot.out"
+        path.write_text(output)
+
+        # Finally rename and gzip the cube files
+        n_processed = 0
+        paths = directory.glob("wp-*.cube")
+        for path in paths:
+            filename = path.stem
+            if filename == "wp-abs2":
+                out = directory / "total_density.cube.gz"
+                with path.open("rb") as f_in:
+                    with gzip.open(out, "wb") as f_out:
+                        shutil.copyfileobj(f_in, f_out)
+                n_processed += 1
+                # path.unlink()
+                path.rename(out.with_suffix(""))
+            elif filename == "wp-abs2diff":
+                out = directory / "difference_density.cube.gz"
+                with path.open("rb") as f_in:
+                    with gzip.open(out, "wb") as f_out:
+                        shutil.copyfileobj(f_in, f_out)
+                n_processed += 1
+                # path.unlink()
+                path.rename(out.with_suffix(""))
+            else:
+                tmp = filename.split("-")
+                if len(tmp) != 5:
+                    text += f"  Problem handling cube file {path.name}\n"
+                else:
+                    spin = int(tmp[1])
+                    kpoint = int(tmp[2])
+                    orbital = int(tmp[3])
+                    form = tmp[4]
+
+                    # homo = homos[kpoint][spin]
+                    if orbital == homo:
+                        name = "HOMO"
+                    elif orbital == homo + 1:
+                        name = "LUMO"
+                    elif orbital < homo:
+                        name = f"HOMO{orbital - homo}"
+                    else:
+                        name = f"LUMO+{orbital - homo - 1}"
+                    if n_spins > 1:
+                        if spin == 1:
+                            name += "↑"
+                        else:
+                            name += "↓"
+                    if form != "real":
+                        name += " chg density"
+                    name += ".cube.gz"
+
+                    out = directory / name
+                    with path.open("rb") as f_in:
+                        with gzip.open(out, "wb") as f_out:
+                            shutil.copyfileobj(f_in, f_out)
+                    n_processed += 1
+                    # path.unlink()
+                    path.rename(out.with_suffix(""))
+        text += f"Successfully handled {n_processed} density and orbital cube files."
+
+        return text

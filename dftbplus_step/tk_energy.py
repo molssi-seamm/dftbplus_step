@@ -81,6 +81,35 @@ class TkEnergy(seamm.TkNode):
             w.combobox.bind("<Return>", self.reset_energy_frame)
             w.combobox.bind("<FocusOut>", self.reset_energy_frame)
 
+        # A tab for output -- orbitals, etc.
+        notebook = self["notebook"]
+        self["output frame"] = oframe = ttk.Frame(notebook)
+        notebook.insert(self["results frame"], oframe, text="Output", sticky="new")
+
+        # Frame to isolate widgets
+        p_frame = self["plot frame"] = ttk.LabelFrame(
+            self["output frame"],
+            borderwidth=4,
+            relief="sunken",
+            text="Plots",
+            labelanchor="n",
+            padding=10,
+        )
+
+        for key in dftbplus_step.EnergyParameters.output:
+            self[key] = P[key].widget(p_frame)
+
+        # Set the callbacks for changes
+        for widget in ("orbitals",):
+            w = self[widget]
+            w.combobox.bind("<<ComboboxSelected>>", self.reset_plotting)
+            w.combobox.bind("<Return>", self.reset_plotting)
+            w.combobox.bind("<FocusOut>", self.reset_plotting)
+        p_frame.grid(row=0, column=0, sticky="new")
+        oframe.columnconfigure(0, weight=1)
+
+        self.reset_plotting()
+
         self.setup_results(dftbplus_step.properties, calculation=calculation)
 
         self.logger.debug("Finished creating the dialog")
@@ -162,5 +191,47 @@ class TkEnergy(seamm.TkNode):
         sw.align_labels(widgets2, sticky=tk.E)
 
         frame.columnconfigure(0, minsize=30)
+
+        return row
+
+    def reset_plotting(self, widget=None):
+        frame = self["plot frame"]
+        for slave in frame.grid_slaves():
+            slave.grid_forget()
+
+        plot_orbitals = self["orbitals"].get() == "yes"
+
+        widgets = []
+
+        row = 0
+        for key in (
+            "total density",
+            "total spin density",
+            "difference density",
+            "orbitals",
+        ):
+            self[key].grid(row=row, column=0, columnspan=4, sticky=tk.EW)
+            widgets.append(self[key])
+            row += 1
+
+        if plot_orbitals:
+            key = "selected orbitals"
+            self[key].grid(row=row, column=1, columnspan=4, sticky=tk.EW)
+            row += 1
+
+        key = "region"
+        self[key].grid(row=row, column=0, columnspan=4, sticky=tk.EW)
+        widgets.append(self[key])
+        row += 1
+
+        key = "nx"
+        self[key].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
+        widgets.append(self[key])
+        self["ny"].grid(row=row, column=2, sticky=tk.EW)
+        self["nz"].grid(row=row, column=3, sticky=tk.EW)
+
+        sw.align_labels(widgets, sticky=tk.E)
+        frame.columnconfigure(0, minsize=10)
+        frame.columnconfigure(4, weight=1)
 
         return row
