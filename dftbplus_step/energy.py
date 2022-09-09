@@ -151,6 +151,21 @@ class Energy(DftbBase):
                 "Monkhorst-Pack grid will be used."
             )
 
+        # Plotting
+        plots = []
+        if P["total density"]:
+            plots.append("total density")
+        if P["difference density"]:
+            plots.append("difference density")
+        if P["total spin density"]:
+            plots.append("spin density")
+        if P["orbitals"]:
+            if len(plots) > 0:
+                text += f"\nThe {', '.join(plots)} and orbitals "
+                text += f"{P['selected orbitals']} will be plotted."
+            else:
+                text += f"\nThe orbitals {P['selected orbitals']} will be plotted."
+
         return self.header + "\n" + __(text, indent=4 * " ").__str__()
 
     def get_input(self):
@@ -729,10 +744,9 @@ class Energy(DftbBase):
             "Options": {
                 "TotalChargeDensity": P["total density"],
                 "TotalChargeDifference": P["difference density"],
-                "ChargeDensity": "No",
-                "RealComponent": "Yes",
+                "TotalSpinPolarisation": P["total spin density"],
+                "PlottedLevels": {},
                 "PlottedSpins": "1:-1",
-                "PlottedLevels": "",
                 "NrOfPoints": [P["nx"], P["ny"], P["nz"]],
                 "NrOfCachedGrids": "-1",
                 "Verbose": "Yes",
@@ -759,12 +773,21 @@ class Energy(DftbBase):
 
         # The information about the dataset
         dataset = self.parent._dataset
+        subset = self.parent._subset
+        if subset is not None:
+            subset_data = subset["element data"]
         element_data = dataset["element data"]
 
         basis = input_data["Basis"]
         missing = []
         for element in symbols:
-            if "wfc" in element_data[element]:
+            if (
+                subset is not None
+                and element in subset_data
+                and "wfc" in subset_data[element]
+            ):
+                basis[element] = subset_data[element]["wfc"]
+            elif "wfc" in element_data[element]:
                 basis[element] = element_data[element]["wfc"]
             else:
                 missing.append(element)
@@ -776,108 +799,144 @@ class Energy(DftbBase):
                 "information for elements '{txt}' is not available."
             )
 
-        # And the info about the orbitals. Find the level of the HOMO.
-        # band.out looks like this:
-        #  KPT            1  SPIN            1  KWEIGHT    1.0000000000000000
-        #      1   -24.450  1.00000
-        #      2   -11.172  1.00000
-        #      3    -9.085  1.00000
-        #      4    -9.085  1.00000
-        #      5     9.934  0.00000
-        #
-        #  KPT            1  SPIN            2  KWEIGHT    1.0000000000000000
-        #      1   -22.899  1.00000
-        #      2    -9.992  1.00000
-        #      3    -7.484  0.50000
-        #      4    -7.484  0.50000
-        #      5    10.324  0.00000
-        homos = {}
-        band_path = directory / "band.out"
-        lines = band_path.read_text().splitlines()
-        first = True
-        homo = 0
-        for line in lines:
-            line = line.strip()
-            if first:
-                first = False
-                tmp = line.split()
-                kpoint = int(tmp[1])
-                spin = int(tmp[3])
-                if kpoint not in homos:
-                    homos[kpoint] = {}
-            elif line == "":
-                first = True
-                continue
-            else:
-                tmp = line.split()
-                if float(tmp[2]) > 0.1:
-                    homos[kpoint][spin] = int(tmp[0])
-                    homo = int(tmp[0]) if int(tmp[0]) > homo else homo
-        n_orbitals = int(tmp[0])
-        n_spins = len(homos[1])
+        if P["orbitals"] and not (
+            periodicity != 0
+            and (P["selected k-points"] == "none" or P["selected k-points"] == "")
+        ):
+            options["ChargeDensity"] = "No"
+            options["RealComponent"] = "Yes"
 
-        # and work out the orbitals
-        txt = P["selected orbitals"]
-        if txt == "all":
-            options["PlottedLevels"] = "1:-1"
-        else:
-            orbitals = []
-            for chunk in txt.split(","):
-                chunk = chunk.strip()
-                if ":" in chunk or ".." in chunk:
-                    if ":" in chunk:
-                        first, last = chunk.split(":")
-                    elif ".." in chunk:
-                        first, last = chunk.split("..")
-                    first = first.strip().upper()
-                    last = last.strip().upper()
-
-                    if first == "HOMO":
-                        first = homo
-                    elif first == "LUMO":
-                        first = homo + 1
-                    else:
-                        first = int(first.removeprefix("HOMO").removeprefix("LUMO"))
-                        if first < 0:
-                            first = homo - first
-                        else:
-                            first = homo + 1 + first
-
-                    if last == "HOMO":
-                        last = homo
-                    elif last == "LUMO":
-                        last = homo + 1
-                    else:
-                        last = int(last.removeprefix("HOMO").removeprefix("LUMO"))
-                        if last < 0:
-                            last = homo - last
-                        else:
-                            last = homo + 1 + last
-
-                    orbitals.extend(range(first, last + 1))
+            # And the info about the orbitals. Find the level of the HOMO.
+            # band.out looks like this:
+            #  KPT            1  SPIN            1  KWEIGHT    1.0000000000000000
+            #      1   -24.450  1.00000
+            #      2   -11.172  1.00000
+            #      3    -9.085  1.00000
+            #      4    -9.085  1.00000
+            #      5     9.934  0.00000
+            #
+            #  KPT            1  SPIN            2  KWEIGHT    1.0000000000000000
+            #      1   -22.899  1.00000
+            #      2    -9.992  1.00000
+            #      3    -7.484  0.50000
+            #      4    -7.484  0.50000
+            #      5    10.324  0.00000
+            homos = {}
+            band_path = directory / "band.out"
+            lines = band_path.read_text().splitlines()
+            first = True
+            homo = 0
+            for line in lines:
+                line = line.strip()
+                if first:
+                    first = False
+                    tmp = line.split()
+                    kpoint = int(tmp[1])
+                    spin = int(tmp[3])
+                    if kpoint not in homos:
+                        homos[kpoint] = {}
+                elif line == "":
+                    first = True
+                    continue
                 else:
-                    first = chunk.strip().upper()
+                    tmp = line.split()
+                    if float(tmp[2]) > 0.1:
+                        homos[kpoint][spin] = int(tmp[0])
+                        homo = int(tmp[0]) if int(tmp[0]) > homo else homo
+            n_orbitals = int(tmp[0])
+            n_spins = len(homos[1])
+            last_kpoint = kpoint
 
-                    if first == "HOMO":
-                        first = homo
-                    elif first == "LUMO":
-                        first = homo + 1
-                    else:
-                        first = int(first.removeprefix("HOMO").removeprefix("LUMO"))
-                        if first < 0:
-                            first = homo + first
-                        else:
-                            first = homo + 1 + first
-                    orbitals.append(first)
-
-                # Remove orbitals out of limits
-                tmp = orbitals
+            # and work out the orbitals
+            txt = P["selected orbitals"]
+            if txt == "all":
+                options["PlottedLevels"] = "1:-1"
+            else:
                 orbitals = []
-                for x in tmp:
-                    if x > 0 and x <= n_orbitals:
-                        orbitals.append(x)
+                for chunk in txt.split(","):
+                    chunk = chunk.strip()
+                    if ":" in chunk or ".." in chunk:
+                        if ":" in chunk:
+                            first, last = chunk.split(":")
+                        elif ".." in chunk:
+                            first, last = chunk.split("..")
+                        first = first.strip().upper()
+                        last = last.strip().upper()
 
-                options["PlottedLevels"] = orbitals
+                        if first == "HOMO":
+                            first = homo
+                        elif first == "LUMO":
+                            first = homo + 1
+                        else:
+                            first = int(first.removeprefix("HOMO").removeprefix("LUMO"))
+                            if first < 0:
+                                first = homo + first
+                            else:
+                                first = homo + 1 + first
+
+                        if last == "HOMO":
+                            last = homo
+                        elif last == "LUMO":
+                            last = homo + 1
+                        else:
+                            last = int(last.removeprefix("HOMO").removeprefix("LUMO"))
+                            if last < 0:
+                                last = homo + last
+                            else:
+                                last = homo + 1 + last
+
+                        orbitals.extend(range(first, last + 1))
+                    else:
+                        first = chunk.strip().upper()
+
+                        if first == "HOMO":
+                            first = homo
+                        elif first == "LUMO":
+                            first = homo + 1
+                        else:
+                            first = int(first.removeprefix("HOMO").removeprefix("LUMO"))
+                            if first < 0:
+                                first = homo + first
+                            else:
+                                first = homo + 1 + first
+                        orbitals.append(first)
+
+                    # Remove orbitals out of limits
+                    tmp = orbitals
+                    orbitals = []
+                    for x in tmp:
+                        if x > 0 and x <= n_orbitals:
+                            orbitals.append(x)
+
+                    options["PlottedLevels"] = orbitals
+
+            if periodicity != 0:
+                if P["selected k-points"] == "all":
+                    options["PlottedKPoints"] = "1:-1"
+                else:
+                    kpoints = []
+                    for chunk in P["selected k-points"].split(","):
+                        chunk = chunk.strip()
+                        if ":" in chunk or ".." in chunk:
+                            if ":" in chunk:
+                                first, last = chunk.split(":")
+                            elif ".." in chunk:
+                                first, last = chunk.split("..")
+                            first = int(first.strip())
+                            last = int(last.strip())
+
+                            if first < 1:
+                                first = 1
+
+                            if last > last_kpoint:
+                                last = last_kpoint
+
+                            kpoints.extend(range(first, last + 1))
+                        else:
+                            first = int(chunk.strip())
+                            if first > 0 and first <= last_kpoint:
+                                kpoints.append(first)
+                    options["PlottedKPoints"] = kpoints
 
         # Write the input file.
         path = directory / "waveplot_in.hsd"
@@ -890,9 +949,10 @@ class Energy(DftbBase):
                 cmd, shell=True, text=True, stderr=subprocess.STDOUT, cwd=directory
             )
         except subprocess.CalledProcessError as e:
-            logger.warning(f"Calling waveplot, returncode = {e.returncode}")
-            logger.warning(f"Output: {e.output}")
-            return None
+            return (
+                f"Calling waveplot, returncode = {e.returncode}"
+                f"\n\nOutput: {e.output}"
+            )
 
         path = directory / "waveplot.out"
         path.write_text(output)
@@ -903,21 +963,26 @@ class Energy(DftbBase):
         for path in paths:
             filename = path.stem
             if filename == "wp-abs2":
-                out = directory / "total_density.cube.gz"
+                out = directory / "Total_Density.cube.gz"
                 with path.open("rb") as f_in:
                     with gzip.open(out, "wb") as f_out:
                         shutil.copyfileobj(f_in, f_out)
                 n_processed += 1
-                # path.unlink()
-                path.rename(out.with_suffix(""))
+                path.unlink()
             elif filename == "wp-abs2diff":
-                out = directory / "difference_density.cube.gz"
+                out = directory / "Difference_Density.cube.gz"
                 with path.open("rb") as f_in:
                     with gzip.open(out, "wb") as f_out:
                         shutil.copyfileobj(f_in, f_out)
                 n_processed += 1
-                # path.unlink()
-                path.rename(out.with_suffix(""))
+                path.unlink()
+            elif filename == "wp-spinpol":
+                out = directory / "Spin_Density.cube.gz"
+                with path.open("rb") as f_in:
+                    with gzip.open(out, "wb") as f_out:
+                        shutil.copyfileobj(f_in, f_out)
+                n_processed += 1
+                path.unlink()
             else:
                 tmp = filename.split("-")
                 if len(tmp) != 5:
@@ -944,6 +1009,9 @@ class Energy(DftbBase):
                             name += "↓"
                     if form != "real":
                         name += " chg density"
+
+                    if periodicity != 0:
+                        name = f"kpt={kpoint} " + name
                     name += ".cube.gz"
 
                     out = directory / name
@@ -951,8 +1019,7 @@ class Energy(DftbBase):
                         with gzip.open(out, "wb") as f_out:
                             shutil.copyfileobj(f_in, f_out)
                     n_processed += 1
-                    # path.unlink()
-                    path.rename(out.with_suffix(""))
+                    path.unlink()
         text += f"Successfully handled {n_processed} density and orbital cube files."
 
         return text
