@@ -7,6 +7,7 @@ dependencies:
   - pip
 
   # molsystem requires, and only available via Conda.
+  - hsd-python
   - seamm
   - seamm-util
   - tabulate

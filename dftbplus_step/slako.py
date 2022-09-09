@@ -9,7 +9,12 @@ import json  # noqa: F401
 import logging
 from pathlib import Path
 
-import xmltodict
+import hsd
+
+try:
+    import xmltodict
+except Exception:
+    pass
 
 logger = logging.getLogger(__name__)
 
@@ -514,10 +519,60 @@ def create_datafile(directory="~/SEAMM/Parameters/slako"):
         fd.write(data)
 
 
+def add_wavefunction(directory="."):
+    "Add the wfc information to the metadata."
+    if not isinstance(directory, Path):
+        directory = Path(directory)
+    directory = directory.expanduser().resolve()
+
+    # Read the metadata file
+    metadata_path = directory / "metadata.json"
+    with metadata_path.open() as fd:
+        metadata = json.load(fd)
+    datasets = metadata["DFTB"]["datasets"]
+
+    # And process the wfc files
+    paths = directory.glob("wfc.*.hsd")
+    for path in paths:
+        # e.g. wfc.3ob-3-1.hsd
+        dataset = path.suffixes[0][1:].split("-")[0]
+
+        key = f"DFTB - {dataset}"
+        if key not in datasets:
+            print(f"Did not find dataset {key} for {path.name}")
+            continue
+
+        wfc_data = hsd.load(str(path))
+        element_data = datasets[key]["element data"]
+        for element, wfc in wfc_data.items():
+            if element in element_data:
+                element_data[element]["wfc"] = wfc
+            else:
+                print(f"   Did not find element {element} for {dataset}")
+
+    metadata_new = directory / "metadata_new.json"
+    with metadata_new.open("w") as fd:
+        json.dump(metadata, fd, indent=4, sort_keys=True)
+
+    # Print missing wfc data
+    print()
+    print("Checking for wfc data")
+    for dataset, data in datasets.items():
+        element_data = data["element data"]
+        print()
+        print(dataset)
+        for element, edata in element_data.items():
+            if "wfc" not in edata:
+                print(f"    {element} **")
+            else:
+                print(f"    {element}")
+
+
 if __name__ == "__main__":
     # test_one('data/slako/3ob/3ob-3-1/Br-Br.skf')
 
-    create_datafile()
+    # create_datafile()
+    add_wavefunction()
     exit()
 
     # metadata, comments = analyze_directory('data/slako')
