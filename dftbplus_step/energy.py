@@ -747,6 +747,7 @@ class Energy(DftbBase):
                 "TotalSpinPolarisation": P["total spin density"],
                 "PlottedLevels": {},
                 "PlottedSpins": "1:-1",
+                "PlottedKPoints": {},
                 "NrOfPoints": [P["nx"], P["ny"], P["nz"]],
                 "NrOfCachedGrids": "-1",
                 "Verbose": "Yes",
