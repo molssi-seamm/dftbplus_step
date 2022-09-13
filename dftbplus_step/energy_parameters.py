@@ -318,6 +318,15 @@ class EnergyParameters(seamm.Parameters):
             "description": "Selected orbitals:",
             "help_text": "Which orbitals to plot.",
         },
+        "selected k-points": {
+            "default": "none",
+            "kind": "string",
+            "default_units": "",
+            "enumeration": ("none", "all"),
+            "format_string": "",
+            "description": "For crystals, k-points:",
+            "help_text": "Plots the orbitals at these k-points.",
+        },
         "region": {
             "default": "default",
             "kind": "string",

@@ -218,6 +218,9 @@ class TkEnergy(seamm.TkNode):
             key = "selected orbitals"
             self[key].grid(row=row, column=1, columnspan=4, sticky=tk.EW)
             row += 1
+            key = "selected k-points"
+            self[key].grid(row=row, column=1, columnspan=4, sticky=tk.EW)
+            row += 1
 
         key = "region"
         self[key].grid(row=row, column=0, columnspan=4, sticky=tk.EW)
