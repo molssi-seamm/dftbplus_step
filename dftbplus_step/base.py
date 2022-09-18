@@ -143,10 +143,11 @@ class DftbBase(seamm.Node):
         options = self.parent.options
         exe = Path(options["dftbplus_path"]) / "dp_bands"
 
+        band_path = str(wd / "band")
         if spin_polarized:
-            command = f"{exe} -s {input_path} {wd / 'band'}"
+            command = f"'{exe}' -s '{input_path}' '{band_path}'"
         else:
-            command = f"{exe} {input_path} {wd / 'band'}"
+            command = f"'{exe}' '{input_path}' '{band_path}'"
         try:
             subprocess.check_output(
                 command, shell=True, text=True, stderr=subprocess.STDOUT
@@ -247,7 +248,8 @@ class DftbBase(seamm.Node):
         # Total DOS
         wd = Path(self.directory)
         exe = Path(options["dftbplus_path"]) / "dp_dos"
-        command = f"{exe} {input_path} {wd / 'dos_total.dat'}"
+        dat_file = str(wd / "dos_total.dat")
+        command = f"'{exe}' '{input_path}' '{dat_file}'"
         try:
             subprocess.check_output(
                 command, shell=True, text=True, stderr=subprocess.STDOUT
@@ -309,7 +311,7 @@ class DftbBase(seamm.Node):
                 shell = ("s", "p", "d", "f")[shell_no - 1]
                 label = element + "_" + shell
 
-                command = f"{exe} -w {path} {out}"
+                command = f"'{exe}' -w '{path}' '{out}'"
                 try:
                     subprocess.check_output(
                         command, shell=True, text=True, stderr=subprocess.STDOUT
