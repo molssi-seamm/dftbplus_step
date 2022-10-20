@@ -44,6 +44,9 @@ class Energy(DftbBase):
 
         super().__init__(flowchart=flowchart, title=title, extension=extension)
 
+        self._calculation = "energy"
+        self._model = None
+        self._metadata = dftbplus_step.metadata
         self.parameters = dftbplus_step.EnergyParameters()
 
         self.description = ["Energy of DFTB+"]
@@ -711,9 +714,8 @@ class Energy(DftbBase):
 
         # Put any requested results into variables or tables
         self.store_results(
+            configuration=configuration,
             data=data,
-            properties=dftbplus_step.properties,
-            results=self.parameters["results"].value,
             create_tables=self.parameters["create tables"].get(),
         )
 

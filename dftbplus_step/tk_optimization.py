@@ -24,7 +24,6 @@ class TkOptimization(dftbplus_step.TkEnergy):
         w=200,
         h=50,
         my_logger=logger,
-        keyword_metadata=None,
     ):
         """Initialize the graphical Tk DFTB+ optimization step
 
@@ -41,7 +40,6 @@ class TkOptimization(dftbplus_step.TkEnergy):
             w=w,
             h=h,
             my_logger=my_logger,
-            keyword_metadata=keyword_metadata,
         )
 
     def right_click(self, event):
@@ -52,12 +50,10 @@ class TkOptimization(dftbplus_step.TkEnergy):
 
         self.popup_menu.tk_popup(event.x_root, event.y_root, 0)
 
-    def create_dialog(
-        self, title="Edit DFTB+ Optimization Step", calculation="optimization"
-    ):
+    def create_dialog(self, title="Edit DFTB+ Optimization Step"):
         """Create the dialog!"""
         self.logger.debug("Creating the dialog")
-        super().create_dialog(title=title, calculation=calculation)
+        super().create_dialog(title=title)
 
         # Create all the widgets
         P = self.node.parameters

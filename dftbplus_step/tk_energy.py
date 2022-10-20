@@ -24,7 +24,6 @@ class TkEnergy(seamm.TkNode):
         w=200,
         h=50,
         my_logger=logger,
-        keyword_metadata=None,
     ):
         """Initialize the graphical Tk DFTB+ Energy step
 
@@ -41,7 +40,6 @@ class TkEnergy(seamm.TkNode):
             w=w,
             h=h,
             my_logger=my_logger,
-            keyword_metadata=keyword_metadata,
         )
 
     def right_click(self, event):
@@ -52,7 +50,7 @@ class TkEnergy(seamm.TkNode):
 
         self.popup_menu.tk_popup(event.x_root, event.y_root, 0)
 
-    def create_dialog(self, title="Edit DFTB+ Energy Step", calculation="energy"):
+    def create_dialog(self, title="Edit DFTB+ Energy Step"):
         """Create the dialog!"""
         self.logger.debug("Creating the dialog")
         super().create_dialog(title=title, widget="notebook", results_tab=True)
@@ -110,7 +108,7 @@ class TkEnergy(seamm.TkNode):
 
         self.reset_plotting()
 
-        self.setup_results(dftbplus_step.properties, calculation=calculation)
+        self.setup_results()
 
         self.logger.debug("Finished creating the dialog")
 

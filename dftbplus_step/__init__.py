@@ -15,7 +15,7 @@ from dftbplus_step.dftbplus_step import DftbplusStep  # noqa: F401
 from dftbplus_step.tk_dftbplus import TkDftbplus  # noqa: F401
 
 # The metadata
-from dftbplus_step.metadata import properties  # noqa: F401
+from dftbplus_step.metadata import metadata  # noqa: F401
 
 # The substeps
 from dftbplus_step.choose_parameters import ChooseParameters  # noqa: F401

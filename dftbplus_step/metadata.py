@@ -1,9 +1,12 @@
 """This file contains metadata to help describe the results of DFTB+
 calculations, etc.
 """
+
+metadata = {}
+
 """Properties that DFTB+ produces, depending on the type of calculation.
 """
-properties = {
+metadata["results"] = {
     "total_energy": {
         "calculation": [
             "energy",
@@ -11,9 +14,9 @@ properties = {
         ],
         "description": "The total energy",
         "dimensionality": "scalar",
-        "methods": [],
+        "property": "total energy#DFTB+#{model}",
         "type": "float",
-        "units": "hartree",
+        "units": "E_h",
     },
     "energy_per_formula_unit": {
         "calculation": [
@@ -22,9 +25,9 @@ properties = {
         ],
         "description": "The energy per empirical formula unit",
         "dimensionality": "scalar",
-        "methods": [],
+        "property": "total energy per formula unit#DFTB+#{model}",
         "type": "float",
-        "units": "hartree",
+        "units": "E_h",
     },
     "energy of formation": {
         "calculation": [
@@ -33,7 +36,7 @@ properties = {
         ],
         "description": "The energy of formation",
         "dimensionality": "scalar",
-        "methods": [],
+        "property": "energy of formation#DFTB+#{model}",
         "type": "float",
         "units": "kJ/mol",
     },
@@ -44,9 +47,9 @@ properties = {
         ],
         "description": "The Fermi level",
         "dimensionality": [2],
-        "methods": [],
+        "property": "Fermi level#DFTB+#{model}",
         "type": "float",
-        "units": "hartree",
+        "units": "E_h",
     },
     "number_of_electrons": {
         "calculation": [
@@ -55,9 +58,7 @@ properties = {
         ],
         "description": "The number of electrons",
         "dimensionality": [2],
-        "methods": [],
         "type": "float",
-        "units": "",
     },
     "mermin_energy": {
         "calculation": [
@@ -66,9 +67,8 @@ properties = {
         ],
         "description": "The Mermin energy",
         "dimensionality": "scalar",
-        "methods": [],
         "type": "float",
-        "units": "hartree",
+        "units": "E_h",
     },
     "extrapolated0_energy": {
         "calculation": [
@@ -77,9 +77,8 @@ properties = {
         ],
         "description": "The energy extrapolated to no smearing",
         "dimensionality": "scalar",
-        "methods": [],
         "type": "float",
-        "units": "hartree",
+        "units": "E_h",
     },
     "forcerelated_energy": {
         "calculation": [
@@ -88,9 +87,8 @@ properties = {
         ],
         "description": "The force-related energy",
         "dimensionality": "scalar",
-        "methods": [],
         "type": "float",
-        "units": "hartree",
+        "units": "E_h",
     },
     "dipole_moments": {
         "calculation": [
@@ -99,9 +97,7 @@ properties = {
         ],
         "description": "The dipole moments of the system",
         "dimensionality": [3, "nspins"],
-        "methods": [],
         "type": "float",
-        "units": "",
     },
     "eigenvalues": {
         "calculation": [
@@ -110,9 +106,8 @@ properties = {
         ],
         "description": "The eigenvalues",
         "dimensionality": ["norbitals"],
-        "methods": [],
         "type": "float",
-        "units": "hartree",
+        "units": "E_h",
     },
     "filling": {
         "calculation": [
@@ -121,9 +116,7 @@ properties = {
         ],
         "description": "The orbital occupancy",
         "dimensionality": ["norbitals"],
-        "methods": [],
         "type": "float",
-        "units": "",
     },
     "orbital_charges": {
         "calculation": [
@@ -132,9 +125,7 @@ properties = {
         ],
         "description": "The orbital charges",
         "dimensionality": ["natoms", "natoms"],
-        "methods": [],
         "type": "float",
-        "units": "",
     },
     "gross_atomic_charges": {
         "calculation": [
@@ -143,9 +134,7 @@ properties = {
         ],
         "description": "The charges on the atoms",
         "dimensionality": ["natoms"],
-        "methods": [],
         "type": "float",
-        "units": "",
     },
     "gross_atomic_spins": {
         "calculation": [
@@ -154,9 +143,7 @@ properties = {
         ],
         "description": "The spins on the atoms",
         "dimensionality": ["natoms"],
-        "methods": [],
         "type": "float",
-        "units": "",
     },
     "atomic_dipole_moment": {
         "calculation": [
@@ -165,17 +152,14 @@ properties = {
         ],
         "description": "The dipole moments of the atoms",
         "dimensionality": [3, "natoms"],
-        "methods": [],
         "type": "float",
-        "units": "",
     },
     "forces": {
         "calculation": ["optimization"],
         "description": "The forces on the atoms",
         "dimensionality": [3, "natoms"],
-        "methods": [],
         "type": "float",
-        "units": "hartree/bohr",
+        "units": "E_h/bohr",
     },
     "stress": {
         "calculation": [
@@ -184,7 +168,6 @@ properties = {
         ],
         "description": "The stress",
         "dimensionality": [3, 3],
-        "methods": [],
         "type": "float",
         "units": "Å^3",
     },
@@ -195,9 +178,7 @@ properties = {
         ],
         "description": "The number of primitive cells in the unit cell",
         "dimensionality": "scalar",
-        "methods": [],
         "type": "integer",
-        "units": "",
     },
     "Z": {
         "calculation": [
@@ -206,9 +187,7 @@ properties = {
         ],
         "description": "The number of empirical formula u its in the system",
         "dimensionality": "scalar",
-        "methods": [],
         "type": "integer",
-        "units": "",
     },
     "formula": {
         "calculation": [
@@ -217,9 +196,7 @@ properties = {
         ],
         "description": "The chemical formula of the system",
         "dimensionality": "scalar",
-        "methods": [],
         "type": "string",
-        "units": "",
     },
     "empirical_formula": {
         "calculation": [
@@ -228,9 +205,7 @@ properties = {
         ],
         "description": "The empirical formula of the system",
         "dimensionality": "scalar",
-        "methods": [],
         "type": "string",
-        "units": "",
     },
     "cell_volume": {
         "calculation": [
@@ -239,7 +214,7 @@ properties = {
         ],
         "description": "The volume of the unit cell",
         "dimensionality": "scalar",
-        "methods": [],
+        "property": "unit cell volume",
         "type": "float",
         "units": "Å^3",
     },

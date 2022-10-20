@@ -1,0 +1,5 @@
+Property,Type,Units,Description,URL
+Fermi level#DFTB+#{model},float,eV,"The {model} Fermi level.",https://en.wikipedia.org/wiki/Fermi_level
+energy of formation#DFTB+#{model},float,eV,"The {model} energy of formation.",
+total energy per formula unit#DFTB+#{model},float,eV,"The {model} total energy (electronic + nuclear).",
+total energy#DFTB+#{model},float,eV,"The {model} total energy (electronic + nuclear).",

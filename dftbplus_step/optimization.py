@@ -25,6 +25,9 @@ class Optimization(dftbplus_step.Energy):
 
         super().__init__(flowchart=flowchart, title=title, extension=extension)
 
+        self._calculation = "optimization"
+        self._model = None
+        self._metadata = dftbplus_step.metadata
         self.parameters = dftbplus_step.OptimizationParameters()
 
         self.description = ["Optimization of DFTB+"]
