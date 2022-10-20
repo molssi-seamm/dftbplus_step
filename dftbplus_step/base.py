@@ -578,7 +578,7 @@ class DftbBase(seamm.Node):
     def parse_results(self, lines):
         """Digest the data in the results.tag file."""
 
-        properties = dftbplus_step.properties
+        properties = dftbplus_step.metadata["results"]
 
         property_data = {}
         line_iter = enumerate(lines.splitlines(), start=1)

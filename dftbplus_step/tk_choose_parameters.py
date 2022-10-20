@@ -55,7 +55,6 @@ class TkChooseParameters(seamm.TkNode):
         w=200,
         h=50,
         my_logger=logger,
-        keyword_metadata=None,
     ):
         """Initialize the graphical Tk DFTB+ step for choosing Slater-Koster
         parameters.
@@ -73,7 +72,6 @@ class TkChooseParameters(seamm.TkNode):
             w=w,
             h=h,
             my_logger=my_logger,
-            keyword_metadata=keyword_metadata,
         )
 
         # Get the metadata for the Slater-Koster parameters
