@@ -6902,14 +6902,6 @@
                 },
                 "element sets": [
                     [
-                        "H_short",
-                        "N"
-                    ],
-                    [
-                        "H",
-                        "N_short"
-                    ],
-                    [
                         "C",
                         "F",
                         "H",

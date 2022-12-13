@@ -51,9 +51,13 @@ from dftbplus_step.dos_parameters import DOSParameters  # noqa: F401
 from dftbplus_step.dos_step import DOSStep  # noqa: F401
 from dftbplus_step.tk_dos import TkDOS  # noqa: F401
 
-# Handle versioneer
 from ._version import get_versions
+from .computational_models import computational_models_metadata
 
+# Get the computational model metadata from the parameters
+metadata["computational models"] = computational_models_metadata()
+
+# Handle versioneer
 __author__ = """Paul Saxe"""
 __email__ = "psaxe@molssi.org"
 versions = get_versions()
