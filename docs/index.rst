@@ -1,54 +1,79 @@
-Welcome to the documentation for the DFTB+ plug-in
-==================================================
+==========
+DFTB+ Step
+==========
+
 This plug-in exposes the functionality of `DFTB+`_, which is an implementation of the
 Density Functional based Tight Binding (DFTB) method, containing many extensions to the
 original method. The development is supported by various groups, resulting in a code
 which is probably the most versatile DFTB-implementation, with some unique features not
 available in other implementations so far.
 
-Features
---------
+.. grid:: 1 1 2 2
 
-DFTB+ offers an approximate density functional theory based quantum simulation tool with
-functionalities similar to _ab_ _initio_ quantum mechanical packages while being one or two
-orders of magnitude faster. You can optimize the structure of molecules and solids, you
-can extract one electron spectra, band structures and various other useful
-quantities. Additionally, you can calculate electron transport under non-equilibrium
-conditions.
+   .. grid-item-card:: Getting Started
+      :margin: 0 3 0 0
 
-For the full list of the capabilities of DFTB+, see the `detailed list of features
-<https://dftbplus.org/about-dftb/features>`_ on DFTB+ website. Currently this plug-in
-supports the following subset of the capabilities:
+      A simple introduction
 
-    * DFTB and xTB Hamiltonian
-    * Non-scc and scc calculations for clusters and periodic systems (with arbitrary K-point sampling)
-    * Spin polarized calculations with colinear :strike:`and non-colinear` spin
-    * Dispersion correction (D3, D4, many-body and Tkatchenko-Scheffler)
-    * 3rd order correction and other DFTB3-features
-    * Ability to treat f-electrons
-    * Geometry and lattice optimisation
-    * Orbital resolved density of states (DOS) and band structure.
+      .. button-link:: ./getting_started/index.html
+	 :color: primary
+	 :expand:
 
+         To the Getting Started Guide
+
+   .. grid-item-card::  User Guide
+      :margin: 0 3 0 0
+
+      A complete guide to using this step
+
+      .. button-link:: ./user_guide/index.html
+	 :color: primary
+	 :expand:
+
+         To the User Guide
+
+   .. grid-item-card::  Developer Guide
+      :margin: 0 3 0 0
+
+      Contributing to the code. Fixing bugs, adding functionality
+
+      .. button-link:: ./developer_guide/index.html
+	 :color: primary
+	 :expand:
+
+         To the Developer Guide
+
+   .. grid-item-card:: API Reference
+      :margin: 0 3 0 0
+
+      The API for the DFTB+ Step
+
+      .. button-link:: ./api/index.html
+	 :color: primary
+	 :expand:
+
+	 To the API Reference.
+
+
+.. toctree::
+   :hidden:
+   :maxdepth: 1
+   :titlesonly:
+
+   getting_started/index
+   user_guide/index
+   developer_guide/index
+   api/index
+   DFTB+ documentation <https://dftbplus.org/documentation>
+
+More Information
+================
 .. toctree::
    :maxdepth: 1
    :titlesonly:
 
-   user/index
-   developer/index
    authors
    history
-   DFTB+ documentation <https://dftbplus.org/documentation>
-   Main SEAMM documentation <https://molssi-seamm.github.io>
-
-Documentation Versions
-----------------------
-
-.. raw:: html
-
-   <iframe
-   src="https://molssi-seamm.github.io/dftbplus_step/dev/versions.html"
-   title="Documentation Versions"  style="border:none;">
-   </iframe>
 
 .. links to software
 .. _DFTB+: https://dftbplus.org

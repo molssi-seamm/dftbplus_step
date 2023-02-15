@@ -23,8 +23,8 @@ important parameter is **SMILES**, which is set to "O", which is the SMILES
 representation for water.
 
 .. note::
-   If you aren't familiar with SEAMM and its flowcharts, there is a more gentle
-   `introduction <https://molssi-seamm.github.io/tutorials/index.html>`_ in the SEAMM
+   If you aren't familiar with SEAMM and its flowcharts, there is a more `gentle
+   introduction <https://molssi-seamm.github.io/tutorials/index.html>`_ in the SEAMM
    documentation.
 
 If you are not familiar with SMILES, it is a convenient representation of moleculaes

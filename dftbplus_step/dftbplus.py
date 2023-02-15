@@ -170,7 +170,7 @@ class Dftbplus(seamm.Node):
     """
     The non-graphical part of a DFTB+ step in a flowchart.
 
-    Attributes
+    Parameters
     ----------
     parser : configargparse.ArgParser
         The parser object.

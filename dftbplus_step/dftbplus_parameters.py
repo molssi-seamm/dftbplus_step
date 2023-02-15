@@ -20,7 +20,7 @@ class DftbplusParameters(seamm.Parameters):
     You need to replace the 'time' example below with one or more
     definitions of the control parameters for your plugin and application.
 
-    Attributes
+    Parameters
     ----------
     parameters : {str: str}
         A dictionary containing the parameters for the current step.
