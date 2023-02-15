@@ -704,7 +704,13 @@ class Energy(DftbBase):
                 atoms["spin"][0:] = tmp
 
         # And requested plots of density, orbitals, etc.
-        text += self.make_plots(data)
+        if "element data" in self.parent._dataset:
+            try:
+                text += self.make_plots(data)
+            except Exception as e:
+                text += f"There was an error making the plots: {str(e)}"
+        else:
+            text += f"Orbital plots not supported for {self.parent._hamiltonian}"
 
         text = str(__(text, **data, indent=self.indent + 4 * " "))
         text += "\n\n"

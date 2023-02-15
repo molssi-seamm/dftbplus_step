@@ -19,12 +19,13 @@ dependencies:
   - pytest
   - pytest-cov
 
-    # Pip-only installs
+  # Documentation
+  - pydata-sphinx-theme
+  - sphinx-design
+
+  # Pip-only installs
   - pip:
     - cms_plots
     # Documentation
-    - rinohtype
-    - pygments
+    - sphinx-copybutton
     - sphinxnotes-strike
-    - sphinx-rtd-theme
-    - pystemmer

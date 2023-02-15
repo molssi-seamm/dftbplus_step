@@ -9,7 +9,7 @@ class TkDftbplus(seamm.TkNode):
     """
     The graphical part of a DFTB+ step in a flowchart.
 
-    Attributes
+    Parameters
     ----------
     tk_flowchart : TkFlowchart = None
         The flowchart that we belong to.

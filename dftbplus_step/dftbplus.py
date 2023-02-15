@@ -11,9 +11,12 @@ except Exception:
     import importlib_metadata as implib
 import json
 import logging
+from pathlib import Path
+import pkg_resources
 import pprint  # noqa: F401
 import sys
 
+import molsystem
 import dftbplus_step
 import seamm
 import seamm_util
@@ -31,6 +34,11 @@ from seamm_util.printing import FormattedText as __
 logger = logging.getLogger(__name__)
 job = printing.getPrinter()
 printer = printing.getPrinter("DFTB+")
+
+# Add DFTB+'s properties to the standard properties
+path = Path(pkg_resources.resource_filename(__name__, "data/"))
+csv_file = path / "properties.csv"
+molsystem.add_properties_from_file(csv_file)
 
 
 def deep_merge(d, u):
@@ -162,7 +170,7 @@ class Dftbplus(seamm.Node):
     """
     The non-graphical part of a DFTB+ step in a flowchart.
 
-    Attributes
+    Parameters
     ----------
     parser : configargparse.ArgParser
         The parser object.
