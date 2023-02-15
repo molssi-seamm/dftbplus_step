@@ -1,0 +1,777 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Recipe 2: Band structure, DOS and PDOS in SEAMM &#8212; DFTB+ Step 2023.2.15 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
+<!-- End Google Tag Manager -->
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'user_guide/recipes/recipe_2';</script>
+
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Developer Documentation" href="../../developer_guide/index.html" />
+    <link rel="prev" title="Recipe 1 extended: More flexible, useful workflows" href="recipe_1_extended.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../index.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <img src="../../_static/SEAMM logo.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../_static/SEAMM Inverted 288x181.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+    <p class="title logo__title">DFTB+ Step</p>
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../getting_started/index.html">
+                        Getting Started
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../developer_guide/index.html">
+                        Developer Documentation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../api/index.html">
+                        API Documentation
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://dftbplus.org/documentation">
+                        DFTB+ documentation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../authors.html">
+                        Credits
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../history.html">
+                        History
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://molssi-seamm.github.io">
+                    SEAMM Documentation
+                  </a>
+                </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://molssi.org">
+                    MolSSI
+                  </a>
+                </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+        </div>
+      
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/molssi-seamm/dftbplus_step" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/MolSSI_NSF" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../getting_started/index.html">
+                        Getting Started
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../developer_guide/index.html">
+                        Developer Documentation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../api/index.html">
+                        API Documentation
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-external" href="https://dftbplus.org/documentation">
+                        DFTB+ documentation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../authors.html">
+                        Credits
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../history.html">
+                        History
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://molssi-seamm.github.io">
+                    SEAMM Documentation
+                  </a>
+                </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://molssi.org">
+                    MolSSI
+                  </a>
+                </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/molssi-seamm/dftbplus_step" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/MolSSI_NSF" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-twitter"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Section navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">
+    Section Navigation
+  </p>
+  <div class="bd-toc-item navbar-nav">
+    <ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">DFTB+ Recipes</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="recipe_1.html">Recipe 1: First Calculation with DFTB+ in SEAMM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="recipe_1_extended.html">Recipe 1 extended: More flexible, useful workflows</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Recipe 2: Band structure, DOS and PDOS in SEAMM</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+            </div>
+            
+            
+            <article class="bd-article" role="main">
+              
+  <section id="recipe-2-band-structure-dos-and-pdos-in-seamm">
+<h1>Recipe 2: Band structure, DOS and PDOS in SEAMM<a class="headerlink" href="#recipe-2-band-structure-dos-and-pdos-in-seamm" title="Permalink to this heading">#</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">#</a></h2>
+<p>The <a class="reference external" href="https://dftbplus-recipes.readthedocs.io/en/latest/basics/bandstruct.html">second recipe</a> on the
+DFTB+ website. This covers calculating the band structure, density of states (DOS), and
+partial DOS on the atoms, which helps us understand the electronic structure of any
+periodic system. We will generally follow their prescription, adapting it for SEAMM. The
+approach is similar:</p>
+<ol class="arabic simple">
+<li><p>Calculate and save the charges on the system using a self-consistent charge (SCC)
+calculation with a good-enough sampling of the reciprocal space (k-point
+sampling). This is done automatically in SEAMM whenever you calculate the energy or
+optimize the structure with DFTB+.</p></li>
+<li><p>Then, keeping the charges fixed, calculate the band energies on a large k-point grid
+to create the DOS.</p></li>
+<li><p>And again keeping the charges fixed, calculate the band energies on a path through
+the Brillouin zone made of about 100 points.</p></li>
+</ol>
+<p>The recipe on the DFTB+ website combined the first two steps into one. The approach
+taken in the SEAMM DFTB+ plug-in is perhaps a bit more general, and allows you to
+calculate the DOS over a fine grid of k-points which might be overkill for the energy
+and charges for larger systems. Since the DOS calculation is equal to just one iteration
+of an energy calculation, this can be a considerable savings, particularly if the
+initial step is a geometry optimization.</p>
+</section>
+<section id="tutorial">
+<h2>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this heading">#</a></h2>
+<p>This is the flowchart that we need to make:</p>
+<figure class="align-center" id="id1">
+<img alt="The flowchart for the band structure and DOS" src="../../_images/recipe_2_flowchart.png" />
+<figcaption>
+<p><span class="caption-text">The flowchart for the band structure and DOS</span><a class="headerlink" href="#id1" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>Open the <strong>Parameters</strong> step and set up the parameters like this:</p>
+<figure class="align-center" id="id2">
+<img alt="Setting up the **Parameters** step" src="../../_images/recipe_2_parameters_dialog.png" />
+<figcaption>
+<p><span class="caption-text">Setting up the <strong>Parameters</strong> step</span><a class="headerlink" href="#id2" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>Note that the type is <em>file</em>. After you click <strong>OK</strong> to close the smaller dialog, the
+<strong>Parameters</strong> dialog should look like this:</p>
+<figure class="align-center" id="id3">
+<img alt="Setting up the **Parameters** step" src="../../_images/recipe_2_parameters.png" />
+<figcaption>
+<p><span class="caption-text">Setting up the <strong>Parameters</strong> step</span><a class="headerlink" href="#id3" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>This will create a variable <em>structure</em> which we use in the <strong>Read Structure</strong>
+step. Note the dollar sign “$” in front of the variable:</p>
+<figure class="align-center" id="id4">
+<img alt="Setting up the **Read Structure** step" src="../../_images/recipe_2_read.png" />
+<figcaption>
+<p><span class="caption-text">Setting up the <strong>Read Structure</strong> step</span><a class="headerlink" href="#id4" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>Now that we have a structure, it is time for the <strong>DFTB+</strong> step:</p>
+<figure class="align-center" id="id5">
+<img alt="The flowchart for the **DFTB+** step" src="../../_images/recipe_2_dftb%2B_flow.png" />
+<figcaption>
+<p><span class="caption-text">The flowchart for the <strong>DFTB+</strong> step</span><a class="headerlink" href="#id5" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>You should be familair with the <strong>Choose Parameters</strong> step. You can click on <strong>Ti</strong> and
+<strong>O</strong> to narrow the choice of parameters down, but in any case select the <strong>mio</strong>
+parameterization with the <strong>tiorg</strong> specialized parameters:</p>
+<figure class="align-center" id="id6">
+<img alt="Setting up the **Choose Parameters** step" src="../../_images/recipe_2_choose.png" />
+<figcaption>
+<p><span class="caption-text">Setting up the <strong>Choose Parameters</strong> step</span><a class="headerlink" href="#id6" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>You can use the defaults in the remaining steps. They are reasonable. Note that the
+k-mesh is defined using a spacing, in reciprocal Å, rather than as an explicit
+e.g. 8x8x8 grid. DFTB+ is after all performing a numerical integration over the
+reciprocal space, so a spacing between points is a senseible measure of the accuracy of
+the grid. It automatically adjust to the the size of the periodic cell. A large cell has
+a small reciprocal space, so doesn’t need many k-points for the integration. Conversely
+a small cell has a large reciprocal space, and requires a large k-mesh for accuracy. A
+spacing of 0.2 1/Å is reasonable. Magnetic systems might require a smaller spacing,
+perhaps 0.1 1/Å, while insulators are less demanding, so spacings up to 0.5 1/Å may be
+OK. You should of course test!</p>
+<p>Now you are ready to run, but you need a structure for anatase. A quick search of the
+Internet will turn up some or you can download <a class="reference download external" download="" href="http://rruff.geo.arizona.edu/AMS/download.php?id=11458.cif&amp;down=cif"><code class="xref download docutils literal notranslate"><span class="pre">this</span> <span class="pre">one</span></code></a> which came from
+the <a class="reference external" href="http://rruff.geo.arizona.edu/AMS/amcsd.php">American Minerologist Crystal Structure Database</a>. Save the structure on you disk, then
+submit the job (<strong>file/run</strong> or <strong>ctrl-R</strong>):</p>
+<figure class="align-center" id="id7">
+<img alt="Submitting the job" src="../../_images/recipe_2_submit.png" />
+<figcaption>
+<p><span class="caption-text">Submitting the job</span><a class="headerlink" href="#id7" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>You can click on the <strong>…</strong> button at the right of the <strong>structure</strong> entryfield to
+navigate to the file and select it, rather than trying to type in the path. This job
+will take a little time, perhaps a minute to run, because we are optimizing the structure
+and unit cell.</p>
+</section>
+<section id="looking-at-the-results">
+<h2>Looking at the Results<a class="headerlink" href="#looking-at-the-results" title="Permalink to this heading">#</a></h2>
+<p>Go to your Dashboard in the browser, find the job that you just submitted, and open the
+job. Once it finishes – you can use the refresh button next to the job number at top
+left to check if it has finished – you can look at the structure and <cite>job.out</cite>. But we
+are interested in the band structure and DOS. You’ll find it in the subfolder <strong>3/4</strong>,
+which corresponds to the <strong>Band Structure</strong> substep of the <strong>DFTB+</strong> step. You’ll find a
+file called <cite>band_structure.graph</cite> with a graph icon. Click on it to open on the right
+side of the window:</p>
+<figure class="align-center" id="id8">
+<img alt="Viewing the band structure and DOS in the Dashboard" src="../../_images/recipe_2_bandstructure.png" />
+<figcaption>
+<p><span class="caption-text">Viewing the band structure and DOS in the Dashboard</span><a class="headerlink" href="#id8" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you are just reading through this tutorial and not running it, you can see the job
+at our <a class="reference external" href="http://137.184.43.219:5000/#/jobs/10">public dashboard</a> and <a class="reference external" href="../../_static/recipe_2_band_structure.html">just the graph</a>.</p>
+</div>
+<p>That was simple! Unlike the picture above, the actual band structure / DOS plot is
+interactive. You can zoom by dragging a rectangle across either the band structure of
+DOS portion of the graph. The legend to the right is also active. Click on an entry to
+turno it on or off. Double-clicking on an entry turns off all the rest, leaving just
+it. The entries for the DOS are at the bottom of the legend. You may have to scroll the
+legend to get to them.</p>
+<p>Here is picture showing just the bands immediately above and below the Fermi energy, and
+the O_p (red) and Ti_d (green) partial DOS.</p>
+<figure class="align-center" id="id9">
+<img alt="Detailed view of the band structure and PDOS" src="../../_images/recipe_2_bandstructure_zoomed.png" />
+<figcaption>
+<p><span class="caption-text">Detailed view of the band structure and PDOS</span><a class="headerlink" href="#id9" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>You can see that the valence bands are almost completely made from the oxygen p
+orbitals, while the conduction bands are mainly titanium d orbitals.</p>
+<p>If you look in the other folders you will find the DOS graph in both the optimization
+(<strong>3/2</strong>) and DOS (<strong>3/3</strong>) folders. Whenever you calculate the energy or optimize a
+structure, you’ll see a DOS plot with just the total DOS. Depending on the k-mesh in the
+calculation it may be quite crude, but since it is essentially free it can be
+useful. The plot in the DOS step has both the total DOS and the atom and orbital
+partical DOS, and is by default calculated on a better grid, so should be better.</p>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this heading">#</a></h2>
+<p>In this tutorial you learned how to optimize a crystal structure and get the band
+structure and DOS as plots. You started by reading in a structure file – typically a
+CIF file for crystalline materials, optimizing the structure, then calculating the DOS
+and finally the band structure. Note that you did not have to specify a path for the
+band structure. It was created automatically based on the crystal symmetry. While it is
+a reasonable path, it may be different than you see in other works, because there is no
+dominant convention for which path to use. In a future release we will add other path
+definitions as well as the ability for you to create a custom path.</p>
+<p>Compared to the original recipe there are a couple of things to note. We optimized the
+structure rather than just calculate the charges and density for the input
+structure. That won’t make much difference to the DOS and band structure plots. The
+plug-in automatically handled a small issue that was glossed over in the original
+recipe: the Fermi energy is conventionally set to zero, but DFTB+ calculates the Fermi
+energy – which is not zero in general – but does not shift the DOS and band structure
+so that the Fermi energy is actually zero. The plug-in makes this adjustment, so the DOS
+and band structure it produces are shifted relative to that in the original recipe. The
+Fermi energy is zero in the plots that you just viewed.</p>
+<p>A final thing to note is that the crystal structure that you started with is the
+conventional cell, which in this case is twice as large as the primitive cell. Since the
+cost of the calculation depends on the number of atoms, it is better to use the primitive
+cell. In the original recipe, this was done by hand, giving the atoms in the primitive
+cell along with the primitive cell parameters. The DFTB+ plug-in does this
+automatically. If it detects a primitive cell it runs the calculation using the
+primitive cell, then transforms the results back to the conventional cell, which is the
+cell you are used to seeing.</p>
+<p>Thus SEAMM and the DFTB+ plug-in take care of almost all the details of the calculation
+for you. You provide a conventional cell, it is automatically transformed to the
+primitive cell for the calculations, the results are transformed back to the
+conventional cell. The band structure is also generated automatically, as are the DOS and
+band structure plots.</p>
+</section>
+</section>
+
+
+            </article>
+            
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+  <a class='left-prev' id="prev-link" href="recipe_1_extended.html" title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+          <p class="prev-next-subtitle">previous</p>
+          <p class="prev-next-title">Recipe 1 extended: More flexible, useful workflows</p>
+      </div>
+  </a>
+  <a class='right-next' id="next-link" href="../../developer_guide/index.html" title="next page">
+  <div class="prev-next-info">
+      <p class="prev-next-subtitle">next</p>
+      <p class="prev-next-title">Developer Documentation</p>
+  </div>
+  <i class="fa-solid fa-angle-right"></i>
+  </a>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#introduction">
+   Introduction
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#tutorial">
+   Tutorial
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#looking-at-the-results">
+   Looking at the Results
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#summary">
+   Summary
+  </a>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+<div class="toc-item">
+  
+<div class="tocsection sourcelink">
+    <a href="../../_sources/user_guide/recipes/recipe_2.rst.txt">
+        <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+</div>
+
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+          </div>
+        </footer>
+        
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
+  <footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    
+  
+
+
+
+  
+  
+  
+  
+  
+  
+  
+
+
+<div class="row h-10">
+    <div class="col-2">
+        <a href="https://molssi.org/" target="_blank" title="Go to MolSSI in a new tab">
+            <img src="../../_static/molssi_main_logo.png" class="logo__image only-light footer_logo" alt="Logo image">
+            <img src="../../_static/molssi_main_logo_inverted_white.png" class="logo__image only-dark footer_logo" alt="Logo image">
+        </a>
+    </div>
+    <div class="col-8">
+        <p> &copy; Copyright 2020-2023 <a href="https://molssi.org/">The Molecular Sciences Software Institute</a></p>
+        <p>Funded by the National Science Foundation 
+          <a href="https://nsf.gov/awardsearch/showAward?AWD_ID=1547580">OAC-1547580</a> and 
+          <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=2136142">CHE-2136142.</a></p>
+ 
+        
+
+    </div>
+    <div class="col-2">
+        <a href="https://nsf.gov/" target="_blank" title="Go to the NSF in a new tab">
+            <img src="../../_static/nsf.png" class="footer_logo" alt="The NSF">
+          </a>
+    </div>
+</div>
+  </div>
+  
+</div>
+  </footer>
+  </body>
+</html>
