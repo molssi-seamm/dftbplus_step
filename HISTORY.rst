@@ -2,6 +2,8 @@
 History
 =======
 
+2023.2.17.1 -- Fixed Linux bug with thread limit
+
 2023.2.17 -- Limiting number of threads
     * By default DFTB+ can try to use all the cores on a larger machine, which can be
       inneficient for smaller systems. This changes limits DFTB+ to 1 core per 500
