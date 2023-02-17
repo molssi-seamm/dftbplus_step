@@ -311,7 +311,7 @@ class Dftbplus(seamm.Node):
         parser.add_argument(
             parser_name,
             "--natoms-per-core",
-            default=10,
+            default=500,
             help="How many atoms to have per core or thread",
         )
 

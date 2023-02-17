@@ -13,6 +13,7 @@ import subprocess
 import traceback
 
 import pandas
+import psutil
 
 import cms_plots
 import dftbplus_step
@@ -644,8 +645,9 @@ class DftbBase(seamm.Node):
 
         # Access the options
         options = self.parent.options
+        seamm_options = self.parent.global_options
 
-        # Get the geometry first, because this sets up the primitieve cell if needed
+        # Get the geometry first, because this sets up the primitive cell if needed
         geom = self.geometry()
 
         input_data = copy.deepcopy(current_input)
@@ -673,6 +675,34 @@ class DftbBase(seamm.Node):
             with path.open(mode="w") as fd:
                 fd.write(files[filename])
 
+        # How to run: how many processors does this node have?
+        n_cores = psutil.cpu_count(logical=False)
+        self.logger.info("The number of cores is {}".format(n_cores))
+
+        if seamm_options["ncores"] != "available":
+            n_cores = min(n_cores, int(seamm_options["ncores"]))
+
+        if options["use_openmp"]:
+            n_atoms = configuration.n_atoms
+            n_atoms_per_core = options["natoms_per_core"]
+            n_threads = int(round(n_atoms / n_atoms_per_core))
+            if n_threads > n_cores:
+                n_threads = n_cores
+            elif n_threads < 1:
+                n_threads = 1
+        else:
+            n_threads = 1
+        self.logger.info(
+            f"DFTB+ will use {n_threads} OpenMP threads for {n_atoms} atoms."
+        )
+        printer.important(
+            f"        DFTB+ using {n_threads} OpenMP threads for {n_atoms} atoms.\n"
+        )
+
+        env = {
+            "OMP_NUM_THREADS": str(n_threads),
+        }
+
         return_files = [
             "*.out",
             "charges.*",
@@ -689,8 +719,13 @@ class DftbBase(seamm.Node):
         local = seamm.ExecLocal()
         exe = Path(options["dftbplus_path"]) / "dftb+"
         result = local.run(
-            cmd=[str(exe)], files=files, return_files=return_files
-        )  # yapf: disable
+            cmd=[str(exe)],
+            files=files,
+            return_files=return_files,
+            env=env,
+            in_situ=True,
+            directory=str(directory),
+        )
 
         if result is None:
             logger.error("There was an error running DFTB+")

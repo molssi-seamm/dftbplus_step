@@ -1,5 +1,7 @@
 cms_plots
 hsd
+pandas
+psutil
 seamm
 seamm_util
 tabulate

@@ -2,6 +2,11 @@
 History
 =======
 
+2023.2.17 -- Limiting number of threads
+    * By default DFTB+ can try to use all the cores on a larger machine, which can be
+      inneficient for smaller systems. This changes limits DFTB+ to 1 core per 500
+      atoms, which seems a reasonable start. This will need more work in the future.
+
 2023.2.15 -- Documentation and bug fixes
     * Restructured the documentation and applied the new theme.
     * Fixed crash with the plots for potentials that lack the need info for the
