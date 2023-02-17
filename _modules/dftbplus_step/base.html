@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>dftbplus_step.base &#8212; DFTB+ Step 2023.2.17 documentation</title>
+    <title>dftbplus_step.base &#8212; DFTB+ Step 2023.2.17.1 documentation</title>
   
   
   
@@ -1124,7 +1124,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;use_openmp&quot;</span><span class="p">]:</span>
             <span class="n">n_atoms</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">n_atoms</span>
-            <span class="n">n_atoms_per_core</span> <span class="o">=</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;natoms_per_core&quot;</span><span class="p">]</span>
+            <span class="n">n_atoms_per_core</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;natoms_per_core&quot;</span><span class="p">])</span>
             <span class="n">n_threads</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">n_atoms</span> <span class="o">/</span> <span class="n">n_atoms_per_core</span><span class="p">))</span>
             <span class="k">if</span> <span class="n">n_threads</span> <span class="o">&gt;</span> <span class="n">n_cores</span><span class="p">:</span>
                 <span class="n">n_threads</span> <span class="o">=</span> <span class="n">n_cores</span>
