@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>dftbplus_step.base &#8212; DFTB+ Step 2023.2.15 documentation</title>
+    <title>dftbplus_step.base &#8212; DFTB+ Step 2023.2.17 documentation</title>
   
   
   
@@ -453,6 +453,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="kn">import</span> <span class="nn">traceback</span>
 
 <span class="kn">import</span> <span class="nn">pandas</span>
+<span class="kn">import</span> <span class="nn">psutil</span>
 
 <span class="kn">import</span> <span class="nn">cms_plots</span>
 <span class="kn">import</span> <span class="nn">dftbplus_step</span>
@@ -1084,8 +1085,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         <span class="c1"># Access the options</span>
         <span class="n">options</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">options</span>
+        <span class="n">seamm_options</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">global_options</span>
 
-        <span class="c1"># Get the geometry first, because this sets up the primitieve cell if needed</span>
+        <span class="c1"># Get the geometry first, because this sets up the primitive cell if needed</span>
         <span class="n">geom</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span>
 
         <span class="n">input_data</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">current_input</span><span class="p">)</span>
@@ -1113,6 +1115,34 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <span class="k">with</span> <span class="n">path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
                 <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">files</span><span class="p">[</span><span class="n">filename</span><span class="p">])</span>
 
+        <span class="c1"># How to run: how many processors does this node have?</span>
+        <span class="n">n_cores</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">(</span><span class="n">logical</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;The number of cores is </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n_cores</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">seamm_options</span><span class="p">[</span><span class="s2">&quot;ncores&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;available&quot;</span><span class="p">:</span>
+            <span class="n">n_cores</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">n_cores</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">seamm_options</span><span class="p">[</span><span class="s2">&quot;ncores&quot;</span><span class="p">]))</span>
+
+        <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;use_openmp&quot;</span><span class="p">]:</span>
+            <span class="n">n_atoms</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">n_atoms</span>
+            <span class="n">n_atoms_per_core</span> <span class="o">=</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;natoms_per_core&quot;</span><span class="p">]</span>
+            <span class="n">n_threads</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">n_atoms</span> <span class="o">/</span> <span class="n">n_atoms_per_core</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">n_threads</span> <span class="o">&gt;</span> <span class="n">n_cores</span><span class="p">:</span>
+                <span class="n">n_threads</span> <span class="o">=</span> <span class="n">n_cores</span>
+            <span class="k">elif</span> <span class="n">n_threads</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">n_threads</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">n_threads</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;DFTB+ will use </span><span class="si">{</span><span class="n">n_threads</span><span class="si">}</span><span class="s2"> OpenMP threads for </span><span class="si">{</span><span class="n">n_atoms</span><span class="si">}</span><span class="s2"> atoms.&quot;</span>
+        <span class="p">)</span>
+        <span class="n">printer</span><span class="o">.</span><span class="n">important</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;        DFTB+ using </span><span class="si">{</span><span class="n">n_threads</span><span class="si">}</span><span class="s2"> OpenMP threads for </span><span class="si">{</span><span class="n">n_atoms</span><span class="si">}</span><span class="s2"> atoms.</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">env</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;OMP_NUM_THREADS&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">n_threads</span><span class="p">),</span>
+        <span class="p">}</span>
+
         <span class="n">return_files</span> <span class="o">=</span> <span class="p">[</span>
             <span class="s2">&quot;*.out&quot;</span><span class="p">,</span>
             <span class="s2">&quot;charges.*&quot;</span><span class="p">,</span>
@@ -1129,8 +1159,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="n">local</span> <span class="o">=</span> <span class="n">seamm</span><span class="o">.</span><span class="n">ExecLocal</span><span class="p">()</span>
         <span class="n">exe</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;dftbplus_path&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="s2">&quot;dftb+&quot;</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">local</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
-            <span class="n">cmd</span><span class="o">=</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">exe</span><span class="p">)],</span> <span class="n">files</span><span class="o">=</span><span class="n">files</span><span class="p">,</span> <span class="n">return_files</span><span class="o">=</span><span class="n">return_files</span>
-        <span class="p">)</span>  <span class="c1"># yapf: disable</span>
+            <span class="n">cmd</span><span class="o">=</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">exe</span><span class="p">)],</span>
+            <span class="n">files</span><span class="o">=</span><span class="n">files</span><span class="p">,</span>
+            <span class="n">return_files</span><span class="o">=</span><span class="n">return_files</span><span class="p">,</span>
+            <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span>
+            <span class="n">in_situ</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">directory</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">directory</span><span class="p">),</span>
+        <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;There was an error running DFTB+&quot;</span><span class="p">)</span>
