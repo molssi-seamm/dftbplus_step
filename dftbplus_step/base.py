@@ -684,7 +684,7 @@ class DftbBase(seamm.Node):
 
         if options["use_openmp"]:
             n_atoms = configuration.n_atoms
-            n_atoms_per_core = options["natoms_per_core"]
+            n_atoms_per_core = int(options["natoms_per_core"])
             n_threads = int(round(n_atoms / n_atoms_per_core))
             if n_threads > n_cores:
                 n_threads = n_cores
