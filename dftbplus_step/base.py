@@ -587,7 +587,7 @@ class DftbBase(seamm.Node):
         try:
             while True:
                 lineno, line = next(line_iter)
-                if line[0] == "#":
+                if len(line) == 0 or line[0] == "#":
                     continue
                 if ":" not in line:
                     raise RuntimeError(
