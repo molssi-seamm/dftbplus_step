@@ -2,6 +2,9 @@
 History
 =======
 
+2023.2.17.2 -- Fixed bug with xTB parameters
+    * xTB runs have a blank line in results.tag which caused a crash.
+
 2023.2.17.1 -- Fixed Linux bug with thread limit
 
 2023.2.17 -- Limiting number of threads

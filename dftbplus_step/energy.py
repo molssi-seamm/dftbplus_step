@@ -784,8 +784,14 @@ class Energy(DftbBase):
         dataset = self.parent._dataset
         subset = self.parent._subset
         if subset is not None:
-            subset_data = subset["element data"]
-        element_data = dataset["element data"]
+            if "element data" in subset:
+                subset_data = subset["element data"]
+            else:
+                subset_data = {}
+        if "element data" in dataset:
+            element_data = dataset["element data"]
+        else:
+            element_data = {}
 
         basis = input_data["Basis"]
         missing = []
@@ -796,7 +802,7 @@ class Energy(DftbBase):
                 and "wfc" in subset_data[element]
             ):
                 basis[element] = subset_data[element]["wfc"]
-            elif "wfc" in element_data[element]:
+            elif element in element_data and "wfc" in element_data[element]:
                 basis[element] = element_data[element]["wfc"]
             else:
                 missing.append(element)
