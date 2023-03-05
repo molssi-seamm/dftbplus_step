@@ -1,12 +1,15 @@
 
+
 <!DOCTYPE html>
 
-<html lang="en">
+
+<html lang="en" >
+
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>dftbplus_step package &#8212; DFTB+ Step 2023.2.17.2 documentation</title>
+    <title>dftbplus_step package &#8212; DFTB+ Step 2023.3.5 documentation</title>
   
   
   
@@ -16,15 +19,15 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
-<link href="../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link href="../_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
 
   
-  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
@@ -32,8 +35,8 @@
     <link rel="stylesheet" type="text/css" href="../_static/css/custom.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
 
 <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -58,81 +61,95 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Credits" href="../authors.html" />
     <link rel="prev" title="dftbplus_step" href="modules.html" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="docsearch:language" content="en">
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
   </head>
   
   
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
   
   
   <a class="skip-link" href="#main-content">Skip to main content</a>
-
   
-  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
   <label class="overlay overlay-primary" for="__primary"></label>
-
   
-  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
   <label class="overlay overlay-secondary" for="__secondary"></label>
-
   
   <div class="search-button__wrapper">
     <div class="search-button__overlay"></div>
     <div class="search-button__search-container">
-      
-<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
   <i class="fa-solid fa-magnifying-glass"></i>
-  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-    </div>
+</form></div>
   </div>
-
   
-  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
   <label class="sidebar-toggle primary-toggle" for="__primary">
-      <span class="fa-solid fa-bars"></span>
+    <span class="fa-solid fa-bars"></span>
   </label>
-  <div id="navbar-start">
-    
-    
   
-
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
 
 <a class="navbar-brand logo" href="../index.html">
-
   
   
   
   
-  
-  
-  
-
-  
-    <img src="../_static/SEAMM logo.png" class="logo__image only-light" alt="Logo image">
-    <img src="../_static/SEAMM Inverted 288x181.png" class="logo__image only-dark" alt="Logo image">
+    
+    
+      
+    
+    
+    <img src="../_static/SEAMM logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../_static/SEAMM Inverted 288x181.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
   
   
     <p class="title logo__title">DFTB+ Step</p>
   
-</a>
+</a></div>
     
   </div>
-
+  
   
   <div class="col-lg-9 navbar-header-items">
-    <div id="navbar-center" class="mr-auto">
+    
+    <div class="me-auto navbar-header-items__center">
       
-      <div class="navbar-center-item">
-        <nav class="navbar-nav">
-    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
-        Site Navigation
-    </p>
-    <ul id="navbar-main-elements" class="navbar-nav">
-        
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../getting_started/index.html">
                         Getting Started
@@ -161,7 +178,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     </li>
                 
             <div class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     More
                 </button>
                 <div class="dropdown-menu">
@@ -203,32 +220,39 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 </div>
             </div>
             
-    </ul>
-</nav>
-      </div>
+  </ul>
+</nav></div>
       
     </div>
-
-    <div id="navbar-end">
+    
+    
+    <div class="navbar-header-items__end">
       
-        <div class="navbar-end-item navbar-persistent--container">
+        <div class="navbar-item navbar-persistent--container">
           
-<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
-  <i class="fa-solid fa-magnifying-glass"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
         </div>
       
       
-      <div class="navbar-end-item">
-        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
     <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
     <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
-</button>
-      </div>
+  </button>
+`);
+</script></div>
       
-      <div class="navbar-end-item">
-        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
         <li class="nav-item">
           
           
@@ -237,7 +261,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           
           
           
-          <a href="https://github.com/molssi-seamm/dftbplus_step" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-github"></i></span>
+          
+          <a href="https://github.com/molssi-seamm/dftbplus_step" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
             <label class="sr-only">GitHub</label></a>
         </li>
         <li class="nav-item">
@@ -248,53 +273,58 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           
           
           
-          <a href="https://twitter.com/MolSSI_NSF" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-twitter"></i></span>
+          
+          <a href="https://twitter.com/MolSSI_NSF" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-twitter"></i></span>
             <label class="sr-only">Twitter</label></a>
         </li>
-      </ul>
-      </div>
+</ul></div>
       
     </div>
+    
   </div>
-
-
   
   
     <div class="navbar-persistent--mobile">
-<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
-  <i class="fa-solid fa-magnifying-glass"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
     </div>
   
 
   
-  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+    <label class="sidebar-toggle secondary-toggle" for="__secondary">
       <span class="fa-solid fa-outdent"></span>
-  </label>
+    </label>
   
-
 </div>
-  </nav>
-  
 
+    </nav>
+  
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
       
       <div class="bd-sidebar-primary bd-sidebar">
         
+
   
   <div class="sidebar-header-items sidebar-primary__section">
     
     
       <div class="sidebar-header-items__center">
-      
-      <div class="navbar-center-item">
-        <nav class="navbar-nav">
-    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
-        Site Navigation
-    </p>
-    <ul id="navbar-main-elements" class="navbar-nav">
         
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../getting_started/index.html">
                         Getting Started
@@ -323,7 +353,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     </li>
                 
             <div class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     More
                 </button>
                 <div class="dropdown-menu">
@@ -365,27 +395,28 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 </div>
             </div>
             
-    </ul>
-</nav>
+  </ul>
+</nav></div>
+        
       </div>
-      
-      </div>
-    
-
     
     
-    <div class="sidebar-header-items__end">
-      
-      <div class="navbar-end-item">
-        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
     <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
     <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
-</button>
-      </div>
-      
-      <div class="navbar-end-item">
-        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
         <li class="nav-item">
           
           
@@ -394,7 +425,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           
           
           
-          <a href="https://github.com/molssi-seamm/dftbplus_step" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-github"></i></span>
+          
+          <a href="https://github.com/molssi-seamm/dftbplus_step" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
             <label class="sr-only">GitHub</label></a>
         </li>
         <li class="nav-item">
@@ -405,59 +437,85 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           
           
           
-          <a href="https://twitter.com/MolSSI_NSF" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-twitter"></i></span>
+          
+          <a href="https://twitter.com/MolSSI_NSF" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-twitter"></i></span>
             <label class="sr-only">Twitter</label></a>
         </li>
-      </ul>
+</ul></div>
+        
       </div>
-      
-    </div>
     
   </div>
-
   
-  <div class="sidebar-start-items sidebar-primary__section">
-    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Section navigation">
-  <p class="bd-links__title" role="heading" aria-level="1">
-    Section Navigation
-  </p>
-  <div class="bd-toc-item navbar-nav">
-    <ul class="current nav bd-sidenav">
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="modules.html">dftbplus_step</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">dftbplus_step package</a></li>
 </ul>
 </li>
 </ul>
-
-  </div>
-</nav>
+</div>
+</nav></div>
     </div>
-  </div>
   
-
   
-  <div class="sidebar-end-items sidebar-primary__section">
-    <div class="sidebar-end-items__item">
-    </div>
+  <div class="sidebar-primary-items__end sidebar-primary__section">
   </div>
-
   
   <div id="rtd-footer-container"></div>
 
+
       </div>
+      
       <main id="main-content" class="bd-main">
         
         
-        <div class="bd-content">
-          <div class="bd-article-container">
-            
-            <div class="bd-header-article">
-                
-            </div>
-            
-            
-            <article class="bd-article" role="main">
+          <div class="bd-content">
+            <div class="bd-article-container">
               
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">API Documentation</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="modules.html" class="nav-link">dftbplus_step</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">dftbplus_step package</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
   <section id="dftbplus-step-package">
 <h1>dftbplus_step package<a class="headerlink" href="#dftbplus-step-package" title="Permalink to this heading">#</a></h1>
 <section id="submodules">
@@ -1573,7 +1631,7 @@ from one or more parameterizations</p>
 <p>The graphical part of a DFTB+ BandStructure node</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="dftbplus_step.tk_band_structure.TkBandStructure">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dftbplus_step.tk_band_structure.</span></span><span class="sig-name descname"><span class="pre">TkBandStructure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tk_flowchart=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">canvas=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x=120</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y=20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w=200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h=50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">my_logger=&lt;Logger</span> <span class="pre">dftbplus_step.tk_band_structure</span> <span class="pre">(WARNING)&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keyword_metadata=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/tk_band_structure.html#TkBandStructure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.tk_band_structure.TkBandStructure" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dftbplus_step.tk_band_structure.</span></span><span class="sig-name descname"><span class="pre">TkBandStructure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tk_flowchart=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">canvas=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x=120</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y=20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w=200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h=50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">my_logger=&lt;Logger</span> <span class="pre">dftbplus_step.tk_band_structure</span> <span class="pre">(WARNING)&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/tk_band_structure.html#TkBandStructure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.tk_band_structure.TkBandStructure" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TkNode</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="dftbplus_step.tk_band_structure.TkBandStructure.create_dialog">
@@ -1808,7 +1866,7 @@ None is returned, which we take as equivalent to cancel.</p>
 <p>The graphical part of a DFTB+ DOS node</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="dftbplus_step.tk_dos.TkDOS">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dftbplus_step.tk_dos.</span></span><span class="sig-name descname"><span class="pre">TkDOS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tk_flowchart=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">canvas=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x=120</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y=20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w=200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h=50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">my_logger=&lt;Logger</span> <span class="pre">dftbplus_step.tk_dos</span> <span class="pre">(WARNING)&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keyword_metadata=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/tk_dos.html#TkDOS"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.tk_dos.TkDOS" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">dftbplus_step.tk_dos.</span></span><span class="sig-name descname"><span class="pre">TkDOS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tk_flowchart=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">canvas=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x=120</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y=20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w=200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h=50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">my_logger=&lt;Logger</span> <span class="pre">dftbplus_step.tk_dos</span> <span class="pre">(WARNING)&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/dftbplus_step/tk_dos.html#TkDOS"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#dftbplus_step.tk_dos.TkDOS" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TkNode</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="dftbplus_step.tk_dos.TkDOS.create_dialog">
@@ -1917,1693 +1975,366 @@ A step for DFTB+ in a SEAMM flowchart</p>
 </section>
 
 
-            </article>
-            
-            
-            
-            <footer class="bd-footer-article">
-                <!-- Previous / next buttons -->
-<div class='prev-next-area'>
-  <a class='left-prev' id="prev-link" href="modules.html" title="previous page">
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="modules.html"
+       title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
-          <p class="prev-next-subtitle">previous</p>
-          <p class="prev-next-title">dftbplus_step</p>
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">dftbplus_step</p>
       </div>
-  </a>
-  <a class='right-next' id="next-link" href="../authors.html" title="next page">
-  <div class="prev-next-info">
-      <p class="prev-next-subtitle">next</p>
-      <p class="prev-next-title">Credits</p>
-  </div>
-  <i class="fa-solid fa-angle-right"></i>
-  </a>
+    </a>
+    <a class="right-next"
+       href="../authors.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Credits</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div>
-            </footer>
-            
-          </div>
-          
-          
-          
-            <div class="bd-sidebar-secondary bd-toc">
+                </footer>
               
-<div class="toc-item">
-  
-<div class="tocsection onthispage">
-    <i class="fa-solid fa-list"></i> On this page
-</div>
-<nav id="bd-toc-nav" class="page-toc">
-    <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#submodules">
-   Submodules
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-dftbplus_step.band_structure">
-   dftbplus_step.band_structure module
-  </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.band_structure.BandStructure">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       BandStructure
-      </span>
-     </code>
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.band_structure.BandStructure.analyze">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         BandStructure.analyze()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.band_structure.BandStructure.description_text">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         BandStructure.description_text()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.band_structure.BandStructure.get_input">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         BandStructure.get_input()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.band_structure.BandStructure.git_revision">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         BandStructure.git_revision
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.band_structure.BandStructure.header">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         BandStructure.header
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.band_structure.BandStructure.kpoints">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         BandStructure.kpoints()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.band_structure.BandStructure.version">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         BandStructure.version
-        </span>
-       </code>
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.band_structure.fix_label">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       fix_label()
-      </span>
-     </code>
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-dftbplus_step.band_structure_parameters">
-   dftbplus_step.band_structure_parameters module
-  </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.band_structure_parameters.BandStructureParameters">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       BandStructureParameters
-      </span>
-     </code>
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.band_structure_parameters.BandStructureParameters.parameters">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         BandStructureParameters.parameters
-        </span>
-       </code>
-      </a>
-     </li>
-    </ul>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-dftbplus_step.band_structure_step">
-   dftbplus_step.band_structure_step module
-  </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.band_structure_step.BandStructureStep">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       BandStructureStep
-      </span>
-     </code>
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.band_structure_step.BandStructureStep.create_node">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         BandStructureStep.create_node()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.band_structure_step.BandStructureStep.create_tk_node">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         BandStructureStep.create_tk_node()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.band_structure_step.BandStructureStep.description">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         BandStructureStep.description()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.band_structure_step.BandStructureStep.my_description">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         BandStructureStep.my_description
-        </span>
-       </code>
-      </a>
-     </li>
-    </ul>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-dftbplus_step.base">
-   dftbplus_step.base module
-  </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.base.DftbBase">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       DftbBase
-      </span>
-     </code>
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.base.DftbBase.band_structure">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         DftbBase.band_structure()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.base.DftbBase.create_band_structure_data">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         DftbBase.create_band_structure_data()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.base.DftbBase.create_dos_data">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         DftbBase.create_dos_data()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.base.DftbBase.dos">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         DftbBase.dos()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.base.DftbBase.find_previous_step">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         DftbBase.find_previous_step()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.base.DftbBase.geometry">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         DftbBase.geometry()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.base.DftbBase.get_previous_charges">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         DftbBase.get_previous_charges()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.base.DftbBase.is_runable">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         DftbBase.is_runable
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.base.DftbBase.parse_results">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         DftbBase.parse_results()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.base.DftbBase.run">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         DftbBase.run()
-        </span>
-       </code>
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.base.redimension">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       redimension()
-      </span>
-     </code>
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-dftbplus_step.choose_parameters">
-   dftbplus_step.choose_parameters module
-  </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.choose_parameters.ChooseParameters">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       ChooseParameters
-      </span>
-     </code>
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.choose_parameters.ChooseParameters.analyze">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         ChooseParameters.analyze()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.choose_parameters.ChooseParameters.description_text">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         ChooseParameters.description_text()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.choose_parameters.ChooseParameters.get_input">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         ChooseParameters.get_input()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.choose_parameters.ChooseParameters.git_revision">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         ChooseParameters.git_revision
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.choose_parameters.ChooseParameters.header">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         ChooseParameters.header
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.choose_parameters.ChooseParameters.is_runable">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         ChooseParameters.is_runable
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.choose_parameters.ChooseParameters.version">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         ChooseParameters.version
-        </span>
-       </code>
-      </a>
-     </li>
-    </ul>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-dftbplus_step.choose_parameters_parameters">
-   dftbplus_step.choose_parameters_parameters module
-  </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.choose_parameters_parameters.ChooseParametersParameters">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       ChooseParametersParameters
-      </span>
-     </code>
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.choose_parameters_parameters.ChooseParametersParameters.parameters">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         ChooseParametersParameters.parameters
-        </span>
-       </code>
-      </a>
-     </li>
-    </ul>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-dftbplus_step.choose_parameters_step">
-   dftbplus_step.choose_parameters_step module
-  </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.choose_parameters_step.ChooseParametersStep">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       ChooseParametersStep
-      </span>
-     </code>
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.choose_parameters_step.ChooseParametersStep.create_node">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         ChooseParametersStep.create_node()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.choose_parameters_step.ChooseParametersStep.create_tk_node">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         ChooseParametersStep.create_tk_node()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.choose_parameters_step.ChooseParametersStep.description">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         ChooseParametersStep.description()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.choose_parameters_step.ChooseParametersStep.my_description">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         ChooseParametersStep.my_description
-        </span>
-       </code>
-      </a>
-     </li>
-    </ul>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-dftbplus_step.computational_models">
-   dftbplus_step.computational_models module
-  </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.computational_models.computational_models_metadata">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       computational_models_metadata()
-      </span>
-     </code>
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-dftbplus_step.dftbplus">
-   dftbplus_step.dftbplus module
-  </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.dftbplus.Dftbplus">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       Dftbplus
-      </span>
-     </code>
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.dftbplus.Dftbplus.analyze">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         Dftbplus.analyze()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.dftbplus.Dftbplus.create_parser">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         Dftbplus.create_parser()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.dftbplus.Dftbplus.description_text">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         Dftbplus.description_text()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.dftbplus.Dftbplus.git_revision">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         Dftbplus.git_revision
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.dftbplus.Dftbplus.run">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         Dftbplus.run()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.dftbplus.Dftbplus.set_id">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         Dftbplus.set_id()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.dftbplus.Dftbplus.version">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         Dftbplus.version
-        </span>
-       </code>
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.dftbplus.deep_merge">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       deep_merge()
-      </span>
-     </code>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.dftbplus.dict_to_hsd">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       dict_to_hsd()
-      </span>
-     </code>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.dftbplus.parse_gen_file">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       parse_gen_file()
-      </span>
-     </code>
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-dftbplus_step.dftbplus_parameters">
-   dftbplus_step.dftbplus_parameters module
-  </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.dftbplus_parameters.DftbplusParameters">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       DftbplusParameters
-      </span>
-     </code>
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.dftbplus_parameters.DftbplusParameters.parameters">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         DftbplusParameters.parameters
-        </span>
-       </code>
-      </a>
-     </li>
-    </ul>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-dftbplus_step.dftbplus_step">
-   dftbplus_step.dftbplus_step module
-  </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.dftbplus_step.DftbplusStep">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       DftbplusStep
-      </span>
-     </code>
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.dftbplus_step.DftbplusStep.create_node">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         DftbplusStep.create_node()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.dftbplus_step.DftbplusStep.create_tk_node">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         DftbplusStep.create_tk_node()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.dftbplus_step.DftbplusStep.description">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         DftbplusStep.description()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.dftbplus_step.DftbplusStep.my_description">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         DftbplusStep.my_description
-        </span>
-       </code>
-      </a>
-     </li>
-    </ul>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-dftbplus_step.dos">
-   dftbplus_step.dos module
-  </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.dos.DOS">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       DOS
-      </span>
-     </code>
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.dos.DOS.analyze">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         DOS.analyze()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.dos.DOS.description_text">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         DOS.description_text()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.dos.DOS.get_input">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         DOS.get_input()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.dos.DOS.git_revision">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         DOS.git_revision
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.dos.DOS.header">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         DOS.header
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.dos.DOS.kpoints">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         DOS.kpoints()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.dos.DOS.version">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         DOS.version
-        </span>
-       </code>
-      </a>
-     </li>
-    </ul>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-dftbplus_step.dos_parameters">
-   dftbplus_step.dos_parameters module
-  </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.dos_parameters.DOSParameters">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       DOSParameters
-      </span>
-     </code>
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.dos_parameters.DOSParameters.parameters">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         DOSParameters.parameters
-        </span>
-       </code>
-      </a>
-     </li>
-    </ul>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-dftbplus_step.dos_step">
-   dftbplus_step.dos_step module
-  </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.dos_step.DOSStep">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       DOSStep
-      </span>
-     </code>
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.dos_step.DOSStep.create_node">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         DOSStep.create_node()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.dos_step.DOSStep.create_tk_node">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         DOSStep.create_tk_node()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.dos_step.DOSStep.description">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         DOSStep.description()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.dos_step.DOSStep.my_description">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         DOSStep.my_description
-        </span>
-       </code>
-      </a>
-     </li>
-    </ul>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-dftbplus_step.energy">
-   dftbplus_step.energy module
-  </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.energy.Energy">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       Energy
-      </span>
-     </code>
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.energy.Energy.analyze">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         Energy.analyze()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.energy.Energy.description_text">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         Energy.description_text()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.energy.Energy.get_input">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         Energy.get_input()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.energy.Energy.git_revision">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         Energy.git_revision
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.energy.Energy.header">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         Energy.header
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.energy.Energy.make_plots">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         Energy.make_plots()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.energy.Energy.version">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         Energy.version
-        </span>
-       </code>
-      </a>
-     </li>
-    </ul>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-dftbplus_step.energy_parameters">
-   dftbplus_step.energy_parameters module
-  </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.energy_parameters.EnergyParameters">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       EnergyParameters
-      </span>
-     </code>
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.energy_parameters.EnergyParameters.output">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         EnergyParameters.output
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.energy_parameters.EnergyParameters.parameters">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         EnergyParameters.parameters
-        </span>
-       </code>
-      </a>
-     </li>
-    </ul>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-dftbplus_step.energy_step">
-   dftbplus_step.energy_step module
-  </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.energy_step.EnergyStep">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       EnergyStep
-      </span>
-     </code>
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.energy_step.EnergyStep.create_node">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         EnergyStep.create_node()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.energy_step.EnergyStep.create_tk_node">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         EnergyStep.create_tk_node()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.energy_step.EnergyStep.description">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         EnergyStep.description()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.energy_step.EnergyStep.my_description">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         EnergyStep.my_description
-        </span>
-       </code>
-      </a>
-     </li>
-    </ul>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#dftbplus-step-installer-module">
-   dftbplus_step.installer module
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-dftbplus_step.metadata">
-   dftbplus_step.metadata module
-  </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.metadata.metadata">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       metadata
-      </span>
-     </code>
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-dftbplus_step.optimization">
-   dftbplus_step.optimization module
-  </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.optimization.Optimization">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       Optimization
-      </span>
-     </code>
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.optimization.Optimization.analyze">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         Optimization.analyze()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.optimization.Optimization.description_text">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         Optimization.description_text()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.optimization.Optimization.get_input">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         Optimization.get_input()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.optimization.Optimization.git_revision">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         Optimization.git_revision
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.optimization.Optimization.header">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         Optimization.header
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.optimization.Optimization.version">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         Optimization.version
-        </span>
-       </code>
-      </a>
-     </li>
-    </ul>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-dftbplus_step.optimization_parameters">
-   dftbplus_step.optimization_parameters module
-  </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.optimization_parameters.OptimizationParameters">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       OptimizationParameters
-      </span>
-     </code>
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.optimization_parameters.OptimizationParameters.parameters">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         OptimizationParameters.parameters
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.optimization_parameters.OptimizationParameters.update">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         OptimizationParameters.update()
-        </span>
-       </code>
-      </a>
-     </li>
-    </ul>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-dftbplus_step.optimization_step">
-   dftbplus_step.optimization_step module
-  </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.optimization_step.OptimizationStep">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       OptimizationStep
-      </span>
-     </code>
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.optimization_step.OptimizationStep.create_node">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         OptimizationStep.create_node()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.optimization_step.OptimizationStep.create_tk_node">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         OptimizationStep.create_tk_node()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.optimization_step.OptimizationStep.description">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         OptimizationStep.description()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.optimization_step.OptimizationStep.my_description">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         OptimizationStep.my_description
-        </span>
-       </code>
-      </a>
-     </li>
-    </ul>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-dftbplus_step.slako">
-   dftbplus_step.slako module
-  </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.slako.add_wavefunction">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       add_wavefunction()
-      </span>
-     </code>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.slako.analyze_directory">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       analyze_directory()
-      </span>
-     </code>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.slako.create_datafile">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       create_datafile()
-      </span>
-     </code>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.slako.find_sets">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       find_sets()
-      </span>
-     </code>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.slako.list_partners">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       list_partners()
-      </span>
-     </code>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.slako.parse_file">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       parse_file()
-      </span>
-     </code>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.slako.partners">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       partners()
-      </span>
-     </code>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.slako.partners2">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       partners2()
-      </span>
-     </code>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.slako.test_one">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       test_one()
-      </span>
-     </code>
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-dftbplus_step.tk_band_structure">
-   dftbplus_step.tk_band_structure module
-  </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.tk_band_structure.TkBandStructure">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       TkBandStructure
-      </span>
-     </code>
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.tk_band_structure.TkBandStructure.create_dialog">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         TkBandStructure.create_dialog()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.tk_band_structure.TkBandStructure.reset_dialog">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         TkBandStructure.reset_dialog()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.tk_band_structure.TkBandStructure.right_click">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         TkBandStructure.right_click()
-        </span>
-       </code>
-      </a>
-     </li>
-    </ul>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-dftbplus_step.tk_choose_parameters">
-   dftbplus_step.tk_choose_parameters module
-  </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.tk_choose_parameters.TkChooseParameters">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       TkChooseParameters
-      </span>
-     </code>
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.tk_choose_parameters.TkChooseParameters.create_dialog">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         TkChooseParameters.create_dialog()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.tk_choose_parameters.TkChooseParameters.reset_dialog">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         TkChooseParameters.reset_dialog()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.tk_choose_parameters.TkChooseParameters.right_click">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         TkChooseParameters.right_click()
-        </span>
-       </code>
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.tk_choose_parameters.expand_range_list">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       expand_range_list()
-      </span>
-     </code>
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-dftbplus_step.tk_dftbplus">
-   dftbplus_step.tk_dftbplus module
-  </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.tk_dftbplus.TkDftbplus">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       TkDftbplus
-      </span>
-     </code>
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.tk_dftbplus.TkDftbplus.create_dialog">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         TkDftbplus.create_dialog()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.tk_dftbplus.TkDftbplus.edit">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         TkDftbplus.edit()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.tk_dftbplus.TkDftbplus.from_flowchart">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         TkDftbplus.from_flowchart()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.tk_dftbplus.TkDftbplus.handle_dialog">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         TkDftbplus.handle_dialog()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.tk_dftbplus.TkDftbplus.handle_help">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         TkDftbplus.handle_help()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.tk_dftbplus.TkDftbplus.right_click">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         TkDftbplus.right_click()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.tk_dftbplus.TkDftbplus.update_flowchart">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         TkDftbplus.update_flowchart()
-        </span>
-       </code>
-      </a>
-     </li>
-    </ul>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-dftbplus_step.tk_dos">
-   dftbplus_step.tk_dos module
-  </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.tk_dos.TkDOS">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       TkDOS
-      </span>
-     </code>
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.tk_dos.TkDOS.create_dialog">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         TkDOS.create_dialog()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.tk_dos.TkDOS.reset_dialog">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         TkDOS.reset_dialog()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.tk_dos.TkDOS.right_click">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         TkDOS.right_click()
-        </span>
-       </code>
-      </a>
-     </li>
-    </ul>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-dftbplus_step.tk_energy">
-   dftbplus_step.tk_energy module
-  </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.tk_energy.TkEnergy">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       TkEnergy
-      </span>
-     </code>
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.tk_energy.TkEnergy.create_dialog">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         TkEnergy.create_dialog()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.tk_energy.TkEnergy.reset_dialog">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         TkEnergy.reset_dialog()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.tk_energy.TkEnergy.reset_energy_frame">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         TkEnergy.reset_energy_frame()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.tk_energy.TkEnergy.reset_plotting">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         TkEnergy.reset_plotting()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.tk_energy.TkEnergy.right_click">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         TkEnergy.right_click()
-        </span>
-       </code>
-      </a>
-     </li>
-    </ul>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-dftbplus_step.tk_optimization">
-   dftbplus_step.tk_optimization module
-  </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#dftbplus_step.tk_optimization.TkOptimization">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       TkOptimization
-      </span>
-     </code>
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.tk_optimization.TkOptimization.create_dialog">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         TkOptimization.create_dialog()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.tk_optimization.TkOptimization.reset_dialog">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         TkOptimization.reset_dialog()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.tk_optimization.TkOptimization.reset_optimization_frame">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         TkOptimization.reset_optimization_frame()
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#dftbplus_step.tk_optimization.TkOptimization.right_click">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         TkOptimization.right_click()
-        </span>
-       </code>
-      </a>
-     </li>
-    </ul>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-dftbplus_step">
-   Module contents
-  </a>
- </li>
-</ul>
-
-</nav>
-</div>
-
-<div class="toc-item">
-  
-<div class="tocsection sourcelink">
-    <a href="../_sources/api/dftbplus_step.rst.txt">
-        <i class="fa-solid fa-file-lines"></i> Show Source
-    </a>
-</div>
-
-</div>
-
             </div>
-          
-          
-        </div>
-        <footer class="bd-footer-content">
-          <div class="bd-footer-content__inner">
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submodules">Submodules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-dftbplus_step.band_structure">dftbplus_step.band_structure module</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.band_structure.BandStructure"><code class="docutils literal notranslate"><span class="pre">BandStructure</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.band_structure.BandStructure.analyze"><code class="docutils literal notranslate"><span class="pre">BandStructure.analyze()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.band_structure.BandStructure.description_text"><code class="docutils literal notranslate"><span class="pre">BandStructure.description_text()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.band_structure.BandStructure.get_input"><code class="docutils literal notranslate"><span class="pre">BandStructure.get_input()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.band_structure.BandStructure.git_revision"><code class="docutils literal notranslate"><span class="pre">BandStructure.git_revision</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.band_structure.BandStructure.header"><code class="docutils literal notranslate"><span class="pre">BandStructure.header</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.band_structure.BandStructure.kpoints"><code class="docutils literal notranslate"><span class="pre">BandStructure.kpoints()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.band_structure.BandStructure.version"><code class="docutils literal notranslate"><span class="pre">BandStructure.version</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.band_structure.fix_label"><code class="docutils literal notranslate"><span class="pre">fix_label()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-dftbplus_step.band_structure_parameters">dftbplus_step.band_structure_parameters module</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.band_structure_parameters.BandStructureParameters"><code class="docutils literal notranslate"><span class="pre">BandStructureParameters</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.band_structure_parameters.BandStructureParameters.parameters"><code class="docutils literal notranslate"><span class="pre">BandStructureParameters.parameters</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-dftbplus_step.band_structure_step">dftbplus_step.band_structure_step module</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.band_structure_step.BandStructureStep"><code class="docutils literal notranslate"><span class="pre">BandStructureStep</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.band_structure_step.BandStructureStep.create_node"><code class="docutils literal notranslate"><span class="pre">BandStructureStep.create_node()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.band_structure_step.BandStructureStep.create_tk_node"><code class="docutils literal notranslate"><span class="pre">BandStructureStep.create_tk_node()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.band_structure_step.BandStructureStep.description"><code class="docutils literal notranslate"><span class="pre">BandStructureStep.description()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.band_structure_step.BandStructureStep.my_description"><code class="docutils literal notranslate"><span class="pre">BandStructureStep.my_description</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-dftbplus_step.base">dftbplus_step.base module</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.base.DftbBase"><code class="docutils literal notranslate"><span class="pre">DftbBase</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.base.DftbBase.band_structure"><code class="docutils literal notranslate"><span class="pre">DftbBase.band_structure()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.base.DftbBase.create_band_structure_data"><code class="docutils literal notranslate"><span class="pre">DftbBase.create_band_structure_data()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.base.DftbBase.create_dos_data"><code class="docutils literal notranslate"><span class="pre">DftbBase.create_dos_data()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.base.DftbBase.dos"><code class="docutils literal notranslate"><span class="pre">DftbBase.dos()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.base.DftbBase.find_previous_step"><code class="docutils literal notranslate"><span class="pre">DftbBase.find_previous_step()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.base.DftbBase.geometry"><code class="docutils literal notranslate"><span class="pre">DftbBase.geometry()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.base.DftbBase.get_previous_charges"><code class="docutils literal notranslate"><span class="pre">DftbBase.get_previous_charges()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.base.DftbBase.is_runable"><code class="docutils literal notranslate"><span class="pre">DftbBase.is_runable</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.base.DftbBase.parse_results"><code class="docutils literal notranslate"><span class="pre">DftbBase.parse_results()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.base.DftbBase.run"><code class="docutils literal notranslate"><span class="pre">DftbBase.run()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.base.redimension"><code class="docutils literal notranslate"><span class="pre">redimension()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-dftbplus_step.choose_parameters">dftbplus_step.choose_parameters module</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.choose_parameters.ChooseParameters"><code class="docutils literal notranslate"><span class="pre">ChooseParameters</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.choose_parameters.ChooseParameters.analyze"><code class="docutils literal notranslate"><span class="pre">ChooseParameters.analyze()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.choose_parameters.ChooseParameters.description_text"><code class="docutils literal notranslate"><span class="pre">ChooseParameters.description_text()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.choose_parameters.ChooseParameters.get_input"><code class="docutils literal notranslate"><span class="pre">ChooseParameters.get_input()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.choose_parameters.ChooseParameters.git_revision"><code class="docutils literal notranslate"><span class="pre">ChooseParameters.git_revision</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.choose_parameters.ChooseParameters.header"><code class="docutils literal notranslate"><span class="pre">ChooseParameters.header</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.choose_parameters.ChooseParameters.is_runable"><code class="docutils literal notranslate"><span class="pre">ChooseParameters.is_runable</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.choose_parameters.ChooseParameters.version"><code class="docutils literal notranslate"><span class="pre">ChooseParameters.version</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-dftbplus_step.choose_parameters_parameters">dftbplus_step.choose_parameters_parameters module</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.choose_parameters_parameters.ChooseParametersParameters"><code class="docutils literal notranslate"><span class="pre">ChooseParametersParameters</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.choose_parameters_parameters.ChooseParametersParameters.parameters"><code class="docutils literal notranslate"><span class="pre">ChooseParametersParameters.parameters</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-dftbplus_step.choose_parameters_step">dftbplus_step.choose_parameters_step module</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.choose_parameters_step.ChooseParametersStep"><code class="docutils literal notranslate"><span class="pre">ChooseParametersStep</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.choose_parameters_step.ChooseParametersStep.create_node"><code class="docutils literal notranslate"><span class="pre">ChooseParametersStep.create_node()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.choose_parameters_step.ChooseParametersStep.create_tk_node"><code class="docutils literal notranslate"><span class="pre">ChooseParametersStep.create_tk_node()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.choose_parameters_step.ChooseParametersStep.description"><code class="docutils literal notranslate"><span class="pre">ChooseParametersStep.description()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.choose_parameters_step.ChooseParametersStep.my_description"><code class="docutils literal notranslate"><span class="pre">ChooseParametersStep.my_description</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-dftbplus_step.computational_models">dftbplus_step.computational_models module</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.computational_models.computational_models_metadata"><code class="docutils literal notranslate"><span class="pre">computational_models_metadata()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-dftbplus_step.dftbplus">dftbplus_step.dftbplus module</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.dftbplus.Dftbplus"><code class="docutils literal notranslate"><span class="pre">Dftbplus</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.dftbplus.Dftbplus.analyze"><code class="docutils literal notranslate"><span class="pre">Dftbplus.analyze()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.dftbplus.Dftbplus.create_parser"><code class="docutils literal notranslate"><span class="pre">Dftbplus.create_parser()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.dftbplus.Dftbplus.description_text"><code class="docutils literal notranslate"><span class="pre">Dftbplus.description_text()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.dftbplus.Dftbplus.git_revision"><code class="docutils literal notranslate"><span class="pre">Dftbplus.git_revision</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.dftbplus.Dftbplus.run"><code class="docutils literal notranslate"><span class="pre">Dftbplus.run()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.dftbplus.Dftbplus.set_id"><code class="docutils literal notranslate"><span class="pre">Dftbplus.set_id()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.dftbplus.Dftbplus.version"><code class="docutils literal notranslate"><span class="pre">Dftbplus.version</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.dftbplus.deep_merge"><code class="docutils literal notranslate"><span class="pre">deep_merge()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.dftbplus.dict_to_hsd"><code class="docutils literal notranslate"><span class="pre">dict_to_hsd()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.dftbplus.parse_gen_file"><code class="docutils literal notranslate"><span class="pre">parse_gen_file()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-dftbplus_step.dftbplus_parameters">dftbplus_step.dftbplus_parameters module</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.dftbplus_parameters.DftbplusParameters"><code class="docutils literal notranslate"><span class="pre">DftbplusParameters</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.dftbplus_parameters.DftbplusParameters.parameters"><code class="docutils literal notranslate"><span class="pre">DftbplusParameters.parameters</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-dftbplus_step.dftbplus_step">dftbplus_step.dftbplus_step module</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.dftbplus_step.DftbplusStep"><code class="docutils literal notranslate"><span class="pre">DftbplusStep</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.dftbplus_step.DftbplusStep.create_node"><code class="docutils literal notranslate"><span class="pre">DftbplusStep.create_node()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.dftbplus_step.DftbplusStep.create_tk_node"><code class="docutils literal notranslate"><span class="pre">DftbplusStep.create_tk_node()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.dftbplus_step.DftbplusStep.description"><code class="docutils literal notranslate"><span class="pre">DftbplusStep.description()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.dftbplus_step.DftbplusStep.my_description"><code class="docutils literal notranslate"><span class="pre">DftbplusStep.my_description</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-dftbplus_step.dos">dftbplus_step.dos module</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.dos.DOS"><code class="docutils literal notranslate"><span class="pre">DOS</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.dos.DOS.analyze"><code class="docutils literal notranslate"><span class="pre">DOS.analyze()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.dos.DOS.description_text"><code class="docutils literal notranslate"><span class="pre">DOS.description_text()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.dos.DOS.get_input"><code class="docutils literal notranslate"><span class="pre">DOS.get_input()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.dos.DOS.git_revision"><code class="docutils literal notranslate"><span class="pre">DOS.git_revision</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.dos.DOS.header"><code class="docutils literal notranslate"><span class="pre">DOS.header</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.dos.DOS.kpoints"><code class="docutils literal notranslate"><span class="pre">DOS.kpoints()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.dos.DOS.version"><code class="docutils literal notranslate"><span class="pre">DOS.version</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-dftbplus_step.dos_parameters">dftbplus_step.dos_parameters module</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.dos_parameters.DOSParameters"><code class="docutils literal notranslate"><span class="pre">DOSParameters</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.dos_parameters.DOSParameters.parameters"><code class="docutils literal notranslate"><span class="pre">DOSParameters.parameters</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-dftbplus_step.dos_step">dftbplus_step.dos_step module</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.dos_step.DOSStep"><code class="docutils literal notranslate"><span class="pre">DOSStep</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.dos_step.DOSStep.create_node"><code class="docutils literal notranslate"><span class="pre">DOSStep.create_node()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.dos_step.DOSStep.create_tk_node"><code class="docutils literal notranslate"><span class="pre">DOSStep.create_tk_node()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.dos_step.DOSStep.description"><code class="docutils literal notranslate"><span class="pre">DOSStep.description()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.dos_step.DOSStep.my_description"><code class="docutils literal notranslate"><span class="pre">DOSStep.my_description</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-dftbplus_step.energy">dftbplus_step.energy module</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.energy.Energy"><code class="docutils literal notranslate"><span class="pre">Energy</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.energy.Energy.analyze"><code class="docutils literal notranslate"><span class="pre">Energy.analyze()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.energy.Energy.description_text"><code class="docutils literal notranslate"><span class="pre">Energy.description_text()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.energy.Energy.get_input"><code class="docutils literal notranslate"><span class="pre">Energy.get_input()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.energy.Energy.git_revision"><code class="docutils literal notranslate"><span class="pre">Energy.git_revision</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.energy.Energy.header"><code class="docutils literal notranslate"><span class="pre">Energy.header</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.energy.Energy.make_plots"><code class="docutils literal notranslate"><span class="pre">Energy.make_plots()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.energy.Energy.version"><code class="docutils literal notranslate"><span class="pre">Energy.version</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-dftbplus_step.energy_parameters">dftbplus_step.energy_parameters module</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.energy_parameters.EnergyParameters"><code class="docutils literal notranslate"><span class="pre">EnergyParameters</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.energy_parameters.EnergyParameters.output"><code class="docutils literal notranslate"><span class="pre">EnergyParameters.output</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.energy_parameters.EnergyParameters.parameters"><code class="docutils literal notranslate"><span class="pre">EnergyParameters.parameters</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-dftbplus_step.energy_step">dftbplus_step.energy_step module</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.energy_step.EnergyStep"><code class="docutils literal notranslate"><span class="pre">EnergyStep</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.energy_step.EnergyStep.create_node"><code class="docutils literal notranslate"><span class="pre">EnergyStep.create_node()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.energy_step.EnergyStep.create_tk_node"><code class="docutils literal notranslate"><span class="pre">EnergyStep.create_tk_node()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.energy_step.EnergyStep.description"><code class="docutils literal notranslate"><span class="pre">EnergyStep.description()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.energy_step.EnergyStep.my_description"><code class="docutils literal notranslate"><span class="pre">EnergyStep.my_description</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus-step-installer-module">dftbplus_step.installer module</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-dftbplus_step.metadata">dftbplus_step.metadata module</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.metadata.metadata"><code class="docutils literal notranslate"><span class="pre">metadata</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-dftbplus_step.optimization">dftbplus_step.optimization module</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.optimization.Optimization"><code class="docutils literal notranslate"><span class="pre">Optimization</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.optimization.Optimization.analyze"><code class="docutils literal notranslate"><span class="pre">Optimization.analyze()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.optimization.Optimization.description_text"><code class="docutils literal notranslate"><span class="pre">Optimization.description_text()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.optimization.Optimization.get_input"><code class="docutils literal notranslate"><span class="pre">Optimization.get_input()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.optimization.Optimization.git_revision"><code class="docutils literal notranslate"><span class="pre">Optimization.git_revision</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.optimization.Optimization.header"><code class="docutils literal notranslate"><span class="pre">Optimization.header</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.optimization.Optimization.version"><code class="docutils literal notranslate"><span class="pre">Optimization.version</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-dftbplus_step.optimization_parameters">dftbplus_step.optimization_parameters module</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.optimization_parameters.OptimizationParameters"><code class="docutils literal notranslate"><span class="pre">OptimizationParameters</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.optimization_parameters.OptimizationParameters.parameters"><code class="docutils literal notranslate"><span class="pre">OptimizationParameters.parameters</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.optimization_parameters.OptimizationParameters.update"><code class="docutils literal notranslate"><span class="pre">OptimizationParameters.update()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-dftbplus_step.optimization_step">dftbplus_step.optimization_step module</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.optimization_step.OptimizationStep"><code class="docutils literal notranslate"><span class="pre">OptimizationStep</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.optimization_step.OptimizationStep.create_node"><code class="docutils literal notranslate"><span class="pre">OptimizationStep.create_node()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.optimization_step.OptimizationStep.create_tk_node"><code class="docutils literal notranslate"><span class="pre">OptimizationStep.create_tk_node()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.optimization_step.OptimizationStep.description"><code class="docutils literal notranslate"><span class="pre">OptimizationStep.description()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.optimization_step.OptimizationStep.my_description"><code class="docutils literal notranslate"><span class="pre">OptimizationStep.my_description</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-dftbplus_step.slako">dftbplus_step.slako module</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.slako.add_wavefunction"><code class="docutils literal notranslate"><span class="pre">add_wavefunction()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.slako.analyze_directory"><code class="docutils literal notranslate"><span class="pre">analyze_directory()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.slako.create_datafile"><code class="docutils literal notranslate"><span class="pre">create_datafile()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.slako.find_sets"><code class="docutils literal notranslate"><span class="pre">find_sets()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.slako.list_partners"><code class="docutils literal notranslate"><span class="pre">list_partners()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.slako.parse_file"><code class="docutils literal notranslate"><span class="pre">parse_file()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.slako.partners"><code class="docutils literal notranslate"><span class="pre">partners()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.slako.partners2"><code class="docutils literal notranslate"><span class="pre">partners2()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.slako.test_one"><code class="docutils literal notranslate"><span class="pre">test_one()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-dftbplus_step.tk_band_structure">dftbplus_step.tk_band_structure module</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.tk_band_structure.TkBandStructure"><code class="docutils literal notranslate"><span class="pre">TkBandStructure</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.tk_band_structure.TkBandStructure.create_dialog"><code class="docutils literal notranslate"><span class="pre">TkBandStructure.create_dialog()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.tk_band_structure.TkBandStructure.reset_dialog"><code class="docutils literal notranslate"><span class="pre">TkBandStructure.reset_dialog()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.tk_band_structure.TkBandStructure.right_click"><code class="docutils literal notranslate"><span class="pre">TkBandStructure.right_click()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-dftbplus_step.tk_choose_parameters">dftbplus_step.tk_choose_parameters module</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.tk_choose_parameters.TkChooseParameters"><code class="docutils literal notranslate"><span class="pre">TkChooseParameters</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.tk_choose_parameters.TkChooseParameters.create_dialog"><code class="docutils literal notranslate"><span class="pre">TkChooseParameters.create_dialog()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.tk_choose_parameters.TkChooseParameters.reset_dialog"><code class="docutils literal notranslate"><span class="pre">TkChooseParameters.reset_dialog()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.tk_choose_parameters.TkChooseParameters.right_click"><code class="docutils literal notranslate"><span class="pre">TkChooseParameters.right_click()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.tk_choose_parameters.expand_range_list"><code class="docutils literal notranslate"><span class="pre">expand_range_list()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-dftbplus_step.tk_dftbplus">dftbplus_step.tk_dftbplus module</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.tk_dftbplus.TkDftbplus"><code class="docutils literal notranslate"><span class="pre">TkDftbplus</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.tk_dftbplus.TkDftbplus.create_dialog"><code class="docutils literal notranslate"><span class="pre">TkDftbplus.create_dialog()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.tk_dftbplus.TkDftbplus.edit"><code class="docutils literal notranslate"><span class="pre">TkDftbplus.edit()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.tk_dftbplus.TkDftbplus.from_flowchart"><code class="docutils literal notranslate"><span class="pre">TkDftbplus.from_flowchart()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.tk_dftbplus.TkDftbplus.handle_dialog"><code class="docutils literal notranslate"><span class="pre">TkDftbplus.handle_dialog()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.tk_dftbplus.TkDftbplus.handle_help"><code class="docutils literal notranslate"><span class="pre">TkDftbplus.handle_help()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.tk_dftbplus.TkDftbplus.right_click"><code class="docutils literal notranslate"><span class="pre">TkDftbplus.right_click()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.tk_dftbplus.TkDftbplus.update_flowchart"><code class="docutils literal notranslate"><span class="pre">TkDftbplus.update_flowchart()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-dftbplus_step.tk_dos">dftbplus_step.tk_dos module</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.tk_dos.TkDOS"><code class="docutils literal notranslate"><span class="pre">TkDOS</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.tk_dos.TkDOS.create_dialog"><code class="docutils literal notranslate"><span class="pre">TkDOS.create_dialog()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.tk_dos.TkDOS.reset_dialog"><code class="docutils literal notranslate"><span class="pre">TkDOS.reset_dialog()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.tk_dos.TkDOS.right_click"><code class="docutils literal notranslate"><span class="pre">TkDOS.right_click()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-dftbplus_step.tk_energy">dftbplus_step.tk_energy module</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.tk_energy.TkEnergy"><code class="docutils literal notranslate"><span class="pre">TkEnergy</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.tk_energy.TkEnergy.create_dialog"><code class="docutils literal notranslate"><span class="pre">TkEnergy.create_dialog()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.tk_energy.TkEnergy.reset_dialog"><code class="docutils literal notranslate"><span class="pre">TkEnergy.reset_dialog()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.tk_energy.TkEnergy.reset_energy_frame"><code class="docutils literal notranslate"><span class="pre">TkEnergy.reset_energy_frame()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.tk_energy.TkEnergy.reset_plotting"><code class="docutils literal notranslate"><span class="pre">TkEnergy.reset_plotting()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.tk_energy.TkEnergy.right_click"><code class="docutils literal notranslate"><span class="pre">TkEnergy.right_click()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-dftbplus_step.tk_optimization">dftbplus_step.tk_optimization module</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.tk_optimization.TkOptimization"><code class="docutils literal notranslate"><span class="pre">TkOptimization</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.tk_optimization.TkOptimization.create_dialog"><code class="docutils literal notranslate"><span class="pre">TkOptimization.create_dialog()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.tk_optimization.TkOptimization.reset_dialog"><code class="docutils literal notranslate"><span class="pre">TkOptimization.reset_dialog()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.tk_optimization.TkOptimization.reset_optimization_frame"><code class="docutils literal notranslate"><span class="pre">TkOptimization.reset_optimization_frame()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dftbplus_step.tk_optimization.TkOptimization.right_click"><code class="docutils literal notranslate"><span class="pre">TkOptimization.right_click()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-dftbplus_step">Module contents</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div class="tocsection sourcelink">
+    <a href="../_sources/api/dftbplus_step.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
             
           </div>
-        </footer>
+          <footer class="bd-footer-content">
+            <div class="bd-footer-content__inner"></div>
+          </footer>
         
       </main>
     </div>
   </div>
-
   
-    
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+  <script src="../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
 
-  <footer class="bd-footer"><div class="bd-footer__inner container">
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
   
-  <div class="footer-item">
-    
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
   
 
 
@@ -3638,10 +2369,21 @@ A step for DFTB+ in a SEAMM flowchart</p>
             <img src="../_static/nsf.png" class="footer_logo" alt="The NSF">
           </a>
     </div>
-</div>
-  </div>
+</div></div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.0.
+</p></div>
+      
+    </div>
   
 </div>
+
   </footer>
   </body>
 </html>
