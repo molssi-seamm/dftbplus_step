@@ -2,6 +2,10 @@
 History
 =======
 
+2023.3.5 -- Fixed issues with bandstructure and DOS
+    * The bandstructure and DOS substeps updated to work with changes in the underlying
+      classes. This had been missed earlier.
+      
 2023.2.17.2 -- Fixed bug with xTB parameters
     * xTB runs have a blank line in results.tag which caused a crash.
 
