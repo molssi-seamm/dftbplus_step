@@ -130,6 +130,7 @@ html_theme = "pydata_sphinx_theme"
 html_theme_options = {
     "github_url": "https://github.com/molssi-seamm/dftbplus_step",
     "twitter_url": "https://twitter.com/MolSSI_NSF",
+    "icon_links": [],
     "logo": {
         "image_light": "SEAMM logo.png",
         "image_dark": "SEAMM Inverted 288x181.png",

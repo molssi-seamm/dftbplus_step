@@ -43,6 +43,9 @@ class BandStructure(DftbBase):
 
         super().__init__(flowchart=flowchart, title=title, extension=extension)
 
+        self._calculation = "band structure"
+        self._model = None
+        self._metadata = dftbplus_step.metadata
         self.parameters = dftbplus_step.BandStructureParameters()
 
         self.description = ["Band Structure for DFTB+"]
