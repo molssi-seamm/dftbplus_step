@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 
 
@@ -8,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>dftbplus_step.base &#8212; DFTB+ Step 2023.3.5 documentation</title>
+    <title>dftbplus_step.base &#8212; DFTB+ Step 2023.11.7 documentation</title>
   
   
   
@@ -18,24 +17,25 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=c224919a" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
 
 <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -45,15 +45,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
-    <script src="../../_static/clipboard.min.js"></script>
-    <script src="../../_static/copybutton.js"></script>
-    <script src="../../_static/design-tabs.js"></script>
+    <script src="../../_static/documentation_options.js?v=f4303f5e"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/design-tabs.js?v=36754332"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/dftbplus_step/base';</script>
 
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -68,6 +65,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   
   
   <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
   
   <input type="checkbox"
           class="sidebar-toggle"
@@ -108,7 +114,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <span class="fa-solid fa-bars"></span>
   </label>
   
-  <div class="navbar-header-items__start">
+  
+  <div class="col-lg-3 navbar-header-items__start">
     
       <div class="navbar-item">
   
@@ -118,13 +125,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   
   
   
+  
     
     
       
     
     
-    <img src="../../_static/SEAMM logo.png" class="logo__image only-light" alt="Logo image"/>
-    <script>document.write(`<img src="../../_static/SEAMM Inverted 288x181.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+    <img src="../../_static/SEAMM logo.png" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="../../_static/SEAMM Inverted 288x181.png" class="logo__image only-dark" alt=""/>`);</script>
   
   
     <p class="title logo__title">DFTB+ Step</p>
@@ -132,7 +140,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </a></div>
     
   </div>
-  
   
   <div class="col-lg-9 navbar-header-items">
     
@@ -174,48 +181,48 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                       </a>
                     </li>
                 
-            <div class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="pst-nav-more-links">
                     More
                 </button>
-                <div class="dropdown-menu">
+                <ul id="pst-nav-more-links" class="dropdown-menu">
                     
                     <li class="nav-item">
-                      <a class="nav-link nav-external" href="https://dftbplus.org/documentation">
+                      <a class="nav-link dropdown-item nav-external" href="https://dftbplus.org/documentation">
                         DFTB+ documentation
                       </a>
                     </li>
                 
 
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../authors.html">
+                      <a class="nav-link dropdown-item nav-internal" href="../../authors.html">
                         Credits
                       </a>
                     </li>
                 
 
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../history.html">
+                      <a class="nav-link dropdown-item nav-internal" href="../../history.html">
                         History
                       </a>
                     </li>
                 
 
                 <li class="nav-item">
-                  <a class="nav-link nav-external" href="https://molssi-seamm.github.io">
+                  <a class="nav-link dropdown-item nav-external" href="https://molssi-seamm.github.io">
                     SEAMM Documentation
                   </a>
                 </li>
                 
 
                 <li class="nav-item">
-                  <a class="nav-link nav-external" href="https://molssi.org">
+                  <a class="nav-link dropdown-item nav-external" href="https://molssi.org">
                     MolSSI
                   </a>
                 </li>
                 
-                </div>
-            </div>
+                </ul>
+            </li>
             
   </ul>
 </nav></div>
@@ -227,23 +234,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       
         <div class="navbar-item navbar-persistent--container">
           
-<script>
-document.write(`
-  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
-  </button>
-`);
-</script>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
         </div>
       
       
         <div class="navbar-item">
 <script>
 document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
   </button>
 `);
 </script></div>
@@ -259,8 +268,8 @@ document.write(`
           
           
           
-          <a href="https://github.com/molssi-seamm/dftbplus_step" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
-            <label class="sr-only">GitHub</label></a>
+          <a href="https://github.com/molssi-seamm/dftbplus_step" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
         </li>
         <li class="nav-item">
           
@@ -271,8 +280,8 @@ document.write(`
           
           
           
-          <a href="https://twitter.com/MolSSI_NSF" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-twitter"></i></span>
-            <label class="sr-only">Twitter</label></a>
+          <a href="https://twitter.com/MolSSI_NSF" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-twitter fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Twitter</span></a>
         </li>
 </ul></div>
       
@@ -282,13 +291,15 @@ document.write(`
   
   
     <div class="navbar-persistent--mobile">
-<script>
-document.write(`
-  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
-  </button>
-`);
-</script>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
     </div>
   
 
@@ -345,48 +356,48 @@ document.write(`
                       </a>
                     </li>
                 
-            <div class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="pst-nav-more-links-2">
                     More
                 </button>
-                <div class="dropdown-menu">
+                <ul id="pst-nav-more-links-2" class="dropdown-menu">
                     
                     <li class="nav-item">
-                      <a class="nav-link nav-external" href="https://dftbplus.org/documentation">
+                      <a class="nav-link dropdown-item nav-external" href="https://dftbplus.org/documentation">
                         DFTB+ documentation
                       </a>
                     </li>
                 
 
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../authors.html">
+                      <a class="nav-link dropdown-item nav-internal" href="../../authors.html">
                         Credits
                       </a>
                     </li>
                 
 
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../history.html">
+                      <a class="nav-link dropdown-item nav-internal" href="../../history.html">
                         History
                       </a>
                     </li>
                 
 
                 <li class="nav-item">
-                  <a class="nav-link nav-external" href="https://molssi-seamm.github.io">
+                  <a class="nav-link dropdown-item nav-external" href="https://molssi-seamm.github.io">
                     SEAMM Documentation
                   </a>
                 </li>
                 
 
                 <li class="nav-item">
-                  <a class="nav-link nav-external" href="https://molssi.org">
+                  <a class="nav-link dropdown-item nav-external" href="https://molssi.org">
                     MolSSI
                   </a>
                 </li>
                 
-                </div>
-            </div>
+                </ul>
+            </li>
             
   </ul>
 </nav></div>
@@ -400,10 +411,10 @@ document.write(`
           <div class="navbar-item">
 <script>
 document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
   </button>
 `);
 </script></div>
@@ -419,8 +430,8 @@ document.write(`
           
           
           
-          <a href="https://github.com/molssi-seamm/dftbplus_step" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
-            <label class="sr-only">GitHub</label></a>
+          <a href="https://github.com/molssi-seamm/dftbplus_step" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
         </li>
         <li class="nav-item">
           
@@ -431,8 +442,8 @@ document.write(`
           
           
           
-          <a href="https://twitter.com/MolSSI_NSF" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-twitter"></i></span>
-            <label class="sr-only">Twitter</label></a>
+          <a href="https://twitter.com/MolSSI_NSF" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-twitter fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Twitter</span></a>
         </li>
 </ul></div>
         
@@ -464,8 +475,8 @@ document.write(`
 
 
 
-<nav aria-label="Breadcrumbs">
-  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
     
     <li class="breadcrumb-item breadcrumb-home">
       <a href="../../index.html" class="nav-link" aria-label="Home">
@@ -530,7 +541,9 @@ document.write(`
 <span class="n">printer</span> <span class="o">=</span> <span class="n">printing</span><span class="o">.</span><span class="n">getPrinter</span><span class="p">(</span><span class="s2">&quot;DFTB+&quot;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="redimension"><a class="viewcode-back" href="../../api/dftbplus_step.html#dftbplus_step.base.redimension">[docs]</a><span class="k">def</span> <span class="nf">redimension</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">dimensions</span><span class="p">):</span>
+<div class="viewcode-block" id="redimension">
+<a class="viewcode-back" href="../../api/dftbplus_step.html#dftbplus_step.base.redimension">[docs]</a>
+<span class="k">def</span> <span class="nf">redimension</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">dimensions</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Change the dimensions on values to the new dimensions.</span>
 
 <span class="sd">    Parameters</span>
@@ -564,6 +577,7 @@ document.write(`
     <span class="k">return</span> <span class="n">result</span></div>
 
 
+
 <span class="k">def</span> <span class="nf">_redimension_helper</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">dimensions</span><span class="p">):</span>
     <span class="n">dim</span> <span class="o">=</span> <span class="n">dimensions</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">remaining</span> <span class="o">=</span> <span class="n">dimensions</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
@@ -577,7 +591,9 @@ document.write(`
     <span class="k">return</span> <span class="n">values</span><span class="p">,</span> <span class="n">result</span>
 
 
-<div class="viewcode-block" id="DftbBase"><a class="viewcode-back" href="../../api/dftbplus_step.html#dftbplus_step.base.DftbBase">[docs]</a><span class="k">class</span> <span class="nc">DftbBase</span><span class="p">(</span><span class="n">seamm</span><span class="o">.</span><span class="n">Node</span><span class="p">):</span>
+<div class="viewcode-block" id="DftbBase">
+<a class="viewcode-back" href="../../api/dftbplus_step.html#dftbplus_step.base.DftbBase">[docs]</a>
+<span class="k">class</span> <span class="nc">DftbBase</span><span class="p">(</span><span class="n">seamm</span><span class="o">.</span><span class="n">Node</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A base class for substeps in the DFTB+ step.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
@@ -594,7 +610,9 @@ document.write(`
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Indicate whether this not runs or just adds input.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="kc">True</span>
 
-<div class="viewcode-block" id="DftbBase.band_structure"><a class="viewcode-back" href="../../api/dftbplus_step.html#dftbplus_step.base.DftbBase.band_structure">[docs]</a>    <span class="k">def</span> <span class="nf">band_structure</span><span class="p">(</span>
+<div class="viewcode-block" id="DftbBase.band_structure">
+<a class="viewcode-back" href="../../api/dftbplus_step.html#dftbplus_step.base.DftbBase.band_structure">[docs]</a>
+    <span class="k">def</span> <span class="nf">band_structure</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">input_path</span><span class="p">,</span> <span class="n">sym_points</span><span class="p">,</span> <span class="n">sym_names</span><span class="p">,</span> <span class="n">Efermi</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="n">DOS</span><span class="o">=</span><span class="kc">None</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Prepare the graph for the band structure.</span>
@@ -622,7 +640,10 @@ document.write(`
             <span class="n">figure</span><span class="o">.</span><span class="n">template</span> <span class="o">=</span> <span class="s2">&quot;band_structure.html_template&quot;</span>
             <span class="n">figure</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">wd</span> <span class="o">/</span> <span class="s2">&quot;band_structure.html&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DftbBase.create_band_structure_data"><a class="viewcode-back" href="../../api/dftbplus_step.html#dftbplus_step.base.DftbBase.create_band_structure_data">[docs]</a>    <span class="k">def</span> <span class="nf">create_band_structure_data</span><span class="p">(</span>
+
+<div class="viewcode-block" id="DftbBase.create_band_structure_data">
+<a class="viewcode-back" href="../../api/dftbplus_step.html#dftbplus_step.base.DftbBase.create_band_structure_data">[docs]</a>
+    <span class="k">def</span> <span class="nf">create_band_structure_data</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">input_path</span><span class="p">,</span> <span class="n">sym_points</span><span class="p">,</span> <span class="n">sym_names</span><span class="p">,</span> <span class="n">Efermi</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Massage the band structure data into a standard form</span>
@@ -720,7 +741,10 @@ document.write(`
 
         <span class="k">return</span> <span class="n">BandStructure</span></div>
 
-<div class="viewcode-block" id="DftbBase.create_dos_data"><a class="viewcode-back" href="../../api/dftbplus_step.html#dftbplus_step.base.DftbBase.create_dos_data">[docs]</a>    <span class="k">def</span> <span class="nf">create_dos_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_path</span><span class="p">,</span> <span class="n">Efermi</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">]):</span>
+
+<div class="viewcode-block" id="DftbBase.create_dos_data">
+<a class="viewcode-back" href="../../api/dftbplus_step.html#dftbplus_step.base.DftbBase.create_dos_data">[docs]</a>
+    <span class="k">def</span> <span class="nf">create_dos_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_path</span><span class="p">,</span> <span class="n">Efermi</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">]):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create the DOS data</span>
 
 <span class="sd">        Parameters</span>
@@ -905,7 +929,10 @@ document.write(`
 
         <span class="k">return</span> <span class="n">DOS</span></div>
 
-<div class="viewcode-block" id="DftbBase.dos"><a class="viewcode-back" href="../../api/dftbplus_step.html#dftbplus_step.base.DftbBase.dos">[docs]</a>    <span class="k">def</span> <span class="nf">dos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_path</span><span class="p">,</span> <span class="n">Efermi</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">]):</span>
+
+<div class="viewcode-block" id="DftbBase.dos">
+<a class="viewcode-back" href="../../api/dftbplus_step.html#dftbplus_step.base.DftbBase.dos">[docs]</a>
+    <span class="k">def</span> <span class="nf">dos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_path</span><span class="p">,</span> <span class="n">Efermi</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">]):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Prepare the graph for the density of states.</span>
 
 <span class="sd">        Parameters</span>
@@ -928,7 +955,10 @@ document.write(`
             <span class="n">figure</span><span class="o">.</span><span class="n">template</span> <span class="o">=</span> <span class="s2">&quot;line.html_template&quot;</span>
             <span class="n">figure</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;DOS.html&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DftbBase.geometry"><a class="viewcode-back" href="../../api/dftbplus_step.html#dftbplus_step.base.DftbBase.geometry">[docs]</a>    <span class="k">def</span> <span class="nf">geometry</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="DftbBase.geometry">
+<a class="viewcode-back" href="../../api/dftbplus_step.html#dftbplus_step.base.DftbBase.geometry">[docs]</a>
+    <span class="k">def</span> <span class="nf">geometry</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create the input for DFTB+ for the geometry.</span>
 
 <span class="sd">        Example::</span>
@@ -1030,7 +1060,10 @@ document.write(`
 
         <span class="k">return</span> <span class="n">result</span></div>
 
-<div class="viewcode-block" id="DftbBase.find_previous_step"><a class="viewcode-back" href="../../api/dftbplus_step.html#dftbplus_step.base.DftbBase.find_previous_step">[docs]</a>    <span class="k">def</span> <span class="nf">find_previous_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">cls</span><span class="p">,</span> <span class="n">missing_ok</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+
+<div class="viewcode-block" id="DftbBase.find_previous_step">
+<a class="viewcode-back" href="../../api/dftbplus_step.html#dftbplus_step.base.DftbBase.find_previous_step">[docs]</a>
+    <span class="k">def</span> <span class="nf">find_previous_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">cls</span><span class="p">,</span> <span class="n">missing_ok</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Find the previous step of class &#39;cls&#39;</span>
 
 <span class="sd">        Parameters</span>
@@ -1052,7 +1085,10 @@ document.write(`
                 <span class="k">break</span>
         <span class="k">return</span> <span class="n">result</span></div>
 
-<div class="viewcode-block" id="DftbBase.get_previous_charges"><a class="viewcode-back" href="../../api/dftbplus_step.html#dftbplus_step.base.DftbBase.get_previous_charges">[docs]</a>    <span class="k">def</span> <span class="nf">get_previous_charges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">missing_ok</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+
+<div class="viewcode-block" id="DftbBase.get_previous_charges">
+<a class="viewcode-back" href="../../api/dftbplus_step.html#dftbplus_step.base.DftbBase.get_previous_charges">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_previous_charges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">missing_ok</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Copy charges from the previous energy step.&quot;&quot;&quot;</span>
         <span class="n">directory</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">)</span>
         <span class="n">step</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_previous_step</span><span class="p">(</span><span class="n">dftbplus_step</span><span class="o">.</span><span class="n">Energy</span><span class="p">,</span> <span class="n">missing_ok</span><span class="o">=</span><span class="n">missing_ok</span><span class="p">)</span>
@@ -1071,7 +1107,10 @@ document.write(`
             <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="s2">&quot;No &#39;charges.dat&#39; in previous energy step.&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">step</span></div>
 
-<div class="viewcode-block" id="DftbBase.parse_results"><a class="viewcode-back" href="../../api/dftbplus_step.html#dftbplus_step.base.DftbBase.parse_results">[docs]</a>    <span class="k">def</span> <span class="nf">parse_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lines</span><span class="p">):</span>
+
+<div class="viewcode-block" id="DftbBase.parse_results">
+<a class="viewcode-back" href="../../api/dftbplus_step.html#dftbplus_step.base.DftbBase.parse_results">[docs]</a>
+    <span class="k">def</span> <span class="nf">parse_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lines</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Digest the data in the results.tag file.&quot;&quot;&quot;</span>
 
         <span class="n">properties</span> <span class="o">=</span> <span class="n">dftbplus_step</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;results&quot;</span><span class="p">]</span>
@@ -1121,7 +1160,10 @@ document.write(`
 
         <span class="k">return</span> <span class="n">property_data</span></div>
 
-<div class="viewcode-block" id="DftbBase.run"><a class="viewcode-back" href="../../api/dftbplus_step.html#dftbplus_step.base.DftbBase.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_input</span><span class="p">):</span>
+
+<div class="viewcode-block" id="DftbBase.run">
+<a class="viewcode-back" href="../../api/dftbplus_step.html#dftbplus_step.base.DftbBase.run">[docs]</a>
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_input</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Run a DFTB+ step.</span>
 
 <span class="sd">        Parameters</span>
@@ -1275,7 +1317,9 @@ document.write(`
 
         <span class="c1"># Analyze the results</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">analyze</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">)</span>
-        <span class="n">printer</span><span class="o">.</span><span class="n">important</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span></div></div>
+        <span class="n">printer</span><span class="o">.</span><span class="n">important</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span></div>
+</div>
+
 
         <span class="c1"># Add other citations here or in the appropriate place in the code.</span>
         <span class="c1"># Add the bibtex to data/references.bib, and add a self.reference.cite</span>
@@ -1286,7 +1330,9 @@ document.write(`
               
               
               
-                <footer class="bd-footer-article">
+              
+              
+                <footer class="prev-next-footer">
                   <!-- Previous / next buttons -->
 <div class="prev-next-area">
 </div>
@@ -1299,7 +1345,7 @@ document.write(`
             
           </div>
           <footer class="bd-footer-content">
-            <div class="bd-footer-content__inner"></div>
+            
           </footer>
         
       </main>
@@ -1307,8 +1353,8 @@ document.write(`
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1355,10 +1401,11 @@ document.write(`
     </div>
   
   
+  
     <div class="footer-items__end">
       
         <div class="footer-item"><p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.3.
 </p></div>
       
     </div>
