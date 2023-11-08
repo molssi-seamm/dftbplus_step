@@ -1,6 +1,9 @@
 =======
 History
 =======
+2023.11.7 -- Added structure to orbital and density plots
+    * The Dashboard expects 'structure.sdf' in order to display the structure with the
+      orbital or debsity plots from CUBE files.
 
 2023.3.5 -- Fixed issues with bandstructure and DOS
     * The bandstructure and DOS substeps updated to work with changes in the underlying
