@@ -1035,6 +1035,12 @@ class Energy(DftbBase):
                             shutil.copyfileobj(f_in, f_out)
                     n_processed += 1
                     path.unlink()
+
+        # Write the structure file
+        if periodicity == 0:
+            path = directory / "structure.sdf"
+            configuration.to_sdf(path)
+
         text += f"Successfully handled {n_processed} density and orbital cube files."
 
         return text
