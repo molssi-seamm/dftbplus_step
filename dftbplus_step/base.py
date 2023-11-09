@@ -616,7 +616,12 @@ class DftbBase(seamm.Node):
                     if _type == "real":
                         values = [float(x) for x in values]
 
-                    property_data[key] = redimension(values, dims)
+                    if key == "fermi_level":
+                        # The Fermi level has one or two values if spin-polarized, but
+                        # normally they are the same, so turn into a scalar.
+                        property_data[key] = values[0]
+                    else:
+                        property_data[key] = redimension(values, dims)
                 if key not in properties:
                     self.logger.warning("Property '{}' not recognized.".format(key))
                 if key in properties and "units" in properties[key]:

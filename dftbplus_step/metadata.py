@@ -46,7 +46,7 @@ metadata["results"] = {
             "optimization",
         ],
         "description": "The Fermi level",
-        "dimensionality": [2],
+        "dimensionality": "scalar",
         "property": "Fermi level#DFTB+#{model}",
         "type": "float",
         "units": "E_h",
