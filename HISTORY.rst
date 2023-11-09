@@ -1,6 +1,12 @@
 =======
 History
 =======
+2023.11.8 -- Bugfix: Fermi level being an array caused problems
+    * The Fermi level in DFTB+ is a vector with 1 or 2 elements, depending whether the
+      calculation is spin-polarized. DFTB+ can handle different Fermi levels, but it is
+      not clear how useful this is, so for the time being not allowing such calculations
+      and treating the Fermi level as a scalar.
+      
 2023.11.7 -- Added structure to orbital and density plots
     * The Dashboard expects 'structure.sdf' in order to display the structure with the
       orbital or debsity plots from CUBE files.

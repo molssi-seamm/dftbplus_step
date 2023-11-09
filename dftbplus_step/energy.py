@@ -618,7 +618,8 @@ class Energy(DftbBase):
 
         # Prepare the DOS graph(s)
         if "fermi_level" in data:
-            Efermi = list(Q_(data["fermi_level"], "hartree").to("eV").magnitude)
+            # Efermi = list(Q_(data["fermi_level"], "hartree").to("eV").magnitude)
+            Efermi = [Q_(data["fermi_level"], "hartree").to("eV").magnitude]
         else:
             Efermi = [0.0]
         wd = Path(self.directory)
