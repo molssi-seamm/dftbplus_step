@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>History &#8212; DFTB+ Step 2023.11.8 documentation</title>
+    <title>History &#8212; DFTB+ Step 2023.11.10 documentation</title>
   
   
   
@@ -46,7 +46,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="_static/documentation_options.js?v=1c2a9c9c"></script>
+    <script src="_static/documentation_options.js?v=76c8e348"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -509,6 +509,13 @@ document.write(`
   <section id="history">
 <h1>History<a class="headerlink" href="#history" title="Link to this heading">#</a></h1>
 <dl class="simple">
+<dt>2023.11.10 – Standard structure handling and cleaned up output</dt><dd><ul class="simple">
+<li><p>Switched to standard structure handling and naming, giving consistent options
+across SEAMM.</p></li>
+<li><p>Corrected issues with the model name in the properties.</p></li>
+<li><p>Generally cleaned up the output, mainly indentation.</p></li>
+</ul>
+</dd>
 <dt>2023.11.8 – Bugfix: Fermi level being an array caused problems</dt><dd><ul class="simple">
 <li><p>The Fermi level in DFTB+ is a vector with 1 or 2 elements, depending whether the
 calculation is spin-polarized. DFTB+ can handle different Fermi levels, but it is

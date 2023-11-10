@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>dftbplus_step.energy &#8212; DFTB+ Step 2023.11.8 documentation</title>
+    <title>dftbplus_step.energy &#8212; DFTB+ Step 2023.11.10 documentation</title>
   
   
   
@@ -45,7 +45,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=1c2a9c9c"></script>
+    <script src="../../_static/documentation_options.js?v=76c8e348"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -708,14 +708,14 @@ document.write(`
 
         <span class="c1"># Set up the description.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">description_text</span><span class="p">(</span><span class="n">PP</span><span class="p">),</span> <span class="o">**</span><span class="n">PP</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">indent</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">description_text</span><span class="p">(</span><span class="n">PP</span><span class="p">),</span> <span class="o">**</span><span class="n">PP</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span> <span class="o">*</span> <span class="s2">&quot; &quot;</span><span class="p">))</span>
 
         <span class="c1"># Determine the input and as we do so, replace any default values</span>
         <span class="c1"># in PP so that we print what is actually done</span>
 
         <span class="n">dataset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">_dataset</span>
-        <span class="n">parameter_set</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">_hamiltonian</span>
-        <span class="n">model</span><span class="p">,</span> <span class="n">parameter_set_name</span> <span class="o">=</span> <span class="n">parameter_set</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; - &quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">parameter_set</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span>
+        <span class="n">model</span><span class="p">,</span> <span class="n">parameter_set_name</span> <span class="o">=</span> <span class="n">parameter_set</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">model</span> <span class="o">==</span> <span class="s2">&quot;DFTB&quot;</span><span class="p">:</span>
             <span class="k">if</span> <span class="s2">&quot;defaults&quot;</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">:</span>
@@ -920,9 +920,9 @@ document.write(`
             <span class="c1"># First check if we have shell resolved constants or not</span>
             <span class="n">spin_constants</span> <span class="o">=</span> <span class="n">hamiltonian</span><span class="p">[</span><span class="s2">&quot;SpinConstants&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
             <span class="n">symbols</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">([</span><span class="o">*</span><span class="nb">set</span><span class="p">(</span><span class="n">atoms</span><span class="o">.</span><span class="n">symbols</span><span class="p">)])</span>
-            <span class="n">dataset_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">_hamiltonian</span>
+            <span class="n">dataset_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span>
             <span class="c1"># e.g. &quot;DFTB - mio&quot;</span>
-            <span class="n">key</span> <span class="o">=</span> <span class="n">dataset_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; - &quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="n">dataset_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">spin_constant_data</span><span class="p">:</span>
                 <span class="n">constants</span> <span class="o">=</span> <span class="n">spin_constant_data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
@@ -1009,7 +1009,7 @@ document.write(`
                 <span class="n">__</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;The mesh for the Brillouin zone integration is </span><span class="si">{</span><span class="n">na</span><span class="si">}</span><span class="s2"> x </span><span class="si">{</span><span class="n">nb</span><span class="si">}</span><span class="s2"> x </span><span class="si">{</span><span class="n">nc</span><span class="si">}</span><span class="s2">&quot;</span>
                     <span class="sa">f</span><span class="s2">&quot; with offsets of </span><span class="si">{</span><span class="n">oa</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">ob</span><span class="si">}</span><span class="s2">, and </span><span class="si">{</span><span class="n">oc</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-                    <span class="n">indent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="s2">&quot; &quot;</span><span class="p">,</span>
+                    <span class="n">indent</span><span class="o">=</span><span class="mi">4</span> <span class="o">*</span> <span class="s2">&quot; &quot;</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="p">)</span>
 
@@ -1227,11 +1227,11 @@ document.write(`
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="n">text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;There was an error making the plots: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;Orbital plots not supported for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">_hamiltonian</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;Orbital plots not supported for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="si">}</span><span class="s2">&quot;</span>
 
-        <span class="n">text</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">__</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="o">**</span><span class="n">data</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="s2">&quot; &quot;</span><span class="p">))</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">__</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="o">**</span><span class="n">data</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">8</span> <span class="o">*</span> <span class="s2">&quot; &quot;</span><span class="p">))</span>
         <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span>
-        <span class="n">text</span> <span class="o">+=</span> <span class="n">textwrap</span><span class="o">.</span><span class="n">indent</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">text_lines</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">+</span> <span class="mi">7</span> <span class="o">*</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="n">textwrap</span><span class="o">.</span><span class="n">indent</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">text_lines</span><span class="p">),</span> <span class="mi">12</span> <span class="o">*</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
 
         <span class="n">printer</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
 
