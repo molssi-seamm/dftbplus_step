@@ -61,6 +61,12 @@ class Optimization(dftbplus_step.Energy):
             f" A maximum of {P['MaxSteps']} steps will be used."
         )
 
+        if self.model is None:
+            kwargs = {}
+        else:
+            kwargs = {"Hamiltonian": self.model}
+        text += seamm.standard_parameters.structure_handling_description(P, **kwargs)
+
         return (
             self.header
             + "\n"
@@ -85,7 +91,7 @@ class Optimization(dftbplus_step.Energy):
                 PP[key] = "{:~P}".format(PP[key])
 
         self.description = []
-        self.description.append(__(self.description_text(PP), **PP, indent=self.indent))
+        self.description.append(__(self.description_text(PP), **PP, indent=4 * " "))
 
         _, configuration = self.get_system_configuration(None)
 
@@ -136,26 +142,39 @@ class Optimization(dftbplus_step.Energy):
             context=seamm.flowchart_variables._data
         )
 
+        # Read the detailed output file to get the number of iterations
+        directory = Path(self.directory)
+        path = directory / "detailed.out"
+        lines = iter(path.read_text().splitlines())
+        data["nsteps"] = "unknown number of"
+        data["ediff"] = "unknown"
+        data["scc error"] = None
+        for line in lines:
+            if "Geometry optimization step:" in line:
+                data["nsteps"] = line.split()[3]
+            if "Diff electronic" in line:
+                tmp = next(lines).split()
+                data["ediff"] = float(tmp[2])
+
+        # Print the key results
+
+        text += (
+            "The geometry optimization converged in {nsteps} steps. "
+            "The last change in energy was {ediff:.6} Eh"
+        )
+        if P["SCC"] == "Yes" and data["scc error"] is not None:
+            text += " and the error in the charges of {scc error:.6}."
+        else:
+            text += "."
+
         # Update the structure
         if "final structure" in data:
             sdata = data["final structure"]
 
-            system, starting_configuration = self.get_system_configuration(None)
-            periodicity = starting_configuration.periodicity
-            if (
-                "structure handling" in P
-                and P["structure handling"] == "Create a new configuration"
-            ):
-                configuration = system.create_configuration(
-                    periodicity=periodicity,
-                    atomset=starting_configuration.atomset,
-                    bondset=starting_configuration.bondset,
-                    cell_id=starting_configuration.cell_id,
-                )
-            else:
-                configuration = starting_configuration
+            _, starting_configuration = self.get_system_configuration()
+            system, configuration = self.get_system_configuration(P)
 
-            if periodicity == 3:
+            if starting_configuration.periodicity == 3:
                 (
                     lattice_in,
                     fractionals_in,
@@ -190,45 +209,15 @@ class Optimization(dftbplus_step.Energy):
                 )
 
             # And the name of the configuration.
-            if "configuration name" in P:
-                if P["configuration name"] == "optimized with <Hamiltonian>":
-                    hamiltonian = self.parent._hamiltonian
-                    configuration.name = f"optimized with {hamiltonian}"
-                elif P["configuration name"] == "keep current name":
-                    pass
-                elif P["configuration name"] == "use SMILES string":
-                    configuration.name = configuration.smiles
-                elif P["configuration name"] == "use Canonical SMILES string":
-                    configuration.name = configuration.canonical_smiles
-                elif P["configuration name"] == "use configuration number":
-                    configuration.name = str(configuration.n_configurations)
+            text += seamm.standard_parameters.set_names(
+                system,
+                configuration,
+                P,
+                _first=True,
+                Hamiltonian=self.model,
+            )
 
-        # Read the detailed output file to get the number of iterations
-        directory = Path(self.directory)
-        path = directory / "detailed.out"
-        lines = iter(path.read_text().splitlines())
-        data["nsteps"] = "unknown number of"
-        data["ediff"] = "unknown"
-        data["scc error"] = None
-        for line in lines:
-            if "Geometry optimization step:" in line:
-                data["nsteps"] = line.split()[3]
-            if "Diff electronic" in line:
-                tmp = next(lines).split()
-                data["ediff"] = float(tmp[2])
-
-        # Print the key results
-
-        text += (
-            "The geometry optimization converged in {nsteps} steps. "
-            "The last change in energy was {ediff:.6} Eh"
-        )
-        if P["SCC"] == "Yes" and data["scc error"] is not None:
-            text += " and the error in the charges of {scc error:.6}."
-        else:
-            text += "."
-
-        printer.normal(__(text, **data, indent=self.indent + 4 * " "))
+        printer.normal(__(text, **data, indent=8 * " "))
 
         printer.normal("\n")
 

@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """Global control parameters for DFTB+
 """
+import logging
 
 import dftbplus_step
-import logging
+import seamm
 
 logger = logging.getLogger(__name__)
 
@@ -159,37 +160,6 @@ class OptimizationParameters(dftbplus_step.EnergyParameters):
             "description": "Alpha update on reset:",
             "help_text": "The factor for the update the alpha parameter on reset.",
         },
-        # Put in the configuration handling options needed
-        "structure handling": {
-            "default": "Create a new configuration",
-            "kind": "enum",
-            "default_units": "",
-            "enumeration": (
-                "Overwrite the current configuration",
-                "Create a new configuration",
-            ),
-            "format_string": "s",
-            "description": "Configuration handling:",
-            "help_text": (
-                "Whether to overwrite the current configuration, or create a new "
-                "configuration or system and configuration for the new structure"
-            ),
-        },
-        "configuration name": {
-            "default": "optimized with <Hamiltonian>",
-            "kind": "string",
-            "default_units": "",
-            "enumeration": (
-                "optimized with <Hamiltonian>",
-                "keep current name",
-                "use SMILES string",
-                "use Canonical SMILES string",
-                "use configuration number",
-            ),
-            "format_string": "s",
-            "description": "Configuration name:",
-            "help_text": "The name for the new configuration",
-        },
     }
 
     def __init__(self, defaults={}, data=None):
@@ -197,8 +167,25 @@ class OptimizationParameters(dftbplus_step.EnergyParameters):
         parameters given in the class"""
 
         super().__init__(
-            defaults={**OptimizationParameters.parameters, **defaults}, data=data
+            defaults={
+                **OptimizationParameters.parameters,
+                **seamm.standard_parameters.structure_handling_parameters,
+                **defaults,
+            },
+            data=data,
         )
+
+        # Do any local editing of defaults
+        tmp = self["structure handling"]
+        tmp.description = "Structure handling:"
+
+        tmp = self["system name"]
+        tmp._data["enumeration"] = (*tmp.enumeration, "optimized with {Hamiltonian}")
+        tmp.default = "keep current name"
+
+        tmp = self["configuration name"]
+        tmp._data["enumeration"] = ["optimized with {Hamiltonian}", *tmp.enumeration]
+        tmp.default = "optimized with {Hamiltonian}"
 
     def update(self, data):
         """Update values from a dict
@@ -219,5 +206,9 @@ class OptimizationParameters(dftbplus_step.EnergyParameters):
         ):
             if key in data:
                 del data[key]
+
+        for key in ("system name", "configuration name"):
+            if key in data and data[key] == "optimized with <Hamiltonian>":
+                data[key] = "optimized with {Hamiltonian}"
 
         super().update(data)
