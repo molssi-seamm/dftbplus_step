@@ -1,6 +1,12 @@
 =======
 History
 =======
+2023.11.10 -- Standard structure handling and cleaned up output
+    * Switched to standard structure handling and naming, giving consistent options
+      across SEAMM.
+    * Corrected issues with the model name in the properties.
+    * Generally cleaned up the output, mainly indentation.
+      
 2023.11.8 -- Bugfix: Fermi level being an array caused problems
     * The Fermi level in DFTB+ is a vector with 1 or 2 elements, depending whether the
       calculation is spin-polarized. DFTB+ can handle different Fermi levels, but it is
