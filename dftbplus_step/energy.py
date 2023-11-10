@@ -195,14 +195,14 @@ class Energy(DftbBase):
 
         # Set up the description.
         self.description = []
-        self.description.append(__(self.description_text(PP), **PP, indent=self.indent))
+        self.description.append(__(self.description_text(PP), **PP, indent=4 * " "))
 
         # Determine the input and as we do so, replace any default values
         # in PP so that we print what is actually done
 
         dataset = self.parent._dataset
-        parameter_set = self.parent._hamiltonian
-        model, parameter_set_name = parameter_set.split(" - ", 1)
+        parameter_set = self.model
+        model, parameter_set_name = parameter_set.split("/", 1)
 
         if model == "DFTB":
             if "defaults" in dataset:
@@ -407,9 +407,9 @@ class Energy(DftbBase):
             # First check if we have shell resolved constants or not
             spin_constants = hamiltonian["SpinConstants"] = {}
             symbols = sorted([*set(atoms.symbols)])
-            dataset_name = self.parent._hamiltonian
+            dataset_name = self.model
             # e.g. "DFTB - mio"
-            key = dataset_name.split(" - ")[1]
+            key = dataset_name.split("/")[1]
             if key in spin_constant_data:
                 constants = spin_constant_data[key]
             else:
@@ -496,7 +496,7 @@ class Energy(DftbBase):
                 __(
                     f"The mesh for the Brillouin zone integration is {na} x {nb} x {nc}"
                     f" with offsets of {oa}, {ob}, and {oc}",
-                    indent=self.indent + 4 * " ",
+                    indent=4 * " ",
                 )
             )
 
@@ -711,11 +711,11 @@ class Energy(DftbBase):
             except Exception as e:
                 text += f"There was an error making the plots: {str(e)}"
         else:
-            text += f"Orbital plots not supported for {self.parent._hamiltonian}"
+            text += f"Orbital plots not supported for {self.model}"
 
-        text = str(__(text, **data, indent=self.indent + 4 * " "))
+        text = str(__(text, **data, indent=8 * " "))
         text += "\n\n"
-        text += textwrap.indent("\n".join(text_lines), self.indent + 7 * " ")
+        text += textwrap.indent("\n".join(text_lines), 12 * " ")
 
         printer.normal(text)
 

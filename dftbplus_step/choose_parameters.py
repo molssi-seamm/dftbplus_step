@@ -12,12 +12,14 @@ from seamm_util import units_class
 import seamm_util.printing as printing
 from seamm_util.printing import FormattedText as __
 
+from .base import DftbBase
+
 logger = logging.getLogger(__name__)
 job = printing.getPrinter()
 printer = printing.getPrinter("DFTB+")
 
 
-class ChooseParameters(seamm.Node):
+class ChooseParameters(DftbBase):
     def __init__(
         self, flowchart=None, title="Choose Parameters", extension=None, logger=logger
     ):
@@ -88,7 +90,7 @@ class ChooseParameters(seamm.Node):
                 PP[key] = "{:~P}".format(PP[key])
 
         self.description = []
-        self.description.append(__(self.description_text(PP), **PP, indent=self.indent))
+        self.description.append(__(self.description_text(PP), **PP, indent=4 * " "))
 
         # The parameter data
         parameter_set = P["dataset"]
@@ -113,7 +115,7 @@ class ChooseParameters(seamm.Node):
             potentials = metadata[model]["potentials"]
             pairs = dataset["potential pairs"]
 
-            self.parent._hamiltonian = parameter_set
+            self.model = parameter_set.replace(" - ", "/")
 
             if P["subset"] == "none" or P["subset"] == "":
                 subset = None
@@ -122,7 +124,7 @@ class ChooseParameters(seamm.Node):
                 if " - " not in subset:
                     # From a variable
                     subset = f"{model} - {subset}"
-                self.parent._hamiltonian += " + " + subset.split(" - ")[1]
+                self.model += "+" + subset.split(" - ")[1]
                 subset = datasets[subset]
                 subpairs = subset["potential pairs"]
 
@@ -216,7 +218,7 @@ class ChooseParameters(seamm.Node):
                 )
         elif model == "xTB":
             # Broadcast to the parent so that other substeps can use
-            self.parent._hamiltonian = P["dataset"]
+            self.model = P["dataset"].replace(" - ", "/")
             self.parent._dataset = dataset
             self.parent._subset = None
 
