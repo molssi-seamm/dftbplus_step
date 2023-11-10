@@ -99,6 +99,15 @@ class DftbBase(seamm.Node):
         """Indicate whether this not runs or just adds input."""
         return True
 
+    @property
+    def model(self):
+        """The model (chemistry) used to obtain results."""
+        return self.parent.model
+
+    @model.setter
+    def model(self, value):
+        self.parent.model = value
+
     def band_structure(
         self, input_path, sym_points, sym_names, Efermi=[0.0, 0.0], DOS=None
     ):

@@ -248,7 +248,6 @@ class Dftbplus(seamm.Node):
         # Data to pass between substeps
         self._dataset = None  # SLAKO dataset used
         self._subset = None  # SLAKO modifier dataset applied to dataset
-        self._hamiltonian = None  # String name of the Hamiltonian
         self._reference_energies = None  # Reference energies per element.
         self._reference_energy = None  # for calculating energy of formation
         self._steps = None  # The nodes for the steps run so far.
@@ -363,7 +362,7 @@ class Dftbplus(seamm.Node):
         text = self.header + "\n\n"
         while node is not None:
             try:
-                text += __(node.description_text(), indent=3 * " ").__str__()
+                text += __(node.description_text(), indent=4 * " ").__str__()
             except Exception as e:
                 print(
                     "Error describing dftbplus flowchart: {} in {}".format(
