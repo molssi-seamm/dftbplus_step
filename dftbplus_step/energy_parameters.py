@@ -105,6 +105,33 @@ class EnergyParameters(seamm.Parameters):
                 "steps, the program stops unless requested elsewhere."
             ),
         },
+        "ConvergentSccOnly": {
+            "default": "No",
+            "kind": "string",
+            "default_units": "",
+            "enumeration": ("Yes", "No"),
+            "format_string": "",
+            "description": "Not converged is error:",
+            "help_text": "Whether to throw an error if the SCC cycle doesn't converge.",
+        },
+        "Filling": {
+            "default": "Fermi",
+            "kind": "string",
+            "default_units": "",
+            "enumeration": ("Fermi", "Gaussian", "Methfessel-Paxton"),
+            "format_string": "",
+            "description": "Electronic temperature method:",
+            "help_text": "The method to populate the electrons due to temperature.",
+        },
+        "Filling Temperature": {
+            "default": 300,
+            "kind": "float",
+            "default_units": "K",
+            "enumeration": None,
+            "format_string": "",
+            "description": "Temperature:",
+            "help_text": "The electronic temperature for the electronic population.",
+        },
         "ShellResolvedSCC": {
             "default": "no",
             "kind": "string",
