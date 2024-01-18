@@ -1,7 +1,7 @@
 cms_plots
 hsd
 pandas
-psutil
 seamm
+seamm-exec
 seamm_util
 tabulate

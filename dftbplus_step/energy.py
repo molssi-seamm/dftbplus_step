@@ -2,6 +2,7 @@
 
 """Setup DFTB+"""
 
+import configparser
 import csv
 import gzip
 
@@ -13,7 +14,6 @@ import json
 import logging
 from pathlib import Path
 import shutil
-import subprocess
 import textwrap
 
 import hsd
@@ -983,19 +983,34 @@ class Energy(DftbBase):
         hsd.dump(input_data, str(path))
 
         # And run WAVEPLOT
-        cmd = str(Path(self.parent.options["dftbplus_path"]) / "waveplot")
-        try:
-            output = subprocess.check_output(
-                cmd, shell=True, text=True, stderr=subprocess.STDOUT, cwd=directory
-            )
-        except subprocess.CalledProcessError as e:
-            return (
-                f"Calling waveplot, returncode = {e.returncode}"
-                f"\n\nOutput: {e.output}"
-            )
+        seamm_options = self.parent.global_options
+        # Read configuration file for DFTB+
+        ini_dir = Path(seamm_options["root"]).expanduser()
+        full_config = configparser.ConfigParser()
+        full_config.read(ini_dir / "dftbplus.ini")
 
-        path = directory / "waveplot.out"
-        path.write_text(output)
+        executor = self.parent.flowchart.executor
+        executor_type = executor.name
+        if executor_type not in full_config:
+            raise RuntimeError(
+                f"No section for '{executor_type}' in DFTB+ ini file "
+                f"({ini_dir / 'dftbplus.ini'})"
+            )
+        config = dict(full_config.items(executor_type))
+
+        result = executor.run(
+            cmd=["waveplot", ">", "waveplot.out"],
+            config=config,
+            directory=self.directory,
+            files={},
+            return_files=["*"],
+            in_situ=True,
+            shell=True,
+        )
+
+        if result is None:
+            logger.error("There was an error running the DOS code")
+            return None
 
         # Finally rename and gzip the cube files
         n_processed = 0

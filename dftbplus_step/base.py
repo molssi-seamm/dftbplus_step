@@ -3,23 +3,22 @@
 """Non-graphical part of the DFTB+ step in a SEAMM flowchart
 """
 
+import configparser
 import copy
-
 import logging
 from pathlib import Path
 import pprint
 import shutil
-import subprocess
 import traceback
 
 import pandas
-import psutil
 
 import cms_plots
 import dftbplus_step
 from .dftbplus import deep_merge, dict_to_hsd, parse_gen_file
 from molsystem.elements import to_symbols
 import seamm
+import seamm_exec
 import seamm_util.printing as printing
 
 # In addition to the normal logger, two logger-like printing facilities are
@@ -91,8 +90,18 @@ class DftbBase(seamm.Node):
         self.mapping_from_primitive = None
         self.mapping_to_primitive = None
         self.results = None  # Results of the calculation from the tag file.
+        self._input_only = False
 
         super().__init__(flowchart=flowchart, title=title, extension=extension)
+
+    @property
+    def input_only(self):
+        """Whether to write the input only, not run MOPAC."""
+        return self._input_only
+
+    @input_only.setter
+    def input_only(self, value):
+        self._input_only = value
 
     @property
     def is_runable(self):
@@ -149,22 +158,41 @@ class DftbBase(seamm.Node):
         wd = Path(self.directory)
         logger.info(f"Preparing the band structure, {wd}")
 
-        spin_polarized = len(Efermi) == 2
-        options = self.parent.options
-        exe = Path(options["dftbplus_path"]) / "dp_bands"
+        seamm_options = self.parent.global_options
 
-        band_path = str(wd / "band")
-        if spin_polarized:
-            command = f"'{exe}' -s '{input_path}' '{band_path}'"
-        else:
-            command = f"'{exe}' '{input_path}' '{band_path}'"
-        try:
-            subprocess.check_output(
-                command, shell=True, text=True, stderr=subprocess.STDOUT
+        spin_polarized = len(Efermi) == 2
+
+        # Read configuration file for DFTB+
+        ini_dir = Path(seamm_options["root"]).expanduser()
+        full_config = configparser.ConfigParser()
+        full_config.read(ini_dir / "dftbplus.ini")
+
+        executor = self.parent.flowchart.executor
+        executor_type = executor.name
+        if executor_type not in full_config:
+            raise RuntimeError(
+                f"No section for '{executor_type}' in DFTB+ ini file "
+                f"({ini_dir / 'dftbplus.ini'})"
             )
-        except subprocess.CalledProcessError as e:
-            logger.warning(f"Calling dp_band, returncode = {e.returncode}")
-            logger.warning(f"Output: {e.output}")
+        config = dict(full_config.items(executor_type))
+
+        if spin_polarized:
+            cmd = ["dp_bands", "-s", input_path, "band"]
+        else:
+            cmd = ["dp_bands", input_path, "band"]
+
+        result = executor.run(
+            cmd=cmd,
+            config=config,
+            directory=self.directory,
+            files={},
+            return_files=["*"],
+            in_situ=True,
+            shell=True,
+        )
+
+        if result is None:
+            logger.error("There was an error running the DOS code")
             return None
 
         if spin_polarized:
@@ -253,23 +281,47 @@ class DftbBase(seamm.Node):
 
         logger.info("Preparing DOS")
 
-        options = self.parent.options
+        seamm_options = self.parent.global_options
 
         # Total DOS
-        wd = Path(self.directory)
-        exe = Path(options["dftbplus_path"]) / "dp_dos"
-        dat_file = str(wd / "dos_total.dat")
-        command = f"'{exe}' '{input_path}' '{dat_file}'"
-        try:
-            subprocess.check_output(
-                command, shell=True, text=True, stderr=subprocess.STDOUT
+        executor = self.parent.flowchart.executor
+
+        # Read configuration file for DFTB+
+        ini_dir = Path(seamm_options["root"]).expanduser()
+        full_config = configparser.ConfigParser()
+        full_config.read(ini_dir / "dftbplus.ini")
+        executor_type = executor.name
+        if executor_type not in full_config:
+            raise RuntimeError(
+                f"No section for '{executor_type}' in DFTB+ ini file "
+                f"({ini_dir / 'dftbplus.ini'})"
             )
-        except subprocess.CalledProcessError as e:
-            logger.warning(f"Calling dp_dos, returncode = {e.returncode}")
-            logger.warning(f"Output: {e.output}")
+        config = dict(full_config.items(executor_type))
+
+        result = executor.run(
+            cmd=[
+                "dp_dos",
+                str(input_path),
+                "dos_total.dat",
+                ">",
+                "DOS.out",
+                "2>",
+                "dos_stderr.txt",
+            ],
+            config=config,
+            directory=self.directory,
+            files={},
+            return_files=["*"],
+            in_situ=True,
+            shell=True,
+        )
+
+        if result is None:
+            logger.error("There was an error running the DOS code")
             return None
 
         # Read the total DOS data
+        wd = Path(self.directory)
         with open(wd / "dos_total.dat", "r") as fd:
             DOS = pandas.read_csv(
                 fd,
@@ -321,15 +373,28 @@ class DftbBase(seamm.Node):
                 shell = ("s", "p", "d", "f")[shell_no - 1]
                 label = element + "_" + shell
 
-                command = f"'{exe}' -w '{path}' '{out}'"
-                try:
-                    subprocess.check_output(
-                        command, shell=True, text=True, stderr=subprocess.STDOUT
-                    )
-                except subprocess.CalledProcessError as e:
-                    logger.warning(f"Calling dp_dos, returncode = {e.returncode}")
-                    logger.warning(f"Output: {e.output}")
-                    continue
+                result = executor.run(
+                    cmd=[
+                        "dp_dos",
+                        "-w",
+                        str(path),
+                        str(out),
+                        ">",
+                        "DOS.out",
+                        "2>",
+                        "dos_stderr.txt",
+                    ],
+                    config=config,
+                    directory=self.directory,
+                    files={},
+                    return_files=["*"],
+                    in_situ=True,
+                    shell=True,
+                )
+
+                if result is None:
+                    logger.error("There was an error running the DOS code")
+                    return None
 
                 # Read the plot data
                 with open(out, "r") as fd:
@@ -675,127 +740,112 @@ class DftbBase(seamm.Node):
         for value in self.description:
             printer.important(value)
 
-        files = {"dftb_in.hsd": hsd}
-        logger.info("dftb_in.hsd:\n" + files["dftb_in.hsd"])
+        # Check for successful run, don't rerun
+        success = directory / "success.dat"
+        if not success.exists():
+            files = {"dftb_in.hsd": hsd}
+            logger.info("dftb_in.hsd:\n" + files["dftb_in.hsd"])
 
-        # If the charge file exists, use it!
-        path = directory / "charges.dat"
-        if path.exists():
-            files["charges.dat"] = path.read_text()
+            # If the charge file exists, use it!
+            path = directory / "charges.dat"
+            if path.exists():
+                files["charges.dat"] = path.read_text()
 
-        # Write the input files to the current directory
-        for filename in files:
-            path = directory / filename
-            with path.open(mode="w") as fd:
-                fd.write(files[filename])
-
-        # How to run: how many processors does this node have?
-        n_cores = psutil.cpu_count(logical=False)
-        self.logger.info("The number of cores is {}".format(n_cores))
-
-        if seamm_options["ncores"] != "available":
-            n_cores = min(n_cores, int(seamm_options["ncores"]))
-
-        if options["use_openmp"]:
-            n_atoms = configuration.n_atoms
-            n_atoms_per_core = int(options["natoms_per_core"])
-            n_threads = int(round(n_atoms / n_atoms_per_core))
-            if n_threads > n_cores:
-                n_threads = n_cores
-            elif n_threads < 1:
-                n_threads = 1
-        else:
-            n_threads = 1
-        self.logger.info(
-            f"DFTB+ will use {n_threads} OpenMP threads for {n_atoms} atoms."
-        )
-        printer.important(
-            f"        DFTB+ using {n_threads} OpenMP threads for {n_atoms} atoms.\n"
-        )
-
-        env = {
-            "OMP_NUM_THREADS": str(n_threads),
-        }
-
-        return_files = [
-            "*.out",
-            "charges.*",
-            "dftb_pin.hsd",
-            "geom.out.*",
-            "output",
-            "pdos*",
-            "results.tag",
-            "*.xml",
-            "eigenvec.bin",
-        ]  # yapf: disable
-
-        # Run the calculation
-        local = seamm.ExecLocal()
-        exe = Path(options["dftbplus_path"]) / "dftb+"
-        result = local.run(
-            cmd=[str(exe)],
-            files=files,
-            return_files=return_files,
-            env=env,
-            in_situ=True,
-            directory=str(directory),
-        )
-
-        if result is None:
-            logger.error("There was an error running DFTB+")
-            return None
-
-        logger.debug("\n" + pprint.pformat(result))
-
-        logger.info("stdout:\n" + result["stdout"])
-        if result["stderr"] != "":
-            logger.warning("stderr:\n" + result["stderr"])
-
-        # Write the output files to the current directory
-        if "stdout" in result and result["stdout"] != "":
-            path = directory / "stdout.txt"
-            with path.open(mode="w") as fd:
-                fd.write(result["stdout"])
-
-        if result["stderr"] != "":
-            self.logger.warning("stderr:\n" + result["stderr"])
-            path = directory / "stderr.txt"
-            with path.open(mode="w") as fd:
-                fd.write(result["stderr"])
-
-        for filename in result["files"]:
-            if filename[0] == "@":
-                subdir, fname = filename[1:].split("+")
-                path = directory / subdir / fname
-            else:
+            # Write the input files to the current directory
+            for filename in files:
                 path = directory / filename
-                if result[filename]["data"] is not None:
-                    if isinstance(result[filename]["data"], bytes):
-                        with path.open(mode="wb") as fd:
-                            fd.write(result[filename]["data"])
-                    else:
-                        with path.open(mode="w") as fd:
-                            fd.write(result[filename]["data"])
+                with path.open(mode="w") as fd:
+                    fd.write(files[filename])
+
+            if not self.input_only:
+                # Get the computational environment and set limits
+                ce = seamm_exec.computational_environment()
+
+                n_cores = ce["NTASKS"]
+                if seamm_options["ncores"] != "available":
+                    n_cores = min(n_cores, int(seamm_options["ncores"]))
+
+                if options["use_openmp"]:
+                    n_atoms = configuration.n_atoms
+                    n_atoms_per_core = int(options["natoms_per_core"])
+                    n_threads = int(round(n_atoms / n_atoms_per_core))
+                    if n_threads > n_cores:
+                        n_threads = n_cores
+                    elif n_threads < 1:
+                        n_threads = 1
                 else:
-                    with path.open(mode="w") as fd:
-                        fd.write(result[filename]["exception"])
+                    n_threads = 1
+                printer.important(
+                    f"        DFTB+ using {n_threads} OpenMP threads for {n_atoms} "
+                    "atoms.\n"
+                )
 
-        # Parse the results.tag file
-        if "results.tag" in result["files"]:
-            self.results = self.parse_results(result["results.tag"]["data"])
-        else:
-            self.results = {}
+                env = {
+                    "OMP_NUM_THREADS": str(n_threads),
+                }
 
-        # And a final structure
-        if "geom.out.gen" in result["files"]:
-            self.results["final structure"] = parse_gen_file(
-                result["geom.out.gen"]["data"]
-            )
+                return_files = [
+                    "*.out",
+                    "charges.*",
+                    "dftb_pin.hsd",
+                    "geom.out.*",
+                    "output",
+                    "pdos*",
+                    "results.tag",
+                    "*.xml",
+                    "eigenvec.bin",
+                ]  # yapf: disable
 
-        # Analyze the results
-        self.analyze(data=self.results)
-        printer.important(" ")
+                # Run the calculation
+                executor = self.parent.flowchart.executor
 
-        # Add other citations here or in the appropriate place in the code.
-        # Add the bibtex to data/references.bib, and add a self.reference.cite
-        # similar to the above to actually add the citation to the references.
+                # Read configuration file for DFTB+
+                ini_dir = Path(seamm_options["root"]).expanduser()
+                full_config = configparser.ConfigParser()
+                full_config.read(ini_dir / "dftbplus.ini")
+                executor_type = executor.name
+                if executor_type not in full_config:
+                    raise RuntimeError(
+                        f"No section for '{executor_type}' in DFTB+ ini file "
+                        f"({ini_dir / 'dftbplus.ini'})"
+                    )
+                config = dict(full_config.items(executor_type))
+
+                result = executor.run(
+                    cmd=["{code}", ">", "DFTB+.out", "2>", "stderr.txt"],
+                    config=config,
+                    directory=self.directory,
+                    files=files,
+                    return_files=return_files,
+                    in_situ=True,
+                    shell=True,
+                    env=env,
+                )
+
+                if result is None:
+                    logger.error("There was an error running DFTB+")
+                    return None
+
+                logger.debug("\n" + pprint.pformat(result))
+
+        if not self.input_only:
+            # Parse the results.tag file
+            path = directory / "results.tag"
+            if path.exists():
+                data = path.read_text()
+                self.results = self.parse_results(data)
+            else:
+                self.results = {}
+
+            # And a final structure
+            path = directory / "geom.out.gen"
+            if path.exists():
+                data = path.read_text()
+                self.results["final structure"] = parse_gen_file(data)
+
+            # Analyze the results
+            self.analyze(data=self.results)
+            printer.important(" ")
+
+            # Ran successfully, put out the success file
+            success.write_text("success")
