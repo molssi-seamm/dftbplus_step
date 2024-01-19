@@ -62,6 +62,18 @@ class EnergyParameters(seamm.Parameters):
     """
 
     parameters = {
+        "input only": {
+            "default": "no",
+            "kind": "boolean",
+            "default_units": "",
+            "enumeration": (
+                "yes",
+                "no",
+            ),
+            "format_string": "s",
+            "description": "Write the input files and stop:",
+            "help_text": "Don't run DFTB+. Just write the input files.",
+        },
         "primitive cell": {
             "default": "Yes",
             "kind": "boolean",

@@ -90,18 +90,8 @@ class DftbBase(seamm.Node):
         self.mapping_from_primitive = None
         self.mapping_to_primitive = None
         self.results = None  # Results of the calculation from the tag file.
-        self._input_only = False
 
         super().__init__(flowchart=flowchart, title=title, extension=extension)
-
-    @property
-    def input_only(self):
-        """Whether to write the input only, not run MOPAC."""
-        return self._input_only
-
-    @input_only.setter
-    def input_only(self, value):
-        self._input_only = value
 
     @property
     def is_runable(self):
@@ -719,6 +709,10 @@ class DftbBase(seamm.Node):
         """
         system, configuration = self.get_system_configuration(None)
 
+        P = self.parameters.current_values_to_dict(
+            context=seamm.flowchart_variables._data
+        )
+
         directory = Path(self.directory)
         directory.mkdir(parents=True, exist_ok=True)
 
@@ -757,7 +751,7 @@ class DftbBase(seamm.Node):
                 with path.open(mode="w") as fd:
                     fd.write(files[filename])
 
-            if not self.input_only:
+            if not P["input only"]:
                 # Get the computational environment and set limits
                 ce = seamm_exec.computational_environment()
 
@@ -828,7 +822,7 @@ class DftbBase(seamm.Node):
 
                 logger.debug("\n" + pprint.pformat(result))
 
-        if not self.input_only:
+        if not P["input only"]:
             # Parse the results.tag file
             path = directory / "results.tag"
             if path.exists():
