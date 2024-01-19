@@ -1,6 +1,10 @@
 =======
 History
 =======
+2024.1.18 -- Support for running in containers and writing input only.
+    * Added new property: scaled dipole.
+    * Added option to write the input file and not run DFTB+
+
 2023.11.10 -- Standard structure handling and cleaned up output
     * Switched to standard structure handling and naming, giving consistent options
       across SEAMM.
@@ -15,7 +19,7 @@ History
       
 2023.11.7 -- Added structure to orbital and density plots
     * The Dashboard expects 'structure.sdf' in order to display the structure with the
-      orbital or debsity plots from CUBE files.
+      orbital or density plots from CUBE files.
 
 2023.3.5 -- Fixed issues with bandstructure and DOS
     * The bandstructure and DOS substeps updated to work with changes in the underlying
