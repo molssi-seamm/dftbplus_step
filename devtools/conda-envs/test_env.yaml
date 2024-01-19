@@ -8,7 +8,6 @@ dependencies:
 
   # molsystem requires, and only available via Conda.
   - hsd-python
-  - psutil
   - seamm
   - seamm-util
   - tabulate
@@ -27,6 +26,7 @@ dependencies:
   # Pip-only installs
   - pip:
     - cms_plots
+    - seamm-exec
     # Documentation
     - sphinx-copybutton
     - sphinxnotes-strike

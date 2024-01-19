@@ -99,6 +99,15 @@ metadata["results"] = {
         "dimensionality": [3, "nspins"],
         "type": "float",
     },
+    "scaled_dipole": {
+        "calculation": [
+            "energy",
+            "optimization",
+        ],
+        "description": "The scaled dipole moments of the system",
+        "dimensionality": [3, "nspins"],
+        "type": "float",
+    },
     "eigenvalues": {
         "calculation": [
             "energy",

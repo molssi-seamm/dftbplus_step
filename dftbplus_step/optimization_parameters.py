@@ -21,6 +21,7 @@ class OptimizationParameters(dftbplus_step.EnergyParameters):
                 "Rational Function",
                 "Limited-memory Broyden-Fletcher-Goldfarb-Shanno (LBFGS)",
                 "Fast inertial relaxation engine (FIRE)",
+                "Steepest descent",
             ),
             "format_string": "s",
             "description": "Method:",

@@ -58,6 +58,9 @@ class TkEnergy(seamm.TkNode):
         # Create all the widgets
         P = self.node.parameters
 
+        # Just write input
+        self["input only"] = P["input only"].widget(self["frame"])
+
         # Frame to isolate widgets
         e_frame = self["energy frame"] = ttk.LabelFrame(
             self["frame"],
@@ -69,7 +72,7 @@ class TkEnergy(seamm.TkNode):
         )
 
         for key in dftbplus_step.EnergyParameters.parameters:
-            if key not in ("results", "extra keywords", "create tables"):
+            if key not in ("results", "extra keywords", "create tables", "input only"):
                 self[key] = P[key].widget(e_frame)
 
         # Set the callbacks for changes
@@ -117,8 +120,12 @@ class TkEnergy(seamm.TkNode):
         for slave in frame.grid_slaves():
             slave.grid_forget()
 
-        # Put in the energy frame
         row = 0
+        # Whether to just write input
+        self["input only"].grid(row=row, column=0, sticky=tk.W)
+        row += 1
+
+        # Put in the energy frame
         self["energy frame"].grid(row=row, column=0, sticky=tk.N)
         row += 1
 
@@ -149,20 +156,29 @@ class TkEnergy(seamm.TkNode):
         widgets.append(self["SCC"])
         row += 1
         if scc:
-            for widget in ("SCCTolerance", "MaxSCCIterations", "ThirdOrder"):
+            for widget in ("SCCTolerance", "MaxSCCIterations", "ConvergentSccOnly"):
                 self[widget].grid(row=row, column=1, columnspan=2, sticky=tk.EW)
                 widgets1.append(self[widget])
                 row += 1
 
-            self["HCorrection"].grid(row=row, column=1, columnspan=2, sticky=tk.EW)
-            widgets1.append(self["HCorrection"])
-            row += 1
+            for widget in ("ThirdOrder", "HCorrection"):
+                self[widget].grid(row=row, column=1, columnspan=2, sticky=tk.EW)
+                widgets1.append(self[widget])
+                row += 1
 
             hcorrection = self["HCorrection"].get()
             if hcorrection == "Damping":
-                self["Damping Exponent"].grid(row=row, column=1, sticky=tk.EW)
+                self["Damping Exponent"].grid(row=row, column=2, sticky=tk.EW)
                 widgets2.append(self["Damping Exponent"])
                 row += 1
+
+            for widget in ("Filling",):
+                self[widget].grid(row=row, column=1, columnspan=2, sticky=tk.EW)
+                widgets1.append(self[widget])
+                row += 1
+            self["Filling Temperature"].grid(row=row, column=2, sticky=tk.EW)
+            widgets2.append(self["Filling Temperature"])
+            row += 1
 
         # The Brillouin zone integration grid
         kmethod = self["k-grid method"].get()
@@ -188,7 +204,8 @@ class TkEnergy(seamm.TkNode):
         sw.align_labels(widgets1, sticky=tk.E)
         sw.align_labels(widgets2, sticky=tk.E)
 
-        frame.columnconfigure(0, minsize=30)
+        frame.columnconfigure(0, minsize=40)
+        frame.columnconfigure(1, minsize=200)
 
         return row
 

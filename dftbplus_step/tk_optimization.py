@@ -94,7 +94,7 @@ class TkOptimization(dftbplus_step.TkEnergy):
     def reset_dialog(self, widget=None):
         super().reset_dialog()
 
-        row = 0
+        row = 1
         self["optimization frame"].grid(row=row, column=1, sticky=tk.EW)
         row += 1
         self["structure frame"].grid(row=row, column=0, columnspan=2)

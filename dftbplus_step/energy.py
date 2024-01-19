@@ -2,6 +2,7 @@
 
 """Setup DFTB+"""
 
+import configparser
 import csv
 import gzip
 
@@ -13,7 +14,6 @@ import json
 import logging
 from pathlib import Path
 import shutil
-import subprocess
 import textwrap
 
 import hsd
@@ -204,6 +204,42 @@ class Energy(DftbBase):
         parameter_set = self.model
         model, parameter_set_name = parameter_set.split("/", 1)
 
+        # Main control of the Hamiltonian
+        if model == "DFTB":
+            # template
+            result = {
+                "Analysis": {
+                    "CalculateForces": "Yes",
+                },
+                "Hamiltonian": {"DFTB": {}},
+            }
+            hamiltonian = result["Hamiltonian"]["DFTB"]
+        else:
+            result = {
+                "Analysis": {
+                    "CalculateForces": "Yes",
+                },
+                "Hamiltonian": {"xTB": {}},
+            }
+            hamiltonian = result["Hamiltonian"]["xTB"]
+
+        # Basic parameters
+        hamiltonian["SCC"] = P["SCC"]
+        if P["SCC"] == "Yes":
+            hamiltonian["SCCTolerance"] = P["SCCTolerance"]
+            hamiltonian["MaxSCCIterations"] = P["MaxSCCIterations"]
+            hamiltonian["ConvergentSccOnly"] = "No"
+            if P["Filling"] == "Gaussian":
+                filling = hamiltonian["Filling = MethfesselPaxton"] = {}
+                filling["Order"] = 1
+            if P["Filling"] == "Methfessel-Paxton":
+                filling = hamiltonian["Filling = MethfesselPaxton"] = {}
+                filling["Order"] = 2
+            else:
+                filling = hamiltonian["Filling = Fermi"] = {}
+            filling["Temperature [K]"] = P["Filling Temperature"].m_as("K")
+
+        # Detail for the models
         if model == "DFTB":
             if "defaults" in dataset:
                 all_defaults = {**dataset["defaults"]}
@@ -219,64 +255,9 @@ class Energy(DftbBase):
             else:
                 defaults = {}
 
-            # template
-            result = {
-                "Analysis": {
-                    "CalculateForces": "Yes",
-                },
-                "Hamiltonian": {"DFTB": {}},
-            }
-            hamiltonian = result["Hamiltonian"]["DFTB"]
-
             if P["SCC"] == "Yes":
-                hamiltonian["SCC"] = "Yes"
-                hamiltonian["SCCTolerance"] = P["SCCTolerance"]
-                hamiltonian["MaxSCCIterations"] = P["MaxSCCIterations"]
-                hamiltonian["ShellResolvedSCC"] = P["ShellResolvedSCC"].capitalize()
-
-                have_charges = "charge" in atoms
-                if have_charges:
-                    for tmp in atoms["charge"]:
-                        if tmp is None:
-                            have_charges = False
-                            break
-                initial_charges = P["initial charges"]
-                if initial_charges == "default":
-                    # Use charge file from previous step or charges on atoms
-                    if self.get_previous_charges(missing_ok=True) is not None:
-                        hamiltonian["ReadInitialCharges"] = "Yes"
-                    elif have_charges:
-                        if periodicity == 0:
-                            charges = [*atoms["charge"]]
-                        else:
-                            charges = [
-                                atoms["charge"][i] for i in self.mapping_from_primitive
-                            ]
-                        # Ensure sums exactly to charge
-                        delta = (configuration.charge - sum(charges)) / len(charges)
-                        hamiltonian["InitialCharges"] = {
-                            "AllAtomCharges": "{"
-                            + f"{', '.join(str(c + delta) for c in charges)}"
-                            + "}"
-                        }
-                elif initial_charges == "from previous step":
-                    if self.get_previous_charges():
-                        hamiltonian["ReadInitialCharges"] = "Yes"
-                elif initial_charges == "from structure":
-                    if have_charges:
-                        if periodicity == 0:
-                            charges = [*atoms["charge"]]
-                        else:
-                            charges = [
-                                atoms["charge"][i] for i in self.mapping_from_primitive
-                            ]
-                        # Ensure sums exactly to charge
-                        delta = (configuration.charge - sum(charges)) / len(charges)
-                        hamiltonian["InitialCharges"] = {
-                            "AllAtomCharges": "{"
-                            + f"{', '.join(str(c + delta) for c in charges)}"
-                            + "}"
-                        }
+                # mixer = hamiltonian["Mixing = Simple"] = {}
+                # mixer["MixingParameter"] = 0.05
 
                 third_order = P["ThirdOrder"]
                 if third_order == "Default for parameters":
@@ -324,17 +305,56 @@ class Energy(DftbBase):
                         else:
                             damping = P["Damping Exponent"]
                         hamiltonian["Damping Exponent"] = damping
-        elif model == "xTB":
-            result = {
-                "Analysis": {
-                    "CalculateForces": "Yes",
-                },
-                "Hamiltonian": {"xTB": {}},
-            }
-            hamiltonian = result["Hamiltonian"]["xTB"]
-            hamiltonian["SCC"] = "Yes"
-            hamiltonian["SCCTolerance"] = P["SCCTolerance"]
-            hamiltonian["MaxSCCIterations"] = P["MaxSCCIterations"]
+
+            have_charges = False
+            if "charge" in atoms:
+                have_charges = True
+                charges = "charge"
+            elif "formal_charge" in atoms:
+                have_charges = True
+                charges = "formal_charge"
+            if have_charges:
+                for tmp in atoms[charges]:
+                    if tmp is None:
+                        have_charges = False
+                        break
+            initial_charges = P["initial charges"]
+            if initial_charges == "default":
+                # Use charge file from previous step or charges on atoms
+                if self.get_previous_charges(missing_ok=True) is not None:
+                    hamiltonian["ReadInitialCharges"] = "Yes"
+                elif have_charges:
+                    if periodicity == 0:
+                        charges = [*atoms[charges]]
+                    else:
+                        charges = [
+                            atoms[charges][i] for i in self.mapping_from_primitive
+                        ]
+                    # Ensure sums exactly to charge
+                    delta = (configuration.charge - sum(charges)) / len(charges)
+                    hamiltonian["InitialCharges"] = {
+                        "AllAtomCharges": "{"
+                        + f"{', '.join(str(c + delta) for c in charges)}"
+                        + "}"
+                    }
+            elif initial_charges == "from previous step":
+                if self.get_previous_charges():
+                    hamiltonian["ReadInitialCharges"] = "Yes"
+            elif initial_charges == "from structure":
+                if have_charges:
+                    if periodicity == 0:
+                        charges = [*atoms[charges]]
+                    else:
+                        charges = [
+                            atoms[charges][i] for i in self.mapping_from_primitive
+                        ]
+                    # Ensure sums exactly to charge
+                    delta = (configuration.charge - sum(charges)) / len(charges)
+                    hamiltonian["InitialCharges"] = {
+                        "AllAtomCharges": "{"
+                        + f"{', '.join(str(c + delta) for c in charges)}"
+                        + "}"
+                    }
 
         # Handle charge and spin
         hamiltonian["Charge"] = configuration.charge
@@ -347,122 +367,126 @@ class Energy(DftbBase):
                     have_spins = False
                     break
 
-        if P["SpinPolarisation"] == "none":
-            hamiltonian["SpinPolarisation"] = {}
-        elif (
-            periodicity == 0
-            and multiplicity == 1
-            and P["SpinPolarisation"] == "from system"
-        ):
-            hamiltonian["SpinPolarisation"] = {}
-        elif (
-            periodicity != 0
-            and P["SpinPolarisation"] == "from system"
-            and multiplicity == 1
-            and not have_spins
-        ):
-            hamiltonian["SpinPolarisation"] = {}
-        else:
-            noncollinear = P["SpinPolarisation"] == "noncollinear"
-
-            H = hamiltonian["SpinPolarisation"] = {}
-            if noncollinear:
-                section = H["NonCollinear"] = {}
+        if P["SCC"] == "Yes":
+            if P["SpinPolarisation"] == "none":
+                hamiltonian["SpinPolarisation"] = {}
+            elif (
+                periodicity == 0
+                and multiplicity == 1
+                and P["SpinPolarisation"] == "from system"
+            ):
+                hamiltonian["SpinPolarisation"] = {}
+            elif (
+                periodicity != 0
+                and P["SpinPolarisation"] == "from system"
+                and multiplicity == 1
+                and not have_spins
+            ):
+                hamiltonian["SpinPolarisation"] = {}
             else:
-                section = H["Collinear"] = {}
-                reading_charge_file = (
-                    "ReadInitialCharges" in hamiltonian
-                    and hamiltonian["ReadInitialCharges"] == "Yes"
-                )
-                if not reading_charge_file:
-                    if have_spins:
-                        if periodicity == 0:
-                            spins = atoms["spin"]
+                noncollinear = P["SpinPolarisation"] == "noncollinear"
+
+                H = hamiltonian["SpinPolarisation"] = {}
+                if noncollinear:
+                    section = H["NonCollinear"] = {}
+                else:
+                    section = H["Collinear"] = {}
+                    reading_charge_file = (
+                        "ReadInitialCharges" in hamiltonian
+                        and hamiltonian["ReadInitialCharges"] == "Yes"
+                    )
+                    if not reading_charge_file:
+                        if have_spins:
+                            if periodicity == 0:
+                                spins = atoms["spin"]
+                            else:
+                                spins = [
+                                    atoms["spin"][i]
+                                    for i in self.mapping_from_primitive
+                                ]
+                            section["InitialSpins"] = {
+                                "AllAtomSpins": "{"
+                                + f"{', '.join(str(c) for c in spins)}"
+                                + "}"
+                            }
                         else:
-                            spins = [
-                                atoms["spin"][i] for i in self.mapping_from_primitive
-                            ]
-                        section["InitialSpins"] = {
-                            "AllAtomSpins": "{"
-                            + f"{', '.join(str(c) for c in spins)}"
-                            + "}"
-                        }
+                            section["UnpairedElectrons"] = multiplicity - 1
+
+                section["RelaxTotalSpin"] = P["RelaxTotalSpin"].capitalize()
+
+                # Get the spin constants
+                package = self.__module__.split(".")[0]
+                files = [
+                    p for p in implib.files(package) if p.name == "spin-constants.json"
+                ]
+                if len(files) != 1:
+                    raise RuntimeError(
+                        "Can't find spin-constants.json file. Check the installation!"
+                    )
+                data = files[0].read_text()
+                spin_constant_data = json.loads(data)
+
+                # First check if we have shell resolved constants or not
+                spin_constants = hamiltonian["SpinConstants"] = {}
+                symbols = sorted([*set(atoms.symbols)])
+                dataset_name = self.model
+                # e.g. "DFTB - mio"
+                key = dataset_name.split("/")[1]
+                if key in spin_constant_data:
+                    constants = spin_constant_data[key]
+                else:
+                    constants = spin_constant_data["GGA"]
+
+                # Bit of a kludgy test. If not shell-resolved there is one constant
+                # per shell, i.e. 1, 2 or 3 for s, p, d. If resolved, there are 1, 4, 9.
+                shell_resolved = False
+                for symbol in symbols:
+                    if len(constants[symbol]) > 3:
+                        shell_resolved = True
+                        break
+
+                if shell_resolved:
+                    if P["ShellResolvedSpin"] == "yes":
+                        spin_constants["ShellResolvedSpin"] = "Yes"
                     else:
-                        section["UnpairedElectrons"] = multiplicity - 1
-
-            section["RelaxTotalSpin"] = P["RelaxTotalSpin"].capitalize()
-
-            # Get the spin constants
-            package = self.__module__.split(".")[0]
-            files = [
-                p for p in implib.files(package) if p.name == "spin-constants.json"
-            ]
-            if len(files) != 1:
-                raise RuntimeError(
-                    "Can't find spin-constants.json file. Check the installation!"
-                )
-            data = files[0].read_text()
-            spin_constant_data = json.loads(data)
-
-            # First check if we have shell resolved constants or not
-            spin_constants = hamiltonian["SpinConstants"] = {}
-            symbols = sorted([*set(atoms.symbols)])
-            dataset_name = self.model
-            # e.g. "DFTB - mio"
-            key = dataset_name.split("/")[1]
-            if key in spin_constant_data:
-                constants = spin_constant_data[key]
-            else:
-                constants = spin_constant_data["GGA"]
-
-            # Bit of a kludgy test. If not shell-resolved there is one constant
-            # per shell, i.e. 1, 2 or 3 for s, p, d. If resolved, there are 1, 4, 9.
-            shell_resolved = False
-            for symbol in symbols:
-                if len(constants[symbol]) > 3:
-                    shell_resolved = True
-                    break
-
-            if shell_resolved:
-                if P["ShellResolvedSpin"] == "yes":
-                    spin_constants["ShellResolvedSpin"] = "Yes"
+                        spin_constants["ShellResolvedSpin"] = "No"
+                        shell_resolved = False
                 else:
                     spin_constants["ShellResolvedSpin"] = "No"
-                    shell_resolved = False
-            else:
-                spin_constants["ShellResolvedSpin"] = "No"
 
-            # And add them and the control parameters
-            if shell_resolved:
-                for symbol in symbols:
-                    spin_constants[symbol] = (
-                        "{" + " ".join([str(c) for c in constants[symbol]]) + "}"
-                    )
-            else:
-                for symbol in symbols:
-                    shells = element_data[symbol]["electron configuration"]
-                    shell = shells.split()[-1]
-                    tmp = constants[symbol]
-                    if "s" in shell:
-                        spin_constants[symbol] = str(tmp[0])
-                    elif "p" in shell:
-                        if len(tmp) == 4:
-                            spin_constants[symbol] = str(tmp[3])
-                        elif len(tmp) == 9:
-                            spin_constants[symbol] = str(tmp[4])
+                # And add them and the control parameters
+                if shell_resolved:
+                    for symbol in symbols:
+                        spin_constants[symbol] = (
+                            "{" + " ".join([str(c) for c in constants[symbol]]) + "}"
+                        )
+                else:
+                    for symbol in symbols:
+                        shells = element_data[symbol]["electron configuration"]
+                        shell = shells.split()[-1]
+                        tmp = constants[symbol]
+                        if "s" in shell:
+                            spin_constants[symbol] = str(tmp[0])
+                        elif "p" in shell:
+                            if len(tmp) == 4:
+                                spin_constants[symbol] = str(tmp[3])
+                            elif len(tmp) == 9:
+                                spin_constants[symbol] = str(tmp[4])
+                            else:
+                                raise RuntimeError(
+                                    f"Error in spin constants for {symbol}: {tmp}"
+                                )
+                        elif "d" in shell:
+                            if len(tmp) == 9:
+                                spin_constants[symbol] = str(tmp[8])
+                            else:
+                                raise RuntimeError(
+                                    f"Error in spin constants for {symbol}: {tmp}"
+                                )
                         else:
                             raise RuntimeError(
-                                f"Error in spin constants for {symbol}: {tmp}"
+                                f"Can't handle spin constants for {symbol}"
                             )
-                    elif "d" in shell:
-                        if len(tmp) == 9:
-                            spin_constants[symbol] = str(tmp[8])
-                        else:
-                            raise RuntimeError(
-                                f"Error in spin constants for {symbol}: {tmp}"
-                            )
-                    else:
-                        raise RuntimeError(f"Can't handle spin constants for {symbol}")
 
         # Integration grid in reciprocal space
         if configuration.periodicity == 3:
@@ -959,19 +983,34 @@ class Energy(DftbBase):
         hsd.dump(input_data, str(path))
 
         # And run WAVEPLOT
-        cmd = str(Path(self.parent.options["dftbplus_path"]) / "waveplot")
-        try:
-            output = subprocess.check_output(
-                cmd, shell=True, text=True, stderr=subprocess.STDOUT, cwd=directory
-            )
-        except subprocess.CalledProcessError as e:
-            return (
-                f"Calling waveplot, returncode = {e.returncode}"
-                f"\n\nOutput: {e.output}"
-            )
+        seamm_options = self.parent.global_options
+        # Read configuration file for DFTB+
+        ini_dir = Path(seamm_options["root"]).expanduser()
+        full_config = configparser.ConfigParser()
+        full_config.read(ini_dir / "dftbplus.ini")
 
-        path = directory / "waveplot.out"
-        path.write_text(output)
+        executor = self.parent.flowchart.executor
+        executor_type = executor.name
+        if executor_type not in full_config:
+            raise RuntimeError(
+                f"No section for '{executor_type}' in DFTB+ ini file "
+                f"({ini_dir / 'dftbplus.ini'})"
+            )
+        config = dict(full_config.items(executor_type))
+
+        result = executor.run(
+            cmd=["waveplot", ">", "waveplot.out"],
+            config=config,
+            directory=self.directory,
+            files={},
+            return_files=["*"],
+            in_situ=True,
+            shell=True,
+        )
+
+        if result is None:
+            logger.error("There was an error running the DOS code")
+            return None
 
         # Finally rename and gzip the cube files
         n_processed = 0
