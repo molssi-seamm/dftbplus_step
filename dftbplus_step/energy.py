@@ -209,7 +209,7 @@ class Energy(DftbBase):
             # template
             result = {
                 "Analysis": {
-                    "CalculateForces": "Yes",
+                    "PrintForces": "Yes",
                 },
                 "Hamiltonian": {"DFTB": {}},
             }
@@ -217,7 +217,7 @@ class Energy(DftbBase):
         else:
             result = {
                 "Analysis": {
-                    "CalculateForces": "Yes",
+                    "PrintForces": "Yes",
                 },
                 "Hamiltonian": {"xTB": {}},
             }

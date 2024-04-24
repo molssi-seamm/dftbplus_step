@@ -74,7 +74,7 @@ class ChooseParameters(DftbBase):
 
         # Get the metadata for the Slater-Koster parameters
         metadata = self.parent._metadata
-        slako_dir = Path(self.parent.options["slako_dir"]).expanduser()
+        slako_dir = Path(self.exe_config["slako-dir"]).expanduser()
 
         # Create the directory
         directory = Path(self.directory)

@@ -167,7 +167,7 @@ class DOS(DftbBase):
         if "Analysis" not in energy_in:
             energy_in["Analysis"] = {}
         analysis = energy_in["Analysis"]
-        analysis["CalculateForces"] = "No"
+        analysis["PrintForces"] = "No"
 
         elements = set(configuration.atoms.symbols)
         elements = sorted([*elements])
