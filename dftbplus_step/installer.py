@@ -27,7 +27,7 @@ class Installer(seamm_installer.InstallerBase):
     The Python package `dftbplus-step` should already be installed, using `pip`,
     `conda`, or similar. This plug-in-specific installer then checks for the
     Dftbplus executable, installing it if needed, and registers its
-    location in seamm.ini.
+    location in ~/SEAMM/dftbplus.ini.
 
     There are a number of ways to determine which are the correct Dftbplus
     executables to use. The aim of this installer is to help the user locate
@@ -35,10 +35,10 @@ class Installer(seamm_installer.InstallerBase):
 
     1. The correct executables are already available.
 
-        1. If they are already registered in `seamm.ini` there is nothing else
+        1. If they are already registered in `dftbplus.ini` there is nothing else
            to do.
         2. They may be in the current path, in which case they need to be added
-           to `seamm.ini`.
+           to `dftbplus.ini`.
         3. If a module system is in use, a module may need to be loaded to give
            access to Dftbplus.
         4. They cannot be found automatically, so the user needs to locate the
@@ -51,7 +51,8 @@ class Installer(seamm_installer.InstallerBase):
            default.
 
     The Slater-Koster potentials also need to be installed if not present. They are
-    placed in ~/SEAMM/Parameters/slako by default.
+    placed in ~/SEAMM/Parameters/slako or, in containers, ~/Parameters/slako by default.
+    The code uses those in ~/Parameters before those in ~/SEAMM/Parameters.
     """
 
     def __init__(self, logger=logger):
@@ -62,23 +63,14 @@ class Installer(seamm_installer.InstallerBase):
         logger.debug("Initializing the Dftbplus installer object.")
 
         self.section = "dftbplus-step"
-        self.path_name = "dftbplus-path"
         self.executables = ["dftb+"]
         self.resource_path = Path(pkg_resources.resource_filename(__name__, "data/"))
 
         self.slako_url = "https://dftb.org/fileadmin/DFTB/public/slako-unpacked.tar.xz"
 
-        # What Conda environment is the default?
-        data = self.configuration.get_values(self.section)
-        if "conda-environment" in data and data["conda-environment"] != "":
-            self.environment = data["conda-environment"]
-        else:
-            self.environment = "seamm-dftbplus"
-
         # The environment.yaml file for Conda installations.
-        path = Path(pkg_resources.resource_filename(__name__, "data/"))
-        logger.debug(f"data directory: {path}")
-        self.environment_file = path / "seamm-dftbplus.yml"
+        logger.debug(f"data directory: {self.resource_path}")
+        self.environment_file = self.resource_path / "seamm-dftbplus.yml"
 
     def check(self):
         """Check the installation and fix errors if requested.
@@ -110,11 +102,30 @@ class Installer(seamm_installer.InstallerBase):
             True if everything is OK, False otherwise. If `yes` is given as an
             option, the return value is after fixing the configuration.
         """
+        print("Checking the DFTB+ installation.")
+
+        # What Conda environment is the default?
+        path = self.configuration.path.parent / "dftbplus.ini"
+        if not path.exists():
+            text = (self.resource_path / "dftbplus.ini").read_text()
+            path.write_text(text)
+            print(f"    The dftbplus.ini file did not exist. Created {path}")
+
+        self.exe_config.path = path
+
+        # Get the current values
+        data = self.exe_config.get_values("local")
+
+        if "conda-environment" in data and data["conda-environment"] != "":
+            self.environment = data["conda-environment"]
+        else:
+            self.environment = "seamm-dftbplus"
+
         # Check the DFTB+ executable
         result = super().check()
 
         # And the Slater-Koster parameter files.
-        self.logger.debug("Checking the Slater-Koster parameters.")
+        print("    Checking the Slater-Koster parameters.")
 
         # First read in the configuration file in the normal fashion
         # to get the root directory (~/SEAMM usually), which may be needed.
@@ -124,7 +135,7 @@ class Installer(seamm_installer.InstallerBase):
         root = Path(options["root"]).expanduser().resolve()
 
         # Get the values from the configuration
-        data = self.configuration.get_values(self.section)
+        data = self.exe_config.get_values("local")
         if "slako-dir" in data and data["slako-dir"] != "":
             tmp = data["slako-dir"].replace("${root:SEAMM}", str(root))
             slako_dir = Path(tmp).expanduser().resolve()
@@ -165,10 +176,8 @@ class Installer(seamm_installer.InstallerBase):
                     "this?",
                     default="yes",
                 ):
-                    self.configuration.set_value(
-                        self.section, "slako-dir", str(slako_dir)
-                    )
-                    self.configuration.save()
+                    self.exe_config.set_value("local", "slako-dir", str(slako_dir))
+                    self.exe_config.save()
 
         if install == "check contents":
             # How do we do this? Check files, versions, what?
@@ -179,9 +188,9 @@ class Installer(seamm_installer.InstallerBase):
             )
         elif install == "full":
             self.install_files(slako_dir)
-            self.configuration.set_value(self.section, "slako-dir", str(slako_dir))
-            self.configuration.save()
-            print("Done!\n")
+            self.exe_config.set_value("local", "slako-dir", str(slako_dir))
+            self.exe_config.save()
+            print("    Done!\n")
         else:
             result = False
 
@@ -281,7 +290,7 @@ class Installer(seamm_installer.InstallerBase):
         root = Path(options["root"]).expanduser().resolve()
 
         # Get the values from the configuration
-        data = self.configuration.get_values(self.section)
+        data = self.exe_config.get_values("local")
         if "slako-dir" in data and data["slako-dir"] != "":
             tmp = data["slako-dir"].replace("${root:SEAMM}", str(root))
             slako_dir = Path(tmp).expanduser().resolve()
@@ -292,8 +301,8 @@ class Installer(seamm_installer.InstallerBase):
         slako_dir.parent.mkdir(parents=True, exist_ok=True)
         self.install_files(slako_dir)
 
-        self.configuration.set_value(self.section, "slako-dir", str(slako_dir))
-        self.configuration.save()
+        self.exe_config.set_value("local", "slako-dir", str(slako_dir))
+        self.exe_config.save()
 
         print("Done!\n")
 
@@ -324,7 +333,7 @@ class Installer(seamm_installer.InstallerBase):
         self.logger.debug("Uninstalling the Slater-Koster parameters.")
 
         # Get the values from the configuration
-        data = self.configuration.get_values(self.section)
+        data = self.exe_config.get_values("local")
         if "slako-dir" in data and data["slako-dir"] != "":
             # First read in the configuration file in the normal fashion
             # to get the root directory (~/SEAMM usually), which may be needed.
@@ -341,8 +350,8 @@ class Installer(seamm_installer.InstallerBase):
 
             shutil.rmtree(slako_dir, ignore_errors=True)
 
-            self.configuration.set_value(self.section, "slako-dir", "")
-            self.configuration.save()
+            self.exe_config.set_value("local", "slako-dir", "")
+            self.exe_config.save()
             print("Done!\n")
         else:
             print("The Slater-Koster files were not installed, so nothing to do.")
@@ -373,7 +382,7 @@ class Installer(seamm_installer.InstallerBase):
         self.logger.debug("Updating the Slater-Koster parameters.")
 
         # Get the values from the configuration
-        data = self.configuration.get_values(self.section)
+        data = self.exe_config.get_values("local")
         if "slako-dir" in data and data["slako-dir"] != "":
             # First read in the configuration file in the normal fashion
             # to get the root directory (~/SEAMM usually), which may be needed.
@@ -391,8 +400,8 @@ class Installer(seamm_installer.InstallerBase):
                     "\nwhere the configuration file indicates they should be."
                     "\nFixing the configuration file."
                 )
-                self.configuration.set_value(self.section, "slako-dir", "")
-                self.configuration.save()
+                self.exe_config.set_value("local", "slako-dir", "")
+                self.exe_config.save()
             else:
                 print(f"Updating the Slater-Koster files in {slako_dir}.")
                 slako_dir.parent.mkdir(parents=True, exist_ok=True)

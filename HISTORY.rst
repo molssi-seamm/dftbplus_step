@@ -1,6 +1,12 @@
 =======
 History
 =======
+2024.4.24 -- Finalized support for Docker containers
+    * Fixed issues and tested running in containers.
+    * Add CI to make a Docker image for DFTB+
+    * Fixed issue with changes in input for DFTB+: CalculateGradients has become
+      PrintGradients it seems.
+      
 2024.1.18 -- Support for running in containers and writing input only.
     * Added new property: scaled dipole.
     * Added option to write the input file and not run DFTB+

@@ -1,0 +1,10 @@
+name: base
+channels:
+  - conda-forge
+dependencies:
+  - python
+    # Executables, etc.
+  - dftbplus
+  - dftbplus-tools
+  - dftbplus-python
+

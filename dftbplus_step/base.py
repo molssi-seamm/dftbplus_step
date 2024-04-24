@@ -107,6 +107,11 @@ class DftbBase(seamm.Node):
     def model(self, value):
         self.parent.model = value
 
+    @property
+    def exe_config(self):
+        """The configuration for the DFTB+ executable."""
+        return self.parent.exe_config
+
     def band_structure(
         self, input_path, sym_points, sym_names, Efermi=[0.0, 0.0], DOS=None
     ):
@@ -158,13 +163,6 @@ class DftbBase(seamm.Node):
         full_config.read(ini_dir / "dftbplus.ini")
 
         executor = self.parent.flowchart.executor
-        executor_type = executor.name
-        if executor_type not in full_config:
-            raise RuntimeError(
-                f"No section for '{executor_type}' in DFTB+ ini file "
-                f"({ini_dir / 'dftbplus.ini'})"
-            )
-        config = dict(full_config.items(executor_type))
 
         if spin_polarized:
             cmd = ["dp_bands", "-s", input_path, "band"]
@@ -173,7 +171,7 @@ class DftbBase(seamm.Node):
 
         result = executor.run(
             cmd=cmd,
-            config=config,
+            config=self.exe_config,
             directory=self.directory,
             files={},
             return_files=["*"],
@@ -271,34 +269,16 @@ class DftbBase(seamm.Node):
 
         logger.info("Preparing DOS")
 
-        seamm_options = self.parent.global_options
-
         # Total DOS
         executor = self.parent.flowchart.executor
-
-        # Read configuration file for DFTB+
-        ini_dir = Path(seamm_options["root"]).expanduser()
-        full_config = configparser.ConfigParser()
-        full_config.read(ini_dir / "dftbplus.ini")
-        executor_type = executor.name
-        if executor_type not in full_config:
-            raise RuntimeError(
-                f"No section for '{executor_type}' in DFTB+ ini file "
-                f"({ini_dir / 'dftbplus.ini'})"
-            )
-        config = dict(full_config.items(executor_type))
 
         result = executor.run(
             cmd=[
                 "dp_dos",
                 str(input_path),
                 "dos_total.dat",
-                ">",
-                "DOS.out",
-                "2>",
-                "dos_stderr.txt",
             ],
-            config=config,
+            config=self.exe_config,
             directory=self.directory,
             files={},
             return_files=["*"],
@@ -369,12 +349,8 @@ class DftbBase(seamm.Node):
                         "-w",
                         str(path),
                         str(out),
-                        ">",
-                        "DOS.out",
-                        "2>",
-                        "dos_stderr.txt",
                     ],
-                    config=config,
+                    config=self.exe_config,
                     directory=self.directory,
                     files={},
                     return_files=["*"],
@@ -788,26 +764,14 @@ class DftbBase(seamm.Node):
                     "results.tag",
                     "*.xml",
                     "eigenvec.bin",
-                ]  # yapf: disable
+                ]
 
                 # Run the calculation
                 executor = self.parent.flowchart.executor
 
-                # Read configuration file for DFTB+
-                ini_dir = Path(seamm_options["root"]).expanduser()
-                full_config = configparser.ConfigParser()
-                full_config.read(ini_dir / "dftbplus.ini")
-                executor_type = executor.name
-                if executor_type not in full_config:
-                    raise RuntimeError(
-                        f"No section for '{executor_type}' in DFTB+ ini file "
-                        f"({ini_dir / 'dftbplus.ini'})"
-                    )
-                config = dict(full_config.items(executor_type))
-
                 result = executor.run(
                     cmd=["{code}", ">", "DFTB+.out", "2>", "stderr.txt"],
-                    config=config,
+                    config=self.exe_config,
                     directory=self.directory,
                     files=files,
                     return_files=return_files,
@@ -816,7 +780,7 @@ class DftbBase(seamm.Node):
                     env=env,
                 )
 
-                if result is None:
+                if not result:
                     logger.error("There was an error running DFTB+")
                     return None
 

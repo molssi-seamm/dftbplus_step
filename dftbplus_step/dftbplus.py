@@ -4,16 +4,13 @@
 """
 
 import collections.abc
-
-try:
-    import importlib.metadata as implib
-except Exception:
-    import importlib_metadata as implib
+import configparser
+import importlib
 import json
 import logging
 from pathlib import Path
-import pkg_resources
 import pprint  # noqa: F401
+import shutil
 import sys
 
 import molsystem
@@ -36,8 +33,8 @@ job = printing.getPrinter()
 printer = printing.getPrinter("DFTB+")
 
 # Add DFTB+'s properties to the standard properties
-path = Path(pkg_resources.resource_filename(__name__, "data/"))
-csv_file = path / "properties.csv"
+resources = importlib.resources.files("dftbplus_step") / "data"
+csv_file = resources / "properties.csv"
 molsystem.add_properties_from_file(csv_file)
 
 
@@ -238,14 +235,15 @@ class Dftbplus(seamm.Node):
         self.parameters = dftbplus_step.DftbplusParameters()
 
         # Get the metadata for the Slater-Koster parameters
-        package = self.__module__.split(".")[0]
-        files = [p for p in implib.files(package) if p.name == "metadata.json"]
-        if len(files) != 1:
+        resources = importlib.resources.files("dftbplus_step") / "data"
+        path = resources / "metadata.json"
+        if not path.exists():
             raise RuntimeError("Can't find Slater-Koster metadata.json file")
-        data = files[0].read_text()
+        data = path.read_text()
         self._metadata = json.loads(data)
 
         # Data to pass between substeps
+        self._exe_config = None
         self._dataset = None  # SLAKO dataset used
         self._subset = None  # SLAKO modifier dataset applied to dataset
         self._reference_energies = None  # Reference energies per element.
@@ -261,6 +259,12 @@ class Dftbplus(seamm.Node):
     def git_revision(self):
         """The git version of this module."""
         return dftbplus_step.__git_revision__
+
+    @property
+    def exe_config(self):
+        if self._exe_config is None:
+            self.get_exe_config()
+        return self._exe_config
 
     def create_parser(self):
         """Setup the command-line / config file parser"""
@@ -476,3 +480,48 @@ class Dftbplus(seamm.Node):
             node.analyze(data=data)
 
             node = node.next()
+
+    def get_exe_config(self):
+        """Read the `dftbplus.ini` file, creating if necessary."""
+        executor = self.flowchart.executor
+
+        # Read configuration file for DFTB+ if it exists
+        executor_type = executor.name
+        full_config = configparser.ConfigParser()
+        ini_dir = Path(self.global_options["root"]).expanduser()
+        path = ini_dir / "dftbplus.ini"
+
+        if path.exists():
+            full_config.read(ini_dir / "dftbplus.ini")
+
+        # If the section we need doesn't exists, get the default
+        if not path.exists() or executor_type not in full_config:
+            resources = importlib.resources.files("dftbplus_step") / "data"
+            ini_text = (resources / "dftbplus.ini").read_text()
+            full_config.read_string(ini_text)
+
+        # Getting desperate! Look for an executable in the path
+        if executor_type not in full_config:
+            path = shutil.which("dftbplus")
+            if path is None:
+                raise RuntimeError(
+                    f"No section for '{executor_type}' in DFTB+ ini file "
+                    f"({ini_dir / 'dftbplus.ini'}), nor in the defaults, nor "
+                    "in the path!"
+                )
+            else:
+                full_config[executor_type] = {
+                    "installation": "local",
+                    "code": str(path),
+                }
+
+        # If the ini file does not exist, write it out!
+        if not path.exists():
+            with path.open("w") as fd:
+                full_config.write(fd)
+            printer.normal(f"Wrote the DFTB+ configuration file to {path}")
+            printer.normal("")
+
+        self._exe_config = dict(full_config.items(executor_type))
+        # Use the matching version of the seamm-dftbplus image by default.
+        self._exe_config["version"] = self.version
