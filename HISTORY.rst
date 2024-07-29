@@ -1,6 +1,10 @@
 =======
 History
 =======
+2024.7.29 -- Bugfix: initial version of dftbplus.ini
+    * The initial version of dftbplus.ini was not generated correctly if it was
+      missing. This caused a crash when running DFTB+.
+
 2024.4.24 -- Finalized support for Docker containers
     * Fixed issues and tested running in containers.
     * Add CI to make a Docker image for DFTB+
