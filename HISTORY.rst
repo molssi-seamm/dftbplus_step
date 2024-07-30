@@ -1,6 +1,8 @@
 =======
 History
 =======
+2024.7.30 -- Fix: the Docker build needed updating for changes in SEAMM
+
 2024.7.29 -- Bugfix: initial version of dftbplus.ini
     * The initial version of dftbplus.ini was not generated correctly if it was
       missing. This caused a crash when running DFTB+.

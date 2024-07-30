@@ -2,7 +2,7 @@ FROM molssi/mamba141
 
 LABEL org.opencontainers.image.authors="psaxe@molssi.org"
 
-COPY ./environment.yml /root/environment.yml
+COPY ./dftbplus_step/data/seamm-dftbplus.yml /root/environment.yml
 
 RUN mamba env update -f /root/environment.yml
 
