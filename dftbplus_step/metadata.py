@@ -7,6 +7,23 @@ metadata = {}
 """Properties that DFTB+ produces, depending on the type of calculation.
 """
 metadata["results"] = {
+    "energy": {
+        "description": "electronic energy",
+        "dimensionality": "scalar",
+        "type": "float",
+        "units": "E_h",
+    },
+    "gradients": {
+        "description": "gradients on the atoms",
+        "dimensionality": [3, "n_atoms"],
+        "type": "float",
+        "units": "E_h/Å",
+    },
+    "model": {
+        "description": "The model string",
+        "dimensionality": "scalar",
+        "type": "string",
+    },
     "total_energy": {
         "calculation": [
             "energy",
@@ -164,7 +181,7 @@ metadata["results"] = {
         "type": "float",
     },
     "forces": {
-        "calculation": ["optimization"],
+        "calculation": ["energy", "optimization"],
         "description": "The forces on the atoms",
         "dimensionality": [3, "natoms"],
         "type": "float",
