@@ -669,6 +669,16 @@ class DftbBase(seamm.Node):
         except StopIteration:
             pass
 
+        # Create the standard properties needed for energy, gradients, etc.
+        property_data["energy"] = property_data["total_energy"]
+        property_data["energy,units"] = "e_H"
+        if "forces" in property_data:
+            property_data["gradients"] = [
+                [-v for v in row] for row in property_data["forces"]
+            ]
+            property_data["gradients,units"] = "E_h/Å"
+        property_data["model"] = self.model
+
         return property_data
 
     def run(self, current_input):

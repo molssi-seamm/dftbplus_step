@@ -1,6 +1,10 @@
 =======
 History
 =======
+2024.10.20 -- Added the standard results for drivers
+    * Added the standard results -- energy, gradients, and model -- that can be written
+      to Results.json for drivers like Structure Step and Thermochemistry Step.
+      
 2024.7.30 -- Fix: the Docker build needed updating for changes in SEAMM
 
 2024.7.29 -- Bugfix: initial version of dftbplus.ini
