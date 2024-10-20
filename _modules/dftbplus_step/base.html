@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>dftbplus_step.base &#8212; DFTB+ Step 2024.7.30 documentation</title>
+    <title>dftbplus_step.base &#8212; DFTB+ Step 2024.10.20 documentation</title>
   
   
   
@@ -29,7 +29,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=c224919a" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -45,8 +45,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=bbd4d529"></script>
-    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/documentation_options.js?v=b88505f4"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
@@ -1199,6 +1199,16 @@ document.write(`
                     <span class="n">property_data</span><span class="p">[</span><span class="n">key</span> <span class="o">+</span> <span class="s2">&quot;,units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">properties</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;units&quot;</span><span class="p">]</span>
         <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
             <span class="k">pass</span>
+
+        <span class="c1"># Create the standard properties needed for energy, gradients, etc.</span>
+        <span class="n">property_data</span><span class="p">[</span><span class="s2">&quot;energy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">property_data</span><span class="p">[</span><span class="s2">&quot;total_energy&quot;</span><span class="p">]</span>
+        <span class="n">property_data</span><span class="p">[</span><span class="s2">&quot;energy,units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;e_H&quot;</span>
+        <span class="k">if</span> <span class="s2">&quot;forces&quot;</span> <span class="ow">in</span> <span class="n">property_data</span><span class="p">:</span>
+            <span class="n">property_data</span><span class="p">[</span><span class="s2">&quot;gradients&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">[</span><span class="o">-</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">row</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">property_data</span><span class="p">[</span><span class="s2">&quot;forces&quot;</span><span class="p">]</span>
+            <span class="p">]</span>
+            <span class="n">property_data</span><span class="p">[</span><span class="s2">&quot;gradients,units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;E_h/Å&quot;</span>
+        <span class="n">property_data</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span>
 
         <span class="k">return</span> <span class="n">property_data</span></div>
 
