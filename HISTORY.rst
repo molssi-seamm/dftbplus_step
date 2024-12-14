@@ -1,6 +1,8 @@
 =======
 History
 =======
+2024.12.14 -- Bugfix: Issue with initialization in subflowcharts
+
 2024.10.20 -- Added the standard results for drivers
     * Added the standard results -- energy, gradients, and model -- that can be written
       to Results.json for drivers like Structure Step and Thermochemistry Step.
