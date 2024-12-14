@@ -409,6 +409,8 @@ class Dftbplus(seamm.Node):
         seamm.Node
             The next node object in the flowchart.
         """
+        next_node = super().run(printer)
+
         system, configuration = self.get_system_configuration(None)
         n_atoms = configuration.n_atoms
         if n_atoms == 0:
@@ -428,7 +430,6 @@ class Dftbplus(seamm.Node):
             note="The principle DFTB+ citation.",
         )
 
-        next_node = super().run(printer)
         # Get the first real node
         start = self.subflowchart.get_node("1")
         node = start.next()
