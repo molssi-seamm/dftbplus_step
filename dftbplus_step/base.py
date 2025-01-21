@@ -113,7 +113,13 @@ class DftbBase(seamm.Node):
         return self.parent.exe_config
 
     def band_structure(
-        self, input_path, sym_points, sym_names, Efermi=[0.0, 0.0], DOS=None
+        self,
+        input_path,
+        sym_points,
+        sym_names,
+        Efermi=0.0,
+        DOS=None,
+        spin_polarized=False,
     ):
         """Prepare the graph for the band structure.
 
@@ -123,7 +129,11 @@ class DftbBase(seamm.Node):
             The path to the band output from DFTB+.
         """
         Band_Structure = self.create_band_structure_data(  # noqa: F841
-            input_path, sym_points, sym_names, Efermi=Efermi
+            input_path,
+            sym_points,
+            sym_names,
+            Efermi=Efermi,
+            spin_polarized=spin_polarized,
         )
 
         figure = cms_plots.band_structure(
@@ -141,7 +151,7 @@ class DftbBase(seamm.Node):
             figure.dump(wd / "band_structure.html")
 
     def create_band_structure_data(
-        self, input_path, sym_points, sym_names, Efermi=[0.0, 0.0]
+        self, input_path, sym_points, sym_names, Efermi=0.0, spin_polarized=False
     ):
         """Massage the band structure data into a standard form
 
@@ -154,8 +164,6 @@ class DftbBase(seamm.Node):
         logger.info(f"Preparing the band structure, {wd}")
 
         seamm_options = self.parent.global_options
-
-        spin_polarized = len(Efermi) == 2
 
         # Read configuration file for DFTB+
         ini_dir = Path(seamm_options["root"]).expanduser()
@@ -250,7 +258,7 @@ class DftbBase(seamm.Node):
 
         return BandStructure
 
-    def create_dos_data(self, input_path, Efermi=[0.0]):
+    def create_dos_data(self, input_path, Efermi=0.0, spin_polarized=False):
         """Create the DOS data
 
         Parameters
@@ -260,13 +268,6 @@ class DftbBase(seamm.Node):
         Efermi : float
             The Fermi energy in eV
         """
-        spin_polarized = len(Efermi) == 2
-
-        if spin_polarized and Efermi[0] != Efermi[1]:
-            raise NotImplementedError(
-                f"Cannot handle different Fermi energies yet: {Efermi}"
-            )
-
         logger.info("Preparing DOS")
 
         # Total DOS
@@ -444,13 +445,13 @@ class DftbBase(seamm.Node):
                 DOS[element] = total.array
 
         # Shift the Fermi level to 0
-        DOS.index -= Efermi[0]
+        DOS.index -= Efermi
 
         DOS.to_csv(Path(self.directory) / "DOS.csv")
 
         return DOS
 
-    def dos(self, input_path, Efermi=[0.0]):
+    def dos(self, input_path, Efermi=0.0, spin_polarized=False):
         """Prepare the graph for the density of states.
 
         Parameters
@@ -459,8 +460,12 @@ class DftbBase(seamm.Node):
             The path to the band output from DFTB+.
         Efermi : float
             The Fermi energy in eV
+        spin_polarized : bool
+            Whether the calculation is spin polarized
         """
-        DOS = self.create_dos_data(input_path, Efermi=Efermi)
+        DOS = self.create_dos_data(
+            input_path, Efermi=Efermi, spin_polarized=spin_polarized
+        )
 
         figure = cms_plots.dos(DOS, template="line.graph_template")
 
@@ -660,6 +665,11 @@ class DftbBase(seamm.Node):
                         # The Fermi level has one or two values if spin-polarized, but
                         # normally they are the same, so turn into a scalar.
                         property_data[key] = values[0]
+                        property_data["spin polarized"] = len(values) == 2
+                        if len(values) == 2 and values[0] != values[1]:
+                            raise NotImplementedError(
+                                f"Cannot handle different Fermi energies yet: {values}"
+                            )
                     else:
                         property_data[key] = redimension(values, dims)
                 if key not in properties:
@@ -671,7 +681,7 @@ class DftbBase(seamm.Node):
 
         # Create the standard properties needed for energy, gradients, etc.
         property_data["energy"] = property_data["total_energy"]
-        property_data["energy,units"] = "e_H"
+        property_data["energy,units"] = "E_h"
         if "forces" in property_data:
             property_data["gradients"] = [
                 [-v for v in row] for row in property_data["forces"]

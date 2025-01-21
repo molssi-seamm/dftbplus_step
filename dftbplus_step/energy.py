@@ -15,6 +15,7 @@ import logging
 from pathlib import Path
 import shutil
 import textwrap
+import traceback
 
 import hsd
 from tabulate import tabulate
@@ -643,11 +644,11 @@ class Energy(DftbBase):
         # Prepare the DOS graph(s)
         if "fermi_level" in data:
             # Efermi = list(Q_(data["fermi_level"], "hartree").to("eV").magnitude)
-            Efermi = [Q_(data["fermi_level"], "hartree").to("eV").magnitude]
+            Efermi = Q_(data["fermi_level"], "hartree").to("eV").magnitude
         else:
-            Efermi = [0.0]
+            Efermi = 0.0
         wd = Path(self.directory)
-        self.dos(wd / "band.out", Efermi=Efermi)
+        self.dos(wd / "band.out", Efermi=Efermi, spin_polarized=data["spin polarized"])
 
         text_lines = []
         # Get charges and spins, etc.
@@ -733,6 +734,8 @@ class Energy(DftbBase):
             try:
                 text += self.make_plots(data)
             except Exception as e:
+                traceback.print_exc()
+                print(f"There was an error making the plots: {str(e)}")
                 text += f"There was an error making the plots: {str(e)}"
         else:
             text += f"Orbital plots not supported for {self.model}"

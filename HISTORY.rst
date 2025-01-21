@@ -1,6 +1,10 @@
 =======
 History
 =======
+2025.1.21 -- Bugfix: Issue with spin-polarized calculations
+    * The code had several errors to do with detecting whether the calculation was
+      spin-polarized or not. This has been fixed and the detection simplified.
+      
 2024.12.14 -- Bugfix: Issue with initialization in subflowcharts
 
 2024.10.20 -- Added the standard results for drivers
