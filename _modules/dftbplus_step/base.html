@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>dftbplus_step.base &#8212; DFTB+ Step 2024.12.14 documentation</title>
+    <title>dftbplus_step.base &#8212; DFTB+ Step 2025.1.21 documentation</title>
   
   
   
@@ -15,8 +15,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -26,19 +26,19 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=c224919a" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
 <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=cc2817ab"></script>
+    <script src="../../_static/documentation_options.js?v=8ab59db2"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -60,7 +60,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2024.12.14" />
+  <meta name="docsearch:version" content="2025.1.21" />
   </head>
   
   
@@ -172,7 +172,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </li>
 
             <li class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="pst-nav-more-links">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
                     More
                 </button>
                 <ul id="pst-nav-more-links" class="dropdown-menu">
@@ -427,9 +429,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -481,23 +488,23 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="sd">&quot;&quot;&quot;Non-graphical part of the DFTB+ step in a SEAMM flowchart</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">configparser</span>
-<span class="kn">import</span> <span class="nn">copy</span>
-<span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">import</span> <span class="nn">pprint</span>
-<span class="kn">import</span> <span class="nn">shutil</span>
-<span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">configparser</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pprint</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">traceback</span>
 
-<span class="kn">import</span> <span class="nn">pandas</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span>
 
-<span class="kn">import</span> <span class="nn">cms_plots</span>
-<span class="kn">import</span> <span class="nn">dftbplus_step</span>
-<span class="kn">from</span> <span class="nn">.dftbplus</span> <span class="kn">import</span> <span class="n">deep_merge</span><span class="p">,</span> <span class="n">dict_to_hsd</span><span class="p">,</span> <span class="n">parse_gen_file</span>
-<span class="kn">from</span> <span class="nn">molsystem.elements</span> <span class="kn">import</span> <span class="n">to_symbols</span>
-<span class="kn">import</span> <span class="nn">seamm</span>
-<span class="kn">import</span> <span class="nn">seamm_exec</span>
-<span class="kn">import</span> <span class="nn">seamm_util.printing</span> <span class="k">as</span> <span class="nn">printing</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">cms_plots</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">dftbplus_step</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.dftbplus</span><span class="w"> </span><span class="kn">import</span> <span class="n">deep_merge</span><span class="p">,</span> <span class="n">dict_to_hsd</span><span class="p">,</span> <span class="n">parse_gen_file</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">molsystem.elements</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_symbols</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seamm</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seamm_exec</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seamm_util.printing</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">printing</span>
 
 <span class="c1"># In addition to the normal logger, two logger-like printing facilities are</span>
 <span class="c1"># defined: &#39;job&#39; and &#39;printer&#39;. &#39;job&#39; send output to the main job.out file for</span>
@@ -514,7 +521,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <div class="viewcode-block" id="redimension">
 <a class="viewcode-back" href="../../api/dftbplus_step.html#dftbplus_step.base.redimension">[docs]</a>
-<span class="k">def</span> <span class="nf">redimension</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">dimensions</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">redimension</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">dimensions</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Change the dimensions on values to the new dimensions.</span>
 
 <span class="sd">    Parameters</span>
@@ -549,7 +556,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 
 
-<span class="k">def</span> <span class="nf">_redimension_helper</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">dimensions</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_redimension_helper</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">dimensions</span><span class="p">):</span>
     <span class="n">dim</span> <span class="o">=</span> <span class="n">dimensions</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">remaining</span> <span class="o">=</span> <span class="n">dimensions</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">remaining</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -564,10 +571,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <div class="viewcode-block" id="DftbBase">
 <a class="viewcode-back" href="../../api/dftbplus_step.html#dftbplus_step.base.DftbBase">[docs]</a>
-<span class="k">class</span> <span class="nc">DftbBase</span><span class="p">(</span><span class="n">seamm</span><span class="o">.</span><span class="n">Node</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DftbBase</span><span class="p">(</span><span class="n">seamm</span><span class="o">.</span><span class="n">Node</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A base class for substeps in the DFTB+ step.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">flowchart</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Choose Parameters&quot;</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="n">logger</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mapping_from_primitive</span> <span class="o">=</span> <span class="kc">None</span>
@@ -577,28 +584,34 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">flowchart</span><span class="o">=</span><span class="n">flowchart</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="n">extension</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">is_runable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_runable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Indicate whether this not runs or just adds input.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="kc">True</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The model (chemistry) used to obtain results.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">model</span>
 
     <span class="nd">@model</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">value</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">exe_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">exe_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The configuration for the DFTB+ executable.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">exe_config</span>
 
 <div class="viewcode-block" id="DftbBase.band_structure">
 <a class="viewcode-back" href="../../api/dftbplus_step.html#dftbplus_step.base.DftbBase.band_structure">[docs]</a>
-    <span class="k">def</span> <span class="nf">band_structure</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">input_path</span><span class="p">,</span> <span class="n">sym_points</span><span class="p">,</span> <span class="n">sym_names</span><span class="p">,</span> <span class="n">Efermi</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="n">DOS</span><span class="o">=</span><span class="kc">None</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">band_structure</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">input_path</span><span class="p">,</span>
+        <span class="n">sym_points</span><span class="p">,</span>
+        <span class="n">sym_names</span><span class="p">,</span>
+        <span class="n">Efermi</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">DOS</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">spin_polarized</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Prepare the graph for the band structure.</span>
 
@@ -608,7 +621,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="sd">            The path to the band output from DFTB+.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">Band_Structure</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_band_structure_data</span><span class="p">(</span>  <span class="c1"># noqa: F841</span>
-            <span class="n">input_path</span><span class="p">,</span> <span class="n">sym_points</span><span class="p">,</span> <span class="n">sym_names</span><span class="p">,</span> <span class="n">Efermi</span><span class="o">=</span><span class="n">Efermi</span>
+            <span class="n">input_path</span><span class="p">,</span>
+            <span class="n">sym_points</span><span class="p">,</span>
+            <span class="n">sym_names</span><span class="p">,</span>
+            <span class="n">Efermi</span><span class="o">=</span><span class="n">Efermi</span><span class="p">,</span>
+            <span class="n">spin_polarized</span><span class="o">=</span><span class="n">spin_polarized</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="n">figure</span> <span class="o">=</span> <span class="n">cms_plots</span><span class="o">.</span><span class="n">band_structure</span><span class="p">(</span>
@@ -628,8 +645,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <div class="viewcode-block" id="DftbBase.create_band_structure_data">
 <a class="viewcode-back" href="../../api/dftbplus_step.html#dftbplus_step.base.DftbBase.create_band_structure_data">[docs]</a>
-    <span class="k">def</span> <span class="nf">create_band_structure_data</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">input_path</span><span class="p">,</span> <span class="n">sym_points</span><span class="p">,</span> <span class="n">sym_names</span><span class="p">,</span> <span class="n">Efermi</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_band_structure_data</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">input_path</span><span class="p">,</span> <span class="n">sym_points</span><span class="p">,</span> <span class="n">sym_names</span><span class="p">,</span> <span class="n">Efermi</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">spin_polarized</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Massage the band structure data into a standard form</span>
 
@@ -642,8 +659,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Preparing the band structure, </span><span class="si">{</span><span class="n">wd</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="n">seamm_options</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">global_options</span>
-
-        <span class="n">spin_polarized</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">Efermi</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
 
         <span class="c1"># Read configuration file for DFTB+</span>
         <span class="n">ini_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">seamm_options</span><span class="p">[</span><span class="s2">&quot;root&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span>
@@ -741,7 +756,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <div class="viewcode-block" id="DftbBase.create_dos_data">
 <a class="viewcode-back" href="../../api/dftbplus_step.html#dftbplus_step.base.DftbBase.create_dos_data">[docs]</a>
-    <span class="k">def</span> <span class="nf">create_dos_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_path</span><span class="p">,</span> <span class="n">Efermi</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">]):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_dos_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_path</span><span class="p">,</span> <span class="n">Efermi</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">spin_polarized</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create the DOS data</span>
 
 <span class="sd">        Parameters</span>
@@ -751,13 +766,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="sd">        Efermi : float</span>
 <span class="sd">            The Fermi energy in eV</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">spin_polarized</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">Efermi</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
-
-        <span class="k">if</span> <span class="n">spin_polarized</span> <span class="ow">and</span> <span class="n">Efermi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">Efermi</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Cannot handle different Fermi energies yet: </span><span class="si">{</span><span class="n">Efermi</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="p">)</span>
-
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Preparing DOS&quot;</span><span class="p">)</span>
 
         <span class="c1"># Total DOS</span>
@@ -935,7 +943,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <span class="n">DOS</span><span class="p">[</span><span class="n">element</span><span class="p">]</span> <span class="o">=</span> <span class="n">total</span><span class="o">.</span><span class="n">array</span>
 
         <span class="c1"># Shift the Fermi level to 0</span>
-        <span class="n">DOS</span><span class="o">.</span><span class="n">index</span> <span class="o">-=</span> <span class="n">Efermi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">DOS</span><span class="o">.</span><span class="n">index</span> <span class="o">-=</span> <span class="n">Efermi</span>
 
         <span class="n">DOS</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;DOS.csv&quot;</span><span class="p">)</span>
 
@@ -944,7 +952,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <div class="viewcode-block" id="DftbBase.dos">
 <a class="viewcode-back" href="../../api/dftbplus_step.html#dftbplus_step.base.DftbBase.dos">[docs]</a>
-    <span class="k">def</span> <span class="nf">dos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_path</span><span class="p">,</span> <span class="n">Efermi</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">]):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">dos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_path</span><span class="p">,</span> <span class="n">Efermi</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">spin_polarized</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Prepare the graph for the density of states.</span>
 
 <span class="sd">        Parameters</span>
@@ -953,8 +961,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="sd">            The path to the band output from DFTB+.</span>
 <span class="sd">        Efermi : float</span>
 <span class="sd">            The Fermi energy in eV</span>
+<span class="sd">        spin_polarized : bool</span>
+<span class="sd">            Whether the calculation is spin polarized</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">DOS</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_dos_data</span><span class="p">(</span><span class="n">input_path</span><span class="p">,</span> <span class="n">Efermi</span><span class="o">=</span><span class="n">Efermi</span><span class="p">)</span>
+        <span class="n">DOS</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_dos_data</span><span class="p">(</span>
+            <span class="n">input_path</span><span class="p">,</span> <span class="n">Efermi</span><span class="o">=</span><span class="n">Efermi</span><span class="p">,</span> <span class="n">spin_polarized</span><span class="o">=</span><span class="n">spin_polarized</span>
+        <span class="p">)</span>
 
         <span class="n">figure</span> <span class="o">=</span> <span class="n">cms_plots</span><span class="o">.</span><span class="n">dos</span><span class="p">(</span><span class="n">DOS</span><span class="p">,</span> <span class="n">template</span><span class="o">=</span><span class="s2">&quot;line.graph_template&quot;</span><span class="p">)</span>
 
@@ -970,7 +982,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <div class="viewcode-block" id="DftbBase.geometry">
 <a class="viewcode-back" href="../../api/dftbplus_step.html#dftbplus_step.base.DftbBase.geometry">[docs]</a>
-    <span class="k">def</span> <span class="nf">geometry</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">geometry</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create the input for DFTB+ for the geometry.</span>
 
 <span class="sd">        Example::</span>
@@ -1075,7 +1087,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <div class="viewcode-block" id="DftbBase.find_previous_step">
 <a class="viewcode-back" href="../../api/dftbplus_step.html#dftbplus_step.base.DftbBase.find_previous_step">[docs]</a>
-    <span class="k">def</span> <span class="nf">find_previous_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">cls</span><span class="p">,</span> <span class="n">missing_ok</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">find_previous_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">cls</span><span class="p">,</span> <span class="n">missing_ok</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Find the previous step of class &#39;cls&#39;</span>
 
 <span class="sd">        Parameters</span>
@@ -1100,7 +1112,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <div class="viewcode-block" id="DftbBase.get_previous_charges">
 <a class="viewcode-back" href="../../api/dftbplus_step.html#dftbplus_step.base.DftbBase.get_previous_charges">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_previous_charges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">missing_ok</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_previous_charges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">missing_ok</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Copy charges from the previous energy step.&quot;&quot;&quot;</span>
         <span class="n">directory</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">)</span>
         <span class="n">step</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_previous_step</span><span class="p">(</span><span class="n">dftbplus_step</span><span class="o">.</span><span class="n">Energy</span><span class="p">,</span> <span class="n">missing_ok</span><span class="o">=</span><span class="n">missing_ok</span><span class="p">)</span>
@@ -1122,7 +1134,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <div class="viewcode-block" id="DftbBase.parse_results">
 <a class="viewcode-back" href="../../api/dftbplus_step.html#dftbplus_step.base.DftbBase.parse_results">[docs]</a>
-    <span class="k">def</span> <span class="nf">parse_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lines</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">parse_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lines</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Digest the data in the results.tag file.&quot;&quot;&quot;</span>
 
         <span class="n">properties</span> <span class="o">=</span> <span class="n">dftbplus_step</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;results&quot;</span><span class="p">]</span>
@@ -1166,6 +1178,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         <span class="c1"># The Fermi level has one or two values if spin-polarized, but</span>
                         <span class="c1"># normally they are the same, so turn into a scalar.</span>
                         <span class="n">property_data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="n">property_data</span><span class="p">[</span><span class="s2">&quot;spin polarized&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+                                <span class="sa">f</span><span class="s2">&quot;Cannot handle different Fermi energies yet: </span><span class="si">{</span><span class="n">values</span><span class="si">}</span><span class="s2">&quot;</span>
+                            <span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">property_data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">redimension</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">dims</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">properties</span><span class="p">:</span>
@@ -1177,7 +1194,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         <span class="c1"># Create the standard properties needed for energy, gradients, etc.</span>
         <span class="n">property_data</span><span class="p">[</span><span class="s2">&quot;energy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">property_data</span><span class="p">[</span><span class="s2">&quot;total_energy&quot;</span><span class="p">]</span>
-        <span class="n">property_data</span><span class="p">[</span><span class="s2">&quot;energy,units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;e_H&quot;</span>
+        <span class="n">property_data</span><span class="p">[</span><span class="s2">&quot;energy,units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;E_h&quot;</span>
         <span class="k">if</span> <span class="s2">&quot;forces&quot;</span> <span class="ow">in</span> <span class="n">property_data</span><span class="p">:</span>
             <span class="n">property_data</span><span class="p">[</span><span class="s2">&quot;gradients&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="p">[</span><span class="o">-</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">row</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">property_data</span><span class="p">[</span><span class="s2">&quot;forces&quot;</span><span class="p">]</span>
@@ -1190,7 +1207,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <div class="viewcode-block" id="DftbBase.run">
 <a class="viewcode-back" href="../../api/dftbplus_step.html#dftbplus_step.base.DftbBase.run">[docs]</a>
-    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_input</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">current_input</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Run a DFTB+ step.</span>
 
 <span class="sd">        Parameters</span>
@@ -1357,8 +1374,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1369,7 +1386,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>
