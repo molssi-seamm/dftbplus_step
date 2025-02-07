@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Global control parameters for DFTB+
-"""
+"""Global control parameters for DFTB+"""
 
 import logging
 import seamm

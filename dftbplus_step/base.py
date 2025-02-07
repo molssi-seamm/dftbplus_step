@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""Non-graphical part of the DFTB+ step in a SEAMM flowchart
-"""
+"""Non-graphical part of the DFTB+ step in a SEAMM flowchart"""
 
 import configparser
 import copy
