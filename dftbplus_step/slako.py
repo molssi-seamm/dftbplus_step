@@ -130,7 +130,7 @@ def analyze_directory(root="data/slako"):
             data["md5 mismatch"] = False
 
         if parameterization not in metadata:
-            logger.info(f"   adding {parameterization}")
+            logger.debug(f"   adding {parameterization}")
             pdata = metadata[parameterization] = {}
         else:
             pdata = metadata[parameterization]
