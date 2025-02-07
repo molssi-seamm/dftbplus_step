@@ -161,7 +161,7 @@ class DftbBase(seamm.Node):
             The path to the band output from DFTB+.
         """
         wd = Path(self.directory)
-        logger.info(f"Preparing the band structure, {wd}")
+        logger.debug(f"Preparing the band structure, {wd}")
 
         seamm_options = self.parent.global_options
 
@@ -268,7 +268,7 @@ class DftbBase(seamm.Node):
         Efermi : float
             The Fermi energy in eV
         """
-        logger.info("Preparing DOS")
+        logger.debug("Preparing DOS")
 
         # Total DOS
         executor = self.parent.flowchart.executor
@@ -734,7 +734,7 @@ class DftbBase(seamm.Node):
         success = directory / "success.dat"
         if not success.exists():
             files = {"dftb_in.hsd": hsd}
-            logger.info("dftb_in.hsd:\n" + files["dftb_in.hsd"])
+            logger.debug("dftb_in.hsd:\n" + files["dftb_in.hsd"])
 
             # If the charge file exists, use it!
             path = directory / "charges.dat"

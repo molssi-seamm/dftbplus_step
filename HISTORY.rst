@@ -1,6 +1,10 @@
 =======
 History
 =======
+2025.2.7 -- Bugfix: Issue with logging and geomeTRIC
+    * Logging at the INFO level made the output from geomTRIC too verbose. Changed to
+      DEBUG level.
+      
 2025.1.21 -- Bugfix: Issue with spin-polarized calculations
     * The code had several errors to do with detecting whether the calculation was
       spin-polarized or not. This has been fixed and the detection simplified.
