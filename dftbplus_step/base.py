@@ -171,6 +171,8 @@ class DftbBase(seamm.Node):
 
         executor = self.parent.flowchart.executor
 
+        if str(input_path)[0] != "'":
+            input_path = "'" + str(input_path) + "'"
         if spin_polarized:
             cmd = ["dp_bands", "-s", input_path, "band"]
         else:
@@ -272,10 +274,12 @@ class DftbBase(seamm.Node):
         # Total DOS
         executor = self.parent.flowchart.executor
 
+        if str(input_path)[0] != "'":
+            input_path = "'" + str(input_path) + "'"
         result = executor.run(
             cmd=[
                 "dp_dos",
-                str(input_path),
+                input_path,
                 "dos_total.dat",
             ],
             config=self.exe_config,
