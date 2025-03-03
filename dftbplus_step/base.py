@@ -86,8 +86,9 @@ class DftbBase(seamm.Node):
     def __init__(
         self, flowchart=None, title="Choose Parameters", extension=None, logger=logger
     ):
-        self.mapping_from_primitive = None
-        self.mapping_to_primitive = None
+        self._mapping_from_primitive = None
+        self._mapping_to_primitive = None
+        self._use_primitive_cell = False
         self.results = None  # Results of the calculation from the tag file.
 
         super().__init__(flowchart=flowchart, title=title, extension=extension)
@@ -535,6 +536,7 @@ class DftbBase(seamm.Node):
                 )
             else:
                 use_primitive_cell = True
+            self._use_primitive_cell = use_primitive_cell
 
             if use_primitive_cell:
                 # Write the structure using the primitive cell
@@ -542,8 +544,8 @@ class DftbBase(seamm.Node):
                     lattice,
                     fractionals,
                     atomic_numbers,
-                    self.mapping_from_primitive,
-                    self.mapping_to_primitive,
+                    self._mapping_from_primitive,
+                    self._mapping_to_primitive,
                 ) = configuration.primitive_cell()
             else:
                 # Use the full cell
@@ -552,8 +554,8 @@ class DftbBase(seamm.Node):
                 atomic_numbers = configuration.atoms.atomic_numbers
 
                 n_atoms = len(atomic_numbers)
-                self.mapping_from_primitive = [i for i in range(n_atoms)]
-                self.mapping_to_primitive = [i for i in range(n_atoms)]
+                self._mapping_from_primitive = [i for i in range(n_atoms)]
+                self._mapping_to_primitive = [i for i in range(n_atoms)]
             symbols = to_symbols(atomic_numbers)
 
             result += "   Periodic = Yes\n"
