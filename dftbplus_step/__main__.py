@@ -9,8 +9,8 @@ from .installer import Installer
 def run():
     """Handle the extra installation needed.
 
-    * Find and/or install the Psi4 executable.
-    * Add or update information in the SEAMM.ini file for Psi4
+    * Find and/or install the dftb+ executable.
+    * Add or update information in the dftbplus.ini file for DFTB+
     """
 
     # Create an installer object
