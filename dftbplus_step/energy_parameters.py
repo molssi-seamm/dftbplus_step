@@ -312,7 +312,7 @@ class EnergyParameters(seamm.Parameters):
 
     output = {
         "total density": {
-            "default": "yes",
+            "default": "no",
             "kind": "boolean",
             "default_units": "",
             "enumeration": ("yes", "no"),
@@ -321,7 +321,7 @@ class EnergyParameters(seamm.Parameters):
             "help_text": "Whether to plot the total charge density.",
         },
         "total spin density": {
-            "default": "yes",
+            "default": "no",
             "kind": "boolean",
             "default_units": "",
             "enumeration": ("yes", "no"),
@@ -330,7 +330,7 @@ class EnergyParameters(seamm.Parameters):
             "help_text": "Whether to plot the total spin density.",
         },
         "difference density": {
-            "default": "yes",
+            "default": "no",
             "kind": "boolean",
             "default_units": "",
             "enumeration": ("yes", "no"),
@@ -339,7 +339,7 @@ class EnergyParameters(seamm.Parameters):
             "help_text": "Whether to plot the difference density.",
         },
         "orbitals": {
-            "default": "yes",
+            "default": "no",
             "kind": "boolean",
             "default_units": "",
             "enumeration": ("yes", "no"),
