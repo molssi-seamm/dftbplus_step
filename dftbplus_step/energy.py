@@ -187,6 +187,7 @@ class Energy(DftbBase):
         system, configuration = self.get_system_configuration(None)
         periodicity = configuration.periodicity
         atoms = configuration.atoms
+        symmetry = configuration.symmetry
 
         # Have to fix formatting for printing...
         PP = dict(P)
@@ -310,12 +311,12 @@ class Energy(DftbBase):
             have_charges = False
             if "charge" in atoms:
                 have_charges = True
-                charges = "charge"
+                charge_key = "charge"
             elif "formal_charge" in atoms:
                 have_charges = True
-                charges = "formal_charge"
+                charge_key = "formal_charge"
             if have_charges:
-                for tmp in atoms[charges]:
+                for tmp in atoms[charge_key]:
                     if tmp is None:
                         have_charges = False
                         break
@@ -326,11 +327,16 @@ class Energy(DftbBase):
                     hamiltonian["ReadInitialCharges"] = "Yes"
                 elif have_charges:
                     if periodicity == 0:
-                        charges = [*atoms[charges]]
+                        charges = [*atoms[charge_key]]
                     else:
-                        charges = [
-                            atoms[charges][i] for i in self.mapping_from_primitive
-                        ]
+                        charges = []
+                        for asym_atom, ops in enumerate(symmetry.atom_generators):
+                            for i in range(len(ops)):
+                                charges.append(atoms[charge_key][asym_atom])
+                        if self._use_primitive_cell:
+                            charges = [charges[i] for i in self._mapping_from_primitive]
+                        else:
+                            charges = [*atoms[charge_key]]
                     # Ensure sums exactly to charge
                     delta = (configuration.charge - sum(charges)) / len(charges)
                     hamiltonian["InitialCharges"] = {
@@ -344,11 +350,16 @@ class Energy(DftbBase):
             elif initial_charges == "from structure":
                 if have_charges:
                     if periodicity == 0:
-                        charges = [*atoms[charges]]
+                        charges = [*atoms[charge_key]]
                     else:
-                        charges = [
-                            atoms[charges][i] for i in self.mapping_from_primitive
-                        ]
+                        charges = []
+                        for asym_atom, ops in enumerate(symmetry.atom_generators):
+                            for i in range(len(ops)):
+                                charges.append(atoms[charge_key][asym_atom])
+                        if self._use_primitive_cell:
+                            charges = [charges[i] for i in self._mapping_from_primitive]
+                        else:
+                            charges = [*atoms[charge_key]]
                     # Ensure sums exactly to charge
                     delta = (configuration.charge - sum(charges)) / len(charges)
                     hamiltonian["InitialCharges"] = {
@@ -403,7 +414,7 @@ class Energy(DftbBase):
                             else:
                                 spins = [
                                     atoms["spin"][i]
-                                    for i in self.mapping_from_primitive
+                                    for i in self._mapping_from_primitive
                                 ]
                             section["InitialSpins"] = {
                                 "AllAtomSpins": "{"
@@ -566,10 +577,11 @@ class Energy(DftbBase):
                 result["Analysis"]["WriteEigenvectors"] = "Yes"
         return result
 
-    def analyze(self, indent="", data={}, out=[]):
+    def analyze(self, indent="", data={}, out=[], table=None):
         """Parse the output and generating the text output and store the
         data in variables for other stages to access
         """
+        text = ""
         options = self.parent.options
 
         # Get the configuration and basic information
@@ -578,6 +590,7 @@ class Energy(DftbBase):
         symbols = configuration.atoms.symbols
         atoms = configuration.atoms
         periodicity = configuration.periodicity
+        symmetry = configuration.symmetry
 
         # Read the detailed output file to get the number of iterations
         directory = Path(self.directory)
@@ -590,23 +603,33 @@ class Energy(DftbBase):
                 data["scc error"] = float(tmp[3])
 
         # Print the key results
+        if table is None:
+            table = {
+                "Property": [],
+                "Value": [],
+                "Units": [],
+            }
+
+        if "Total energy" not in table["Property"]:
+            table["Property"].append("Total energy")
+            table["Value"].append(f"{data['total_energy']:.6f}")
+            table["Units"].append("E_h")
+
         if periodicity == 3:
             # May have primitive cell....
-            Zcell = len(symbols) / len(self.mapping_from_primitive)
+            Zcell = len(symbols) / len(self._mapping_from_primitive)
             data["#_primitive_cells"] = Zcell
-            if Zcell != 1:
-                text = (
-                    "The total energy of the primitive cell is {total_energy:.6f} E_h."
-                    f" There are {Zcell:.0f} primitive cells in the conventional cell."
-                )
-            else:
-                text = "The total energy of the unit cell is {total_energy:.6f} E_h."
+
+            table["Property"].append("Z")
+            table["Value"].append(f"{Zcell:.0f}")
+            table["Units"].append("")
         else:
             Zcell = 1
             data["#_primitive_cells"] = None
-            text = "The total energy is {total_energy:.6f} E_h."
-        if data["scc error"] is not None:
-            text += " The charges converged to {scc error:.6f}."
+        if data["scc error"] is not None and "SCC error" not in table["Property"]:
+            table["Property"].append("SCC error")
+            table["Value"].append(f"{data['scc error']:.6f}")
+            table["Units"].append("")
 
         # Handle the chemical and empirical formulas
         formula, empirical, Z = configuration.formula
@@ -615,27 +638,32 @@ class Energy(DftbBase):
         data["Z"] = Z
         data["energy_per_formula_unit"] = data["total_energy"] * Zcell / Z
 
+        table["Property"].append("Formula")
+        table["Value"].append(formula)
+        table["Units"].append("")
+
         # Calculate the energy of formation
         if self.parent._reference_energy is not None:
             dE = data["total_energy"] - self.parent._reference_energy
             dE = Q_(dE, "hartree").to("kJ/mol").magnitude
             if periodicity == 3:
                 dE = dE * Zcell
-                text += (
-                    f" The calculated formation energy of the cell ({formula}) is "
-                    f"{dE:.1f} kJ/mol."
-                )
+                table["Property"].append("Formation energy per cell")
+                table["Value"].append(f"{dE:.1f}")
+                table["Units"].append("kJ/mol")
                 data["energy of formation"] = dE
             else:
-                text += (
-                    f" The calculated formation energy is {dE:.1f} kJ/mol for formula "
-                    f"{formula}."
-                )
+                table["Property"].append("Formation energy")
+                table["Value"].append(f"{dE:.1f}")
+                table["Units"].append("kJ/mol")
                 data["energy of formation"] = dE
             if Z != 1:
-                text += (
-                    f" For the empirical formula {empirical} it is {dE / Z:.1f} kJ/mol."
-                )
+                table["Property"].append("Empirical formula")
+                table["Value"].append(empirical)
+                table["Units"].append("")
+                table["Property"].append("Formation energy")
+                table["Value"].append(f"{dE / Z:.1f}")
+                table["Units"].append("kJ/mol")
         else:
             text += " Could not calculate the formation energy because some reference "
             text += "energies are missing."
@@ -645,10 +673,31 @@ class Energy(DftbBase):
         if "fermi_level" in data:
             # Efermi = list(Q_(data["fermi_level"], "hartree").to("eV").magnitude)
             Efermi = Q_(data["fermi_level"], "hartree").to("eV").magnitude
+            table["Property"].append("Fermi energy")
+            table["Value"].append(f"{Efermi:.2f}")
+            table["Units"].append("eV")
         else:
             Efermi = 0.0
         wd = Path(self.directory)
         self.dos(wd / "band.out", Efermi=Efermi, spin_polarized=data["spin polarized"])
+
+        if text != "":
+            text = str(__(text, **data, indent=4 * " "))
+            text += "\n\n"
+
+        text_lines = []
+        text_lines.append("                     Results")
+        text_lines.append(
+            tabulate(
+                table,
+                headers="keys",
+                tablefmt="rounded_outline",
+                colalign=("center", "decimal", "left"),
+                disable_numparse=True,
+            )
+        )
+        text += textwrap.indent("\n".join(text_lines), 12 * " ")
+        text += "\n"
 
         text_lines = []
         # Get charges and spins, etc.
@@ -662,8 +711,11 @@ class Energy(DftbBase):
             if periodicity == 0:
                 atoms["charge"][0:] = charges
             else:
-                tmp = [charges[i] for i in self.mapping_to_primitive]
-                atoms["charge"][0:] = tmp
+                if self._use_primitive_cell:
+                    tmp, delta = symmetry.symmetrize_atomic_scalar(charges)
+                    atoms["charge"][0:] = tmp
+                else:
+                    atoms["charge"][0:] = charges
 
             # Print the charges and dump to a csv file
             table = {
@@ -712,8 +764,9 @@ class Energy(DftbBase):
                     tabulate(
                         table,
                         headers="keys",
-                        tablefmt="psql",
-                        colalign=("center", "center"),
+                        tablefmt="rounded_outline",
+                        colalign=("center", "center", "decimal"),
+                        disable_numparse=True,
                     )
                 )
         if "gross_atomic_spins" in data:
@@ -726,8 +779,11 @@ class Energy(DftbBase):
             if periodicity == 0:
                 atoms["spin"][0:] = spins
             else:
-                tmp = [spins[i] for i in self.mapping_to_primitive]
-                atoms["spin"][0:] = tmp
+                if self._use_primitive_cell:
+                    tmp, delta = symmetry.symmetrize_atomic_scalar(spins)
+                    atoms["spin"][0:] = tmp
+                else:
+                    atoms["spin"][0:] = spins
 
         # And requested plots of density, orbitals, etc.
         if "element data" in self.parent._dataset:
@@ -742,7 +798,7 @@ class Energy(DftbBase):
 
         text = str(__(text, **data, indent=8 * " "))
         text += "\n\n"
-        text += textwrap.indent("\n".join(text_lines), 12 * " ")
+        text += textwrap.indent("\n".join(text_lines), 20 * " ")
 
         printer.normal(text)
 
