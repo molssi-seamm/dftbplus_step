@@ -1,6 +1,12 @@
 =======
 History
 =======
+2025.3.3 -- Enhancements and bug fix for periodic cell!
+    * Fixed issue with periodic cells with symmetry and primitive cells that caused
+      problems with e.g. charges and spins.
+    * Added RMSD and displacement between initial and final structure in optimization.
+    * Added to output and put key results in tables to make easier to read.
+      
 2025.2.7 -- Bugfix: Issue with logging and geomeTRIC
     * Logging at the INFO level made the output from geomTRIC too verbose. Changed to
       DEBUG level.
