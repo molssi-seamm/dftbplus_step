@@ -5,7 +5,10 @@
 import logging
 from pathlib import Path
 
+import numpy as np
+
 import dftbplus_step
+from molsystem import RMSD
 import seamm
 import seamm.data
 from seamm_util import units_class
@@ -57,8 +60,8 @@ class Optimization(dftbplus_step.Energy):
 
         text = (
             f"Structural optimization using the {P['optimization method']} "
-            f"method with a convergence criterion of {P['MaxForceComponent']}."
-            f" A maximum of {P['MaxSteps']} steps will be used."
+            f"method with a convergence criterion of {P['MaxForceComponent']} "
+            f"and no more than {P['MaxSteps']} steps. "
         )
 
         if self.model is None:
@@ -131,10 +134,17 @@ class Optimization(dftbplus_step.Energy):
 
         return result
 
-    def analyze(self, indent="", data={}, out=[]):
+    def analyze(self, indent="", data={}, out=[], table=None):
         """Parse the output and generating the text output and store the
         data in variables for other stages to access
         """
+        if table is None:
+            table = {
+                "Property": [],
+                "Value": [],
+                "Units": [],
+            }
+
         text = ""
 
         # Get the parameters used
@@ -158,55 +168,87 @@ class Optimization(dftbplus_step.Energy):
 
         # Print the key results
 
-        text += (
-            "The geometry optimization converged in {nsteps} steps. "
-            "The last change in energy was {ediff:.6} Eh"
-        )
+        table["Property"].append("Total energy")
+        table["Value"].append(f"{data['total_energy']:.6f}")
+        table["Units"].append("E_h")
+
+        table["Property"].append("Optimization steps")
+        table["Value"].append(f"{data['nsteps']}")
+        table["Units"].append("")
+
+        table["Property"].append("Last energy change")
+        table["Value"].append(f"{data['ediff']:.6f}")
+        table["Units"].append("E_h")
+
         if P["SCC"] == "Yes" and data["scc error"] is not None:
-            text += " and the error in the charges of {scc error:.6}."
-        else:
-            text += "."
+            table["Property"].append("SCC error")
+            table["Value"].append(f"{data['scc error']:.6f}")
+            table["Units"].append("")
 
         # Update the structure
         if "final structure" in data:
             sdata = data["final structure"]
 
             _, starting_configuration = self.get_system_configuration()
+            if starting_configuration.periodicity != 3:
+                initial = starting_configuration.to_RDKMol()
+
+            update_structure = P["structure handling"] != "Discard the structure"
             system, configuration = self.get_system_configuration(P)
 
             if starting_configuration.periodicity == 3:
-                (
-                    lattice_in,
-                    fractionals_in,
-                    atomic_numbers,
-                    self.mapping_from_primitive,
-                    self.mapping_to_primitive,
-                ) = starting_configuration.primitive_cell()
-
-                tmp = configuration.update(
-                    sdata["coordinates"],
-                    fractionals=sdata["coordinate system"] == "fractional",
-                    atomic_numbers=atomic_numbers,
-                    lattice=sdata["lattice vectors"],
-                    space_group=starting_configuration.symmetry.group,
-                    symprec=0.01,
-                )
-
-                # Symmetry may have changed
-                if tmp != "":
-                    text += f"\n\nWarning: {tmp}\n\n"
+                if update_structure:
                     (
-                        lattice,
-                        fractionals,
+                        lattice_in,
+                        fractionals_in,
                         atomic_numbers,
-                        self.mapping_from_primitive,
-                        self.mapping_to_primitive,
-                    ) = configuration.primitive_cell()
+                        self._mapping_from_primitive,
+                        self._mapping_to_primitive,
+                    ) = starting_configuration.primitive_cell()
+
+                    tmp = configuration.update(
+                        sdata["coordinates"],
+                        fractionals=sdata["coordinate system"] == "fractional",
+                        atomic_numbers=atomic_numbers,
+                        lattice=sdata["lattice vectors"],
+                        space_group=starting_configuration.symmetry.group,
+                        symprec=0.01,
+                    )
+
+                    # Symmetry may have changed
+                    if tmp != "":
+                        text += f"\n\nWarning: {tmp}\n\n"
+                        (
+                            lattice,
+                            fractionals,
+                            atomic_numbers,
+                            self._mapping_from_primitive,
+                            self._mapping_to_primitive,
+                        ) = configuration.primitive_cell()
             else:
-                configuration.atoms.set_coordinates(
-                    sdata["coordinates"],
-                    fractionals=sdata["coordinate system"] == "fractional",
-                )
+                if update_structure:
+                    configuration.atoms.set_coordinates(
+                        sdata["coordinates"],
+                        fractionals=sdata["coordinate system"] == "fractional",
+                    )
+                    final = configuration.to_RDKMol()
+                else:
+                    final = starting_configuration.to_RDKMol()
+                    final.GetConformer(0).SetPositions(np.array(sdata["coordinates"]))
+
+                result = RMSD(final, initial, symmetry=True, include_h=True)
+                data["RMSD with H"] = result["RMSD"]
+                data["displaced atom with H"] = result["displaced atom"]
+                data["maximum displacement with H"] = result["maximum displacement"]
+
+                # Align the structure
+                if update_structure:
+                    configuration.from_RDKMol(final)
+
+                result = RMSD(final, initial, symmetry=True)
+                data["RMSD"] = result["RMSD"]
+                data["displaced atom"] = result["displaced atom"]
+                data["maximum displacement"] = result["maximum displacement"]
 
             # And the name of the configuration.
             text += seamm.standard_parameters.set_names(
@@ -217,8 +259,26 @@ class Optimization(dftbplus_step.Energy):
                 Hamiltonian=self.model,
             )
 
+        if "RMSD" in data:
+            tmp = data["RMSD"]
+            table["Property"].append("RMSD in Geometry")
+            table["Value"].append(f"{tmp:.2f}")
+            table["Units"].append("Å")
+
+        if "maximum displacement" in data:
+            tmp = data["maximum displacement"]
+            table["Property"].append("Largest Displacement")
+            table["Value"].append(f"{tmp:.2f}")
+            table["Units"].append("Å")
+
+        if "displaced atom" in data:
+            tmp = data["displaced atom"]
+            table["Property"].append("Displaced Atom")
+            table["Value"].append(f"{tmp + 1}")
+            table["Units"].append("")
+
         printer.normal(__(text, **data, indent=8 * " "))
 
         printer.normal("\n")
 
-        super().analyze(indent=indent, data=data, out=out)
+        super().analyze(indent=indent, data=data, out=out, table=table)
