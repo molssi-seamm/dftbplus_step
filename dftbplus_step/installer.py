@@ -105,11 +105,12 @@ class Installer(seamm_installer.InstallerBase):
         print("Checking the DFTB+ installation.")
 
         # What Conda environment is the default?
-        path = self.configuration.path.parent / "dftbplus.ini"
+        # path = self.configuration.path.parent / self.init_file_name
+        path = self.root / self.init_file_name
         if not path.exists():
-            text = (self.resource_path / "dftbplus.ini").read_text()
+            text = (self.resource_path / self.init_file_name).read_text()
             path.write_text(text)
-            print(f"    The dftbplus.ini file did not exist. Created {path}")
+            print(f"    The {self.init_file_name} file did not exist. Created {path}")
 
         self.exe_config.path = path
 
@@ -196,39 +197,71 @@ class Installer(seamm_installer.InstallerBase):
 
         return result
 
-    def exe_version(self, path):
+    def exe_version(self, data):
         """Get the version of the Dftbplus executable.
 
         Parameters
         ----------
-        path : pathlib.Path
-            Path to the executable.
+        data : {str: any}
+            Data about how to run
 
         Returns
         -------
         str
             The version reported by the executable, or 'unknown'.
         """
-        try:
-            result = subprocess.run(
-                [str(path), "--version"],
-                stdin=subprocess.DEVNULL,
-                capture_output=True,
-                text=True,
-            )
-        except Exception:
-            version = "unknown"
+        version = "unknown"
+        if data["installation"] == "conda":
+            try:
+                cmd = [
+                    data["conda"],
+                    "run",
+                    "-n",
+                    data["conda-environment"],
+                    data["code"],
+                    " --version",
+                ]
+                result = subprocess.run(
+                    cmd,
+                    stdin=subprocess.DEVNULL,
+                    capture_output=True,
+                    text=True,
+                )
+            except Exception:
+                version = "unknown"
+            else:
+                version = "unknown"
+                lines = result.stdout.splitlines()
+                for line in lines:
+                    line = line.strip()
+                    tmp = line.split()
+                    if len(tmp) == 4 and tmp[2] == "release":
+                        version = tmp[3]
+                        break
+        elif data["installation"] == "local":
+            cmd = [data["code"], "--version"]
+            try:
+                result = subprocess.run(
+                    cmd,
+                    stdin=subprocess.DEVNULL,
+                    capture_output=True,
+                    text=True,
+                )
+            except Exception:
+                version = "unknown"
+            else:
+                version = "unknown"
+                lines = result.stdout.splitlines()
+                for line in lines:
+                    line = line.strip()
+                    tmp = line.split()
+                    if len(tmp) == 4 and tmp[2] == "release":
+                        version = tmp[3]
+                        break
         else:
-            version = "unknown"
-            lines = result.stdout.splitlines()
-            for line in lines:
-                line = line.strip()
-                tmp = line.split()
-                if len(tmp) == 4 and tmp[2] == "release":
-                    version = tmp[3]
-                    break
+            print(f"Cannot yet handle running as {data['installation']}.")
 
-        return version
+        return "DFTB+", version
 
     def install_files(self, location):
         """Install the Slater-Koster files and update the configuration if needed.
