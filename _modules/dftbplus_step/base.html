@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>dftbplus_step.base &#8212; DFTB+ Step 2025.2.7 documentation</title>
+    <title>dftbplus_step.base &#8212; DFTB+ Step 2025.3.3 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=3c0199e2"></script>
+    <script src="../../_static/documentation_options.js?v=b1a5c91c"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -60,7 +60,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2025.2.7" />
+  <meta name="docsearch:version" content="2025.3.3" />
   </head>
   
   
@@ -576,8 +576,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">flowchart</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Choose Parameters&quot;</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="n">logger</span>
     <span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">mapping_from_primitive</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">mapping_to_primitive</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mapping_from_primitive</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mapping_to_primitive</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_use_primitive_cell</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">results</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Results of the calculation from the tag file.</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">flowchart</span><span class="o">=</span><span class="n">flowchart</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="n">extension</span><span class="p">)</span>
@@ -666,6 +667,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         <span class="n">executor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">flowchart</span><span class="o">.</span><span class="n">executor</span>
 
+        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">input_path</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">:</span>
+            <span class="n">input_path</span> <span class="o">=</span> <span class="s2">&quot;&#39;&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">input_path</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span>
         <span class="k">if</span> <span class="n">spin_polarized</span><span class="p">:</span>
             <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;dp_bands&quot;</span><span class="p">,</span> <span class="s2">&quot;-s&quot;</span><span class="p">,</span> <span class="n">input_path</span><span class="p">,</span> <span class="s2">&quot;band&quot;</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
@@ -770,10 +773,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="c1"># Total DOS</span>
         <span class="n">executor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">flowchart</span><span class="o">.</span><span class="n">executor</span>
 
+        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">input_path</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">:</span>
+            <span class="n">input_path</span> <span class="o">=</span> <span class="s2">&quot;&#39;&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">input_path</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">executor</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
             <span class="n">cmd</span><span class="o">=</span><span class="p">[</span>
                 <span class="s2">&quot;dp_dos&quot;</span><span class="p">,</span>
-                <span class="nb">str</span><span class="p">(</span><span class="n">input_path</span><span class="p">),</span>
+                <span class="n">input_path</span><span class="p">,</span>
                 <span class="s2">&quot;dos_total.dat&quot;</span><span class="p">,</span>
             <span class="p">],</span>
             <span class="n">config</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">exe_config</span><span class="p">,</span>
@@ -1035,6 +1040,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">use_primitive_cell</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_use_primitive_cell</span> <span class="o">=</span> <span class="n">use_primitive_cell</span>
 
             <span class="k">if</span> <span class="n">use_primitive_cell</span><span class="p">:</span>
                 <span class="c1"># Write the structure using the primitive cell</span>
@@ -1042,8 +1048,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     <span class="n">lattice</span><span class="p">,</span>
                     <span class="n">fractionals</span><span class="p">,</span>
                     <span class="n">atomic_numbers</span><span class="p">,</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">mapping_from_primitive</span><span class="p">,</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">mapping_to_primitive</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_mapping_from_primitive</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_mapping_to_primitive</span><span class="p">,</span>
                 <span class="p">)</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">primitive_cell</span><span class="p">()</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="c1"># Use the full cell</span>
@@ -1052,8 +1058,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <span class="n">atomic_numbers</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">atomic_numbers</span>
 
                 <span class="n">n_atoms</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">atomic_numbers</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">mapping_from_primitive</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_atoms</span><span class="p">)]</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">mapping_to_primitive</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_atoms</span><span class="p">)]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_mapping_from_primitive</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_atoms</span><span class="p">)]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_mapping_to_primitive</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_atoms</span><span class="p">)]</span>
             <span class="n">symbols</span> <span class="o">=</span> <span class="n">to_symbols</span><span class="p">(</span><span class="n">atomic_numbers</span><span class="p">)</span>
 
             <span class="n">result</span> <span class="o">+=</span> <span class="s2">&quot;   Periodic = Yes</span><span class="se">\n</span><span class="s2">&quot;</span>
