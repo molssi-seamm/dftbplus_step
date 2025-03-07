@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>History &#8212; DFTB+ Step 2025.3.3 documentation</title>
+    <title>History &#8212; DFTB+ Step 2025.3.7 documentation</title>
   
   
   
@@ -49,7 +49,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="_static/documentation_options.js?v=b1a5c91c"></script>
+    <script src="_static/documentation_options.js?v=4dd4d3bb"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -62,7 +62,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="prev" title="Credits" href="authors.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2025.3.3" />
+  <meta name="docsearch:version" content="2025.3.7" />
   </head>
   
   
@@ -495,6 +495,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <section id="history">
 <h1>History<a class="headerlink" href="#history" title="Link to this heading">#</a></h1>
 <dl class="simple">
+<dt>2025.3.7 – Installation upgrade and tracking of timing information</dt><dd><ul class="simple">
+<li><p>Updated the code to work with the latest installer. In the process, directly
+incorporated the Slater-Koster files in the release because their location at
+dftb.org changed, causing errors in the installation.</p></li>
+<li><p>Add tracking of timing for calculations to ~/.seamm.d/timing/dftbplus.csv for
+analysis and future use in prediciting job limits for queueing systems.</p></li>
+</ul>
+</dd>
 <dt>2025.3.3 – Enhancements and bug fix for periodic cell!</dt><dd><ul class="simple">
 <li><p>Fixed issue with periodic cells with symmetry and primitive cells that caused
 problems with e.g. charges and spins.</p></li>
