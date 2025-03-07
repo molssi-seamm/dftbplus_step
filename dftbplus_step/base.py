@@ -4,12 +4,18 @@
 
 import configparser
 import copy
+import csv
+from datetime import datetime, timezone
+import json
 import logging
 from pathlib import Path
+import platform
 import pprint
 import shutil
+import time
 import traceback
 
+from cpuinfo import get_cpu_info
 import pandas
 
 import cms_plots
@@ -18,6 +24,7 @@ from .dftbplus import deep_merge, dict_to_hsd, parse_gen_file
 from molsystem.elements import to_symbols
 import seamm
 import seamm_exec
+from seamm_util import units_class
 import seamm_util.printing as printing
 
 # In addition to the normal logger, two logger-like printing facilities are
@@ -92,6 +99,47 @@ class DftbBase(seamm.Node):
         self.results = None  # Results of the calculation from the tag file.
 
         super().__init__(flowchart=flowchart, title=title, extension=extension)
+
+        # Set up the timing information
+        self._timing_data = []
+        self._timing_path = Path("~/.seamm.d/timing/dftbplus.csv").expanduser()
+        self._timing_header = [
+            "node",  # 0
+            "cpu",  # 1
+            "cpu_version",  # 2
+            "cpu_count",  # 3
+            "cpu_speed",  # 4
+            "date",  # 5
+            "H_SMILES",  # 6
+            "ISOMERIC_SMILES",  # 7
+            "formula",  # 8
+            "net_charge",  # 9
+            "spin_multiplicity",  # 10
+            "keywords",  # 11
+            "nproc",  # 12
+            "time",  # 13
+        ]
+        try:
+            self._timing_path.parent.mkdir(parents=True, exist_ok=True)
+
+            self._timing_data = 14 * [""]
+            self._timing_data[0] = platform.node()
+            tmp = get_cpu_info()
+            if "arch" in tmp:
+                self._timing_data[1] = tmp["arch"]
+            if "cpuinfo_version_string" in tmp:
+                self._timing_data[2] = tmp["cpuinfo_version_string"]
+            if "count" in tmp:
+                self._timing_data[3] = str(tmp["count"])
+            if "hz_advertized_friendly" in tmp:
+                self._timing_data[4] = tmp["hz_advertized_friendly"]
+
+            if not self._timing_path.exists():
+                with self._timing_path.open("w", newline="") as fd:
+                    writer = csv.writer(fd)
+                    writer.writerow(self._timing_header)
+        except Exception:
+            self._timing_data = None
 
     @property
     def is_runable(self):
@@ -737,7 +785,9 @@ class DftbBase(seamm.Node):
 
         # Check for successful run, don't rerun
         success = directory / "success.dat"
-        if not success.exists():
+        if success.exists():
+            self._timing_data = None
+        else:
             files = {"dftb_in.hsd": hsd}
             logger.debug("dftb_in.hsd:\n" + files["dftb_in.hsd"])
 
@@ -791,8 +841,44 @@ class DftbBase(seamm.Node):
                     "eigenvec.bin",
                 ]
 
+                if self._timing_data is not None:
+                    try:
+                        self._timing_data[6] = configuration.to_smiles(
+                            canonical=True, hydrogens=True
+                        )
+                    except Exception:
+                        self._timing_data[6] = ""
+                    try:
+                        self._timing_data[7] = configuration.isomeric_smiles
+                    except Exception:
+                        self._timing_data[7] = ""
+                    try:
+                        self._timing_data[8] = configuration.formula[0]
+                    except Exception:
+                        self._timing_data[7] = ""
+                    try:
+                        self._timing_data[9] = str(configuration.charge)
+                    except Exception:
+                        self._timing_data[9] = ""
+                    try:
+                        self._timing_data[10] = str(configuration.spin_multiplicity)
+                    except Exception:
+                        self._timing_data[10] = ""
+
+                    # Have to fix formatting for printing...
+                    tmp = []
+                    for key, value in P.items():
+                        if isinstance(value, units_class):
+                            tmp.append((key, f"{value:~P}"))
+                        else:
+                            tmp.append((key, value))
+                    self._timing_data[11] = json.dumps(tmp)
+                    self._timing_data[5] = datetime.now(timezone.utc).isoformat()
+
                 # Run the calculation
                 executor = self.parent.flowchart.executor
+
+                t0 = time.time_ns()
 
                 result = executor.run(
                     cmd=["{code}", ">", "DFTB+.out", "2>", "stderr.txt"],
@@ -804,6 +890,17 @@ class DftbBase(seamm.Node):
                     shell=True,
                     env=env,
                 )
+
+                t = (time.time_ns() - t0) / 1.0e9
+                if self._timing_data is not None:
+                    self._timing_data[13] = f"{t:.3f}"
+                    self._timing_data[12] = str(n_cores)
+                    try:
+                        with self._timing_path.open("a", newline="") as fd:
+                            writer = csv.writer(fd)
+                            writer.writerow(self._timing_data)
+                    except Exception:
+                        pass
 
                 if not result:
                     logger.error("There was an error running DFTB+")

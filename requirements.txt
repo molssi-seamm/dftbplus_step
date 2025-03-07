@@ -2,6 +2,7 @@ cms_plots
 hsd
 numpy
 pandas
+py-cpuinfo
 seamm
 seamm-exec
 seamm_util

@@ -1,6 +1,13 @@
 =======
 History
 =======
+2025.3.7 -- Installation upgrade and tracking of timing information
+    * Updated the code to work with the latest installer. In the process, directly
+      incorporated the Slater-Koster files in the release because their location at
+      dftb.org changed, causing errors in the installation.
+    * Add tracking of timing for calculations to ~/.seamm.d/timing/dftbplus.csv for
+      analysis and future use in prediciting job limits for queueing systems.
+      
 2025.3.3 -- Enhancements and bug fix for periodic cell!
     * Fixed issue with periodic cells with symmetry and primitive cells that caused
       problems with e.g. charges and spins.
