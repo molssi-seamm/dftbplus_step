@@ -236,6 +236,9 @@ class Dftbplus(seamm.Node):
 
         # Get the metadata for the Slater-Koster parameters
         resources = importlib.resources.files("dftbplus_step") / "data"
+
+        self._slako_path = [resources / "slako"]
+
         path = resources / "metadata.json"
         if not path.exists():
             raise RuntimeError("Can't find Slater-Koster metadata.json file")
