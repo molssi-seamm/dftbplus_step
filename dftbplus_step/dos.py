@@ -18,7 +18,6 @@ from seamm_util.printing import FormattedText as __
 
 from .base import DftbBase
 
-
 logger = logging.getLogger(__name__)
 job = printing.getPrinter()
 printer = printing.getPrinter("DFTB+")

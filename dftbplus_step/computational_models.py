@@ -1,16 +1,14 @@
+import importlib
 import json
-from pathlib import Path
-import pkg_resources
 
 from seamm_util import element_data
-
 
 atno = {symbol: d["atomic number"] for symbol, d in element_data.items()}
 
 
 def computational_models_metadata():
     """Create the metadata for the computational models from the paramater metadata."""
-    data_path = Path(pkg_resources.resource_filename(__name__, "data"))
+    data_path = importlib.resources.files("dftbplus_step") / "data"
     path = data_path / "metadata.json"
     with open(path) as fd:
         package_data = json.load(fd)

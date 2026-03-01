@@ -243,7 +243,7 @@ class Optimization(dftbplus_step.Energy):
 
                 # Align the structure
                 if update_structure:
-                    configuration.from_RDKMol(final)
+                    configuration.coordinates_from_RDKMol(final)
 
                 result = RMSD(final, initial, symmetry=True)
                 data["RMSD"] = result["RMSD"]
