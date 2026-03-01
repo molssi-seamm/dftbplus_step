@@ -1,6 +1,8 @@
 =======
 History
 =======
+2026.3.1 -- Internal: switching from deprecated library pkg_resources to importlib
+
 2025.3.7 -- Installation upgrade and tracking of timing information
     * Updated the code to work with the latest installer. In the process, directly
       incorporated the Slater-Koster files in the release because their location at
