@@ -110,3 +110,12 @@ image: uninstall-image ## Make the Docker image
 
 uninstall-image: ## Remove the docker image
 	docker image rm --force ghcr.io/molssi-seamm/seamm-dftbplus:latest
+
+.PHONY: update
+update: ## post-release: sync main and dev, reinstall, run checks, push dev
+	git checkout main
+	git pull
+	git checkout dev
+	git merge --ff-only main
+	$(MAKE) lint install test
+	git push
