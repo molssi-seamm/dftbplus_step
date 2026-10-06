@@ -94,6 +94,24 @@ def _output_text(directory, names):
     return None
 
 
+#: What the cost model is made of (seamm_exec.timing_model.Spec as plain data): atoms
+#: as the size variable, the model as the class, the task, SCC cycles as the unit.
+#: Written beside the records when a run is recorded.
+TIMING_SPEC = {
+    "size": ["n_atoms"],
+    "klass": ["model"],
+    "task": "task",
+    "units": "scc_cycles",
+    "multiplier": None,
+    "default_alpha": 0.8,
+}
+
+
+def _record_kwargs():
+    """``spec=`` for seamm-exec releases that take it (2026.10.7 on)."""
+    return {"spec": TIMING_SPEC} if hasattr(seamm_exec, "TimingSpec") else {}
+
+
 def timing_descriptors(model, out_text=None, configuration=None):
     """The descriptors of a DFTB+ run for its timing record (seamm_exec's
     campaign of 2026-10-05): the model (parameter set), the structure, and
@@ -683,6 +701,7 @@ class DftbBase(seamm.Node):
                 cpus_per_task=n_cores,
                 state="finished" if result else "failed",
                 in_situ=True,
+                **_record_kwargs(),
             )
         except Exception as e:  # pragma: no cover - must never stop the step
             self.logger.warning(f"Could not record the timing of the DFTB+ run: {e}")

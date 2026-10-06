@@ -1,6 +1,12 @@
 =======
 History
 =======
+2026.10.7 -- The step declares what its cost model is made of
+    * ``base.TIMING_SPEC`` -- atoms as the size variable, the model as the class, the task, SCC cycles as the unit -- is passed when a run is
+      recorded (seamm-exec 2026.10.7 writes it beside the records), so the cost
+      model is fitted from the step's own description rather than a table in
+      seamm-exec.
+
 2026.10.6 -- Timing records that a cost model can be fitted to
     * Each DFTB+ run appends a record to ``~/.seamm.d/timing/dftbplus.csv`` through
       ``seamm_exec.timing``: the machine class, threads, wall time and outcome, the
