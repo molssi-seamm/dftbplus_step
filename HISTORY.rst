@@ -6,6 +6,8 @@ History
       recorded (seamm-exec 2026.10.6.1 writes it beside the records), so the cost
       model is fitted from the step's own description rather than a table in
       seamm-exec.
+    * Removed the Docker image (and its recipe and release job) and the Docker settings
+      in the default dftbplus.ini, which were no longer used or maintained.
 
 2026.10.6 -- Timing records that a cost model can be fitted to
     * Each DFTB+ run appends a record to ``~/.seamm.d/timing/dftbplus.csv`` through
