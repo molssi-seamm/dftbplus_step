@@ -1,6 +1,15 @@
 =======
 History
 =======
+2026.10.6 -- Timing records that a cost model can be fitted to
+    * Each DFTB+ run appends a record to ``~/.seamm.d/timing/dftbplus.csv`` through
+      ``seamm_exec.timing``: the machine class, threads, wall time and outcome, the
+      model, the structure, and from the output the SCC cycles, geometry steps and
+      DFTB+'s own times. This replaces the step's own CSV (SMILES, formula and the
+      whole parameter dictionary as JSON), which grew without bound. See seamm_exec's
+      campaign of 2026-10-05.
+    * Requires seamm-exec 2026.10.6.
+
 2026.3.1 -- Internal: switching from deprecated library pkg_resources to importlib
 
 2025.3.7 -- Installation upgrade and tracking of timing information

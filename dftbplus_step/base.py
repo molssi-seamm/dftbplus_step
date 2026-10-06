@@ -4,18 +4,14 @@
 
 import configparser
 import copy
-import csv
-from datetime import datetime, timezone
-import json
 import logging
+import re
 from pathlib import Path
-import platform
 import pprint
 import shutil
 import time
 import traceback
 
-from cpuinfo import get_cpu_info
 import pandas
 
 import cms_plots
@@ -24,7 +20,6 @@ from .dftbplus import deep_merge, dict_to_hsd, parse_gen_file
 from molsystem.elements import to_symbols
 import seamm
 import seamm_exec
-from seamm_util import units_class
 import seamm_util.printing as printing
 
 # In addition to the normal logger, two logger-like printing facilities are
@@ -87,6 +82,42 @@ def _redimension_helper(values, dimensions):
     return values, result
 
 
+def _output_text(directory, names):
+    """The text of the first of ``names`` found in ``directory``, or None."""
+    for name in names:
+        path = Path(directory) / name
+        if path.exists():
+            try:
+                return path.read_text(errors="replace")
+            except OSError:
+                return None
+    return None
+
+
+def timing_descriptors(model, out_text=None, configuration=None):
+    """The descriptors of a DFTB+ run for its timing record (seamm_exec's
+    campaign of 2026-10-05): the model (parameter set), the structure, and
+    from the output the SCC cycles, geometry steps and DFTB+'s own time.
+    """
+    d = {"model": str(model or "")}
+    if configuration is not None:
+        d.update(seamm_exec.structure_descriptors(configuration))
+    if out_text:
+        d["scc_cycles"] = len(
+            re.findall(
+                r"^\s*\d+\s+-?\d+\.\d+E[+-]\d+\s+-?\d+\.\d+E[+-]\d+", out_text, re.M
+            )
+        )
+        d["geometry_steps"] = len(re.findall(r"Geometry step:", out_text))
+        d["scc_converged"] = len(re.findall(r"SCC converged", out_text))
+        m = re.search(r"Total\s+=\s+([\d.]+)\s+\(\s*[\d.]+%\)\s+([\d.]+)", out_text)
+        if m:
+            d["cpu_seconds"] = float(m.group(1))
+            d["code_seconds"] = float(m.group(2))
+        d["terminated_normally"] = "DFTB+ running times" in out_text
+    return d
+
+
 class DftbBase(seamm.Node):
     """A base class for substeps in the DFTB+ step."""
 
@@ -99,47 +130,6 @@ class DftbBase(seamm.Node):
         self.results = None  # Results of the calculation from the tag file.
 
         super().__init__(flowchart=flowchart, title=title, extension=extension)
-
-        # Set up the timing information
-        self._timing_data = []
-        self._timing_path = Path("~/.seamm.d/timing/dftbplus.csv").expanduser()
-        self._timing_header = [
-            "node",  # 0
-            "cpu",  # 1
-            "cpu_version",  # 2
-            "cpu_count",  # 3
-            "cpu_speed",  # 4
-            "date",  # 5
-            "H_SMILES",  # 6
-            "ISOMERIC_SMILES",  # 7
-            "formula",  # 8
-            "net_charge",  # 9
-            "spin_multiplicity",  # 10
-            "keywords",  # 11
-            "nproc",  # 12
-            "time",  # 13
-        ]
-        try:
-            self._timing_path.parent.mkdir(parents=True, exist_ok=True)
-
-            self._timing_data = 14 * [""]
-            self._timing_data[0] = platform.node()
-            tmp = get_cpu_info()
-            if "arch" in tmp:
-                self._timing_data[1] = tmp["arch"]
-            if "cpuinfo_version_string" in tmp:
-                self._timing_data[2] = tmp["cpuinfo_version_string"]
-            if "count" in tmp:
-                self._timing_data[3] = str(tmp["count"])
-            if "hz_advertized_friendly" in tmp:
-                self._timing_data[4] = tmp["hz_advertized_friendly"]
-
-            if not self._timing_path.exists():
-                with self._timing_path.open("w", newline="") as fd:
-                    writer = csv.writer(fd)
-                    writer.writerow(self._timing_header)
-        except Exception:
-            self._timing_data = None
 
     @property
     def is_runable(self):
@@ -674,6 +664,29 @@ class DftbBase(seamm.Node):
             raise FileNotFoundError("No 'charges.dat' in previous energy step.")
         return step
 
+    def record_timing(self, configuration, n_cores, wall, result):
+        """Append this run's timing record (``~/.seamm.d/timing/dftbplus.csv``)
+        with :func:`timing_descriptors`; never raises."""
+        try:
+            text = _output_text(
+                self.directory,
+                ("dftb+.out", "dftbplus.out", "stdout.txt", "output.txt"),
+            )
+            descriptors = timing_descriptors(
+                getattr(self, "model", None), text, configuration
+            )
+            seamm_exec.record_timing(
+                "dftbplus",
+                wall,
+                descriptors,
+                ntasks=1,
+                cpus_per_task=n_cores,
+                state="finished" if result else "failed",
+                in_situ=True,
+            )
+        except Exception as e:  # pragma: no cover - must never stop the step
+            self.logger.warning(f"Could not record the timing of the DFTB+ run: {e}")
+
     def parse_results(self, lines):
         """Digest the data in the results.tag file."""
 
@@ -786,7 +799,7 @@ class DftbBase(seamm.Node):
         # Check for successful run, don't rerun
         success = directory / "success.dat"
         if success.exists():
-            self._timing_data = None
+            pass
         else:
             files = {"dftb_in.hsd": hsd}
             logger.debug("dftb_in.hsd:\n" + files["dftb_in.hsd"])
@@ -841,43 +854,7 @@ class DftbBase(seamm.Node):
                     "eigenvec.bin",
                 ]
 
-                if self._timing_data is not None:
-                    try:
-                        self._timing_data[6] = configuration.to_smiles(
-                            canonical=True, hydrogens=True
-                        )
-                    except Exception:
-                        self._timing_data[6] = ""
-                    try:
-                        self._timing_data[7] = configuration.isomeric_smiles
-                    except Exception:
-                        self._timing_data[7] = ""
-                    try:
-                        self._timing_data[8] = configuration.formula[0]
-                    except Exception:
-                        self._timing_data[7] = ""
-                    try:
-                        self._timing_data[9] = str(configuration.charge)
-                    except Exception:
-                        self._timing_data[9] = ""
-                    try:
-                        self._timing_data[10] = str(configuration.spin_multiplicity)
-                    except Exception:
-                        self._timing_data[10] = ""
-
-                    # Have to fix formatting for printing...
-                    tmp = []
-                    for key, value in P.items():
-                        if isinstance(value, units_class):
-                            tmp.append((key, f"{value:~P}"))
-                        else:
-                            tmp.append((key, value))
-                    self._timing_data[11] = json.dumps(tmp)
-                    self._timing_data[5] = datetime.now(timezone.utc).isoformat()
-
-                # Run the calculation
                 executor = self.parent.flowchart.executor
-
                 t0 = time.time_ns()
 
                 result = executor.run(
@@ -892,15 +869,7 @@ class DftbBase(seamm.Node):
                 )
 
                 t = (time.time_ns() - t0) / 1.0e9
-                if self._timing_data is not None:
-                    self._timing_data[13] = f"{t:.3f}"
-                    self._timing_data[12] = str(n_cores)
-                    try:
-                        with self._timing_path.open("a", newline="") as fd:
-                            writer = csv.writer(fd)
-                            writer.writerow(self._timing_data)
-                    except Exception:
-                        pass
+                self.record_timing(configuration, n_cores, t, result)
 
                 if not result:
                     logger.error("There was an error running DFTB+")
