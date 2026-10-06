@@ -4,6 +4,6 @@ numpy
 pandas
 py-cpuinfo
 seamm
-seamm-exec
+seamm-exec>=2026.10.6
 seamm_util
 tabulate

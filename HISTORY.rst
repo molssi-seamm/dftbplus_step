@@ -9,6 +9,7 @@ History
       whole parameter dictionary as JSON), which grew without bound. See seamm_exec's
       campaign of 2026-10-05.
     * Requires seamm-exec 2026.10.6.
+
 2026.3.1 -- Internal: switching from deprecated library pkg_resources to importlib
 
 2025.3.7 -- Installation upgrade and tracking of timing information
