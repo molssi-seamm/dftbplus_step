@@ -527,5 +527,3 @@ class Dftbplus(seamm.Node):
                 full_config.read(ini_dir / "dftbplus.ini")
 
         self._exe_config = dict(full_config.items(executor_type))
-        # Use the matching version of the seamm-dftbplus image by default.
-        self._exe_config["version"] = self.version

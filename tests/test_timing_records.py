@@ -35,3 +35,9 @@ def test_descriptors():
     assert d["geometry_steps"] == 1
     assert d["cpu_seconds"] == 0.12 and d["code_seconds"] == 0.34
     assert d["terminated_normally"] is True
+
+
+def test_timing_spec():
+    from dftbplus_step import base
+
+    assert base.TIMING_SPEC["units"] == "scc_cycles"
