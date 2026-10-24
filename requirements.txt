@@ -3,7 +3,7 @@ hsd
 numpy
 pandas
 py-cpuinfo
-seamm
+seamm>=2026.10.24
 seamm-exec>=2026.10.6
 seamm_util
 tabulate

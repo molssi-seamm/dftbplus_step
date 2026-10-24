@@ -1,6 +1,14 @@
 =======
 History
 =======
+2026.10.24 -- The optimized structure keeps its name
+    * The structures that optimizations write are now named '{current name} optimized
+      with {Hamiltonian}' by default, keeping the name the structure had, such as a
+      title read from an SDF file: 'DMC_cc optimized with DFTB3'. Before, every
+      structure was named 'optimized with <Hamiltonian>', so the titles of several
+      molecules were lost. Flowcharts already saved keep their setting, and the
+      previous choice remains in the list. Needs seamm 2026.10.24.
+
 2026.10.11 -- The step declares what its cost model is made of
     * ``base.TIMING_SPEC`` -- atoms as the size variable, the model as the class, the
       task, and SCC cycles as the unit -- is passed with each timing record (seamm-exec
